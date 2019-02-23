@@ -46,6 +46,11 @@ import controlP5.*;
     throughout the sketch and its contents built from various classes.  
 **/
 
+IsoSkeleton attractorGeo;    // Used to pass through IsoSkeleton
+Radar strangeOne;            // into Attractor class
+Grid bkgdGrid;
+Globe earth;
+
 IsoSkeleton skeleton;
 IsoWrap wrap;
 IsoWrap wrapSmall;
@@ -55,10 +60,18 @@ ControlP5 cp6;
 ControlP5 cp10;
 ControlWindow controlWindow;
 Canvas cc;
-ColorPicker cp;
+
+ColorPicker cp;              // UI for global path color
+
+TextStream backText;         // Scrolling text background 
 
 int pathDensity = 100;
-color pathColor;
+int bkgdGridSpace = 20;
+
+color pathColor;            // Color for paths around globe
+color attractorColor;       // Color for paths used for strange attractor
+color bkgdGridColor = (50);
+
 boolean extraTab = false;
 PVector aptSource, aptDestination;
 
@@ -126,6 +139,7 @@ void setup() {
 
   // Create iso-skeleton
   //skeleton = new IsoSkeleton(this);
+  attractorGeo = new IsoSkeleton(this);
   wrap = new IsoWrap(this);
   wrapSmall = new IsoWrap(this);
   cp5 = new ControlP5(this);
@@ -139,6 +153,15 @@ void setup() {
   float radiusSmall = 200;
   float phi;
   float theta;
+
+  bkgdGrid = new Grid(bkgdGridColor, bkgdGridSpace);
+
+  backText = new TextStream();                // Setup scrolling back text 
+  
+  strangeOne = new Radar(attractorGeo);
+  attractorColor = color(0, 255, 0, 10);
+
+  earth = new Globe();
 
   // By default all controllers are stored inside Tab 'default' 
   // add a second tab with name 'extra'
@@ -241,67 +264,30 @@ void setup() {
 
 void draw() {
   background(0);
-  pushMatrix();
-  int bkgdGridXSpace = 20;
-  int bkgdGridYSpace = 20;
-  int bkgdGridXOrigin = 0;
-  int bkgdGridYOrigin = 0;
-  color bkgdGridColor = (50);
-  strokeWeight(1);
-  stroke(bkgdGridColor);
-  translate(bkgdGridXOrigin, bkgdGridYSpace);
-  // Horizontal Lines
-  for(int i=0; i < height; i+=bkgdGridYSpace){
-     //line(0, i, width, i);
-  }
-  // Vertical Lines
-  for(int i=0; i < width; i+=bkgdGridXSpace){
-     //line(i, 0, i, height);
-  }
-  popMatrix();
-  //lights();  
-
-  // *******************************************************
-  // Assign color picker color to pathColor variable
-  pathColor = cp.getColorValue();
-  // *******************************************************
   
+  // *******************************************************
+  // Background grid
+  //bkgdGrid.drawGeo();            // Figure out why it appears to be drawn on top of everything
+  // *******************************************************
+ 
+  // *******************************************************
+  // Variable management
+  pathColor = cp.getColorValue();  // Assign color picker color to pathColor variable
+  // *******************************************************
+ 
+  // ******************************************************* 
+  //Background content
+  strangeOne.drawGeo();       // Draws the strange attractor in background
+  backText.drawStream(40);    // Draws the text stream in background
+  // *******************************************************    
+
   if(extraTab){
     // create a control window canvas and add it to
     // the previously created control window.  
     //cc = new MyCanvas();
     //cc.pre(); // use cc.post(); to draw on top of existing controllers.  
     //cp10.addCanvas(cc); // add the canvas to cp5 
-  }
-    
-    
-    
-  //****************************************  
-  // The following code is for the Matrix UI
-  
-  
-  pushMatrix();
-  translate(20, 0);
-  noFill();
-  stroke(0, 0, 0);
-  smooth(4);
-  
-  //noLoop();
-  
-  int multiplier = 40;
-  int numOfCurves = height / multiplier;
-  int curveOffset = height / numOfCurves;
-  
-  drawCurveArray(numOfCurves, curveOffset, 200);
-  drawCurveArray(numOfCurves, curveOffset, 150);
-  drawCurveArray(numOfCurves, curveOffset, 100);
-  drawCurveArray(numOfCurves, curveOffset, 50);     
-  popMatrix();  
-    
-    
-    
-    
-  //****************************************    
+  }  
 
   pushMatrix();
   translate(width/2, height/2);
@@ -309,10 +295,6 @@ void draw() {
   //rotateX(mouseY*-0.003);
   rotateY(frameCount*0.003 + mouseX*0.003);
   
-  //float zm = 450;
-  //float sp = 0.01 * frameCount;
-  //camera(zm * cos(sp), zm * sin(sp), zm, 0, 0, 0, 0, 0, -1);
-  //camera(zm * cos(sp), zm * sin(sp), zm, 0, 0, 0, 0, 0, -1);
   
   noStroke();
   stroke(255);
@@ -321,100 +303,10 @@ void draw() {
   noStroke();
   fill(0, 0, 0, 255);
   wrap.plot();
-  globe(400, 10);
-  globePaths();
+  earth.drawGlobeGeo(400, 10);
+  earth.globePaths();
   popMatrix();
 }
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-void globe(int radius, int offset){
-  for(int i=0; i < cities.getRowCount(); i++){
-     float latitude = cities.getFloat(i, "lat");
-     float longitude = cities.getFloat(i, "lng");
-     PVector aPt = sphereToCart(radians(latitude), radians(longitude));
-     aPt.mult(radius);
-     stroke(255);
-     strokeWeight(1);
-     point(aPt.x, aPt.y, aPt.z);
-  }  
-  for(int i=0; i < airports.getRowCount(); i++){
-     float latitude = airports.getFloat(i, 6);
-     float longitude = airports.getFloat(i, 7);
-     PVector aPt = sphereToCart(radians(latitude), radians(longitude));
-     aPt.mult(radius + offset);
-     stroke(255, 0, 0);
-     strokeWeight(1);
-     point(aPt.x, aPt.y, aPt.z);
-  }    
-  
-}
-
-
-
-
-void globePaths(){
-  float lift = 1;
-  PVector rise = new PVector(0, 0, 0);
-  float projection = 30;
-  //for(int i=0; i < routes.getRowCount(); i++){
-  //for(int i=0; i < 3000; i++){
-  for(int i=0; i < routes.getRowCount(); i+=pathDensity){  
-     String source = routes.getString(i, 0);
-     String destination = routes.getString(i, 1);
-     println(source + " , " + destination);
-     TableRow srcIteration = airports.findRow(source, 4);
-     TableRow destIteration = airports.findRow(destination, 4);
-     println(srcIteration + " , " + destIteration);
-     if(srcIteration != null && destIteration != null){
-         String aptCodeSrc = srcIteration.getString(4);
-         String aptCodeDest = destIteration.getString(4);
-         println(aptCodeSrc + " , " + aptCodeDest);
-         if(source.equals(aptCodeSrc) && destination.equals(aptCodeDest)){
-             noFill();
-             float srcLatitude = srcIteration.getFloat(6);
-             float srcLongitude = srcIteration.getFloat(7);
-             aptSource = sphereToCart(radians(srcLatitude), radians(srcLongitude));
-             aptSource = aptSource.mult(410);
-             PVector aptSourceAnchor = aptSource.cross(rise);
-             float destLatitude = destIteration.getFloat(6);
-             float destLongitude = destIteration.getFloat(7);
-             aptDestination = sphereToCart(radians(destLatitude), radians(destLongitude));
-             aptDestination = aptDestination.mult(410);
-             PVector aptDestinationAnchor = aptDestination.cross(rise);
-             float midLatitude = srcLatitude + ((destLatitude - srcLatitude) / 2);
-             float midLongitude = srcLongitude + ((destLongitude - srcLongitude) / 2);
-             PVector aptMidpoint = sphereToCart(radians(midLatitude), radians(midLongitude));
-             aptMidpoint = aptMidpoint.mult(410 + projection);
-             stroke(pathColor);
-             strokeWeight(1);
-             beginShape();
-               curveVertex(aptSourceAnchor.x, aptSourceAnchor.y, aptSourceAnchor.z);
-               curveVertex(aptSource.x, aptSource.y, aptSource.z);
-               curveVertex(aptMidpoint.x, aptMidpoint.y, aptMidpoint.z);
-               curveVertex(aptDestination.x, aptDestination.y, aptDestination.z);
-               curveVertex(aptDestinationAnchor.x, aptDestinationAnchor.y, aptDestinationAnchor.z);
-             endShape();
-             float dist = PVector.dist(aptSource, aptDestination);
-         }        
-     }
-  }
-}
-
-
-
-
-
-PVector sphereToCart(float lat, float lon){
-  // Algorithms for mapping spherical coordinates to three-dimensional Cartesian
-  // coordinates derived from the following resource link:
-  // https://www.mathworks.com/help/matlab/ref/sph2cart.html
-  // Formulas from this reference were then converted to align elevation to latitude
-  // and azimuth to longitude
-  PVector vNew = new PVector(-cos(lat) * cos(lon), -sin(lat), cos(lat) * sin(lon));
-  return vNew;
-}
-
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -428,86 +320,5 @@ void keyPressed() {
     // method B to change color
     cp.setColorValue(color(255, 0, 0, 255));
     break;
-  }
-}
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-// The following functions are for the Matrix UI
-
-void drawCurveArray(int numOfCurves, int offset, int alpha){
-  for(int i=0; i < numOfCurves; i++){
-    pushMatrix();
-    translate(0, (i * offset));
-    drawCurve(alpha);
-    popMatrix();
-  }
-  
-}
-
-void drawCurve(int alpha){
-  int scalar = 10;
-  int arrayLength = (width/4)/scalar + scalar;
-  int shift;
-  
-  noFill();
-  stroke(0, 0, 0);
-  noStroke();
-  strokeWeight(0.3);
-  
-  float xList[] = new float[arrayLength];
-  float yList[] = new float[arrayLength];
-  
-  for(int i=0; i < arrayLength; i++){
-     shift = int(random(0, 2));
-     xList[i] = scalar * i;
-     yList[i] = scalar * (sin(i) + shift);
-  }
-  beginShape();
-  //curveVertex(0, 0);
-  //curveVertex(0, 0);
-  curveVertex(xList[0], yList[0]);
-  curveVertex(xList[0], yList[0]);
-  
-  for(int i=1; i < arrayLength; i++){
-     curveVertex(xList[i], yList[i]);
-     println(xList[i], yList[i]);
-  }
-
-  
-  
-  curveVertex(xList[xList.length-1], yList[yList.length-1]);
-  println(xList[xList.length-1], yList[yList.length-1]);
-  
-  endShape();
-  
-  
-  
-  char[] alphabet = new char[26];
-  for(int i = 0; i < 26; i++){
-    alphabet[i] = (char)(65 + i);
-  }
-  
-  char[] glyph = new char[95];
-  for(int i = 0; i < 95; i++){
-    glyph[i] = (char)(33 + i);
-  }
-  
-  for(int i=0; i < arrayLength; i++){
-     if(yList[i] > yList[0]){
-       noStroke();
-       fill(153, 0, 0);
-       noFill();
-       ellipse(xList[i], yList[i], 3, 3);
-       
-       textSize(10);
-       textAlign(CENTER, CENTER);
-       fill(153, 0, 0);
-       
-       fill(39, 255, 8, alpha);
-       text(glyph[int(random(0, 95))], xList[i], yList[i]);
-       
-     }
   }
 }
