@@ -1,6 +1,50 @@
+// Futuristic HUD
+// by Hans Palacios
+// for SCAD ITGM 719 Course
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/** PROJECT DESCRIPTION
+    Add description here
+    
+    --------------------------------------------------------------------------------
+    REFERENCED CODE
+    Code referenced from online sources are identified with comments and delineated
+    with the following syntax:
+    
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+        Referenced code located here along with cited web link.
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+        
+    --------------------------------------------------------------------------------
+    REFERENCED MATH & DATA
+    Math and data referenced from online sources are identified with comments and 
+    delineated with the following syntax:
+    
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        Referenced math formulas and data located here along with cited web link.
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+            
+    --------------------------------------------------------------------------------    
+    IMAGES
+    
+    
+**/
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+// Processing Libraries
+/**   
+**/
+
 import ComputationalGeometry.*;
 import controlP5.*;
 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+// Global variables
+/** The majority of these global variables are used and defined to creat consistency 
+    throughout the sketch and its contents built from various classes.  
+**/
 
 IsoSkeleton skeleton;
 IsoWrap wrap;
@@ -13,30 +57,34 @@ ControlWindow controlWindow;
 Canvas cc;
 ColorPicker cp;
 
-// Data sourced from:
-// https://openflights.org/data.html
+int pathDensity = 100;
+color pathColor;
+boolean extraTab = false;
+PVector aptSource, aptDestination;
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// Data
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Data for airports and routes sourced from: https://openflights.org/data.html
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Table airports;
-
-// Data sourced from:
-// https://openflights.org/data.html
 Table routes;
-
 JSONArray airport;
 JSONArray airRoutes;
 
-
-// Data sourced from:
-// https://simplemaps.com/data/world-cities
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Data for cities sourced from: https://simplemaps.com/data/world-cities
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Table cities;
 
-boolean extraTab = false;
-PVector aptSource, aptDestination;
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 
 // MyCanvas, your Canvas render class
 class MyCanvas extends Canvas {
-
   int x, y;
   int mx = 0;
   int my = 0;
@@ -51,8 +99,6 @@ class MyCanvas extends Canvas {
   }
 
   public void draw(PGraphics pg) {
-    
-
       pushMatrix();
       pg.fill(100);
       //pg.rect(mx-20, y-20, 240, 100);
@@ -60,8 +106,6 @@ class MyCanvas extends Canvas {
       pg.fill(255);
       pg.text("This text is drawn by MyCanvas", x,y);
       popMatrix();
-    
-
   }
 }
 
@@ -69,7 +113,7 @@ class MyCanvas extends Canvas {
 
 
 
-
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void setup() {
   size(1920, 1080, P3D);
@@ -95,12 +139,6 @@ void setup() {
   float radiusSmall = 200;
   float phi;
   float theta;
-
-
-
-
-
-  
 
   // By default all controllers are stored inside Tab 'default' 
   // add a second tab with name 'extra'
@@ -128,24 +166,10 @@ void setup() {
      
   ;
 
-  int sliderTicks1 = 98;
-  cp5.addSlider("sliderTicks1")
-     .setPosition(100, 140)
-     .setSize(300,20)
-     .setRange(0,sliderTicks1)
-     .setNumberOfTickMarks(6)
-  ;
 
-  cp5.getController("sliderTicks1").moveTo("extra");
-  //cp5.getController("slider").moveTo("global");
-  
-  // Tab 'global' is a tab that lies on top of any 
-  // other tab and is always visible
-  
-  
-  
-  
-  
+
+
+
 
   // Create points to make the network
   PVector[] pts = new PVector[1000];
@@ -167,9 +191,7 @@ void setup() {
       }
     }
   }
-  
-  
-  
+
   
   // Create points to make the network
   PVector[] ptsSmall = new PVector[1000];
@@ -192,11 +214,30 @@ void setup() {
   
   cp6 = new ControlP5(this);
   cp = cp6.addColorPicker("picker")
-      .setPosition(1400, 100)
-      .setColorValue(color(255, 128, 0, 128))
+      .setPosition(1460, 100)
+      .setColorValue(color(0, 255, 0, 255))
       ;
+      
+  //int sliderTicks1 = 100;
+  //pathDensity = sliderTicks1;
+  //cp5.addSlider("sliderTicks1")
+  cp5.addSlider("pathDensity")
+     .setPosition(1460, 180)
+     .setSize(260,20)
+     .setRange(25,pathDensity)
+     .setNumberOfTickMarks(3)
+  ;    
+
+  cp5.getController("pathDensity").moveTo("extra");
+  //cp5.getController("slider").moveTo("global");
+  
+  // Tab 'global' is a tab that lies on top of any 
+  // other tab and is always visible
+  
   
 }
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void draw() {
   background(0);
@@ -211,17 +252,19 @@ void draw() {
   translate(bkgdGridXOrigin, bkgdGridYSpace);
   // Horizontal Lines
   for(int i=0; i < height; i+=bkgdGridYSpace){
-     line(0, i, width, i);
+     //line(0, i, width, i);
   }
   // Vertical Lines
   for(int i=0; i < width; i+=bkgdGridXSpace){
-     line(i, 0, i, height);
+     //line(i, 0, i, height);
   }
   popMatrix();
   //lights();  
 
-
-  
+  // *******************************************************
+  // Assign color picker color to pathColor variable
+  pathColor = cp.getColorValue();
+  // *******************************************************
   
   if(extraTab){
     // create a control window canvas and add it to
@@ -261,26 +304,10 @@ void draw() {
   //****************************************    
 
   pushMatrix();
-  noStroke();
-  fill(0, 0, 0, 255);
-  translate(width / 6, height / 2);
-  //shearY(PI*8/9);
-  rotateY(frameCount*0.006 + 0.003);
-  //wrapSmall.plot();
-  //globe(200, 0);
-  popMatrix();    
-
-  
-
-  
-  
-
-  
-  pushMatrix();
   translate(width/2, height/2);
   //rotateX(frameCount*0.001);
-  rotateX(mouseY*-0.003);
-  rotateY(frameCount*0.001 + mouseX*0.003);
+  //rotateX(mouseY*-0.003);
+  rotateY(frameCount*0.003 + mouseX*0.003);
   
   //float zm = 450;
   //float sp = 0.01 * frameCount;
@@ -297,11 +324,9 @@ void draw() {
   globe(400, 10);
   globePaths();
   popMatrix();
-  
-
-  
 }
 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void globe(int radius, int offset){
   for(int i=0; i < cities.getRowCount(); i++){
@@ -333,7 +358,8 @@ void globePaths(){
   PVector rise = new PVector(0, 0, 0);
   float projection = 30;
   //for(int i=0; i < routes.getRowCount(); i++){
-  for(int i=0; i < 3000; i++){  
+  //for(int i=0; i < 3000; i++){
+  for(int i=0; i < routes.getRowCount(); i+=pathDensity){  
      String source = routes.getString(i, 0);
      String destination = routes.getString(i, 1);
      println(source + " , " + destination);
@@ -351,41 +377,25 @@ void globePaths(){
              aptSource = sphereToCart(radians(srcLatitude), radians(srcLongitude));
              aptSource = aptSource.mult(410);
              PVector aptSourceAnchor = aptSource.cross(rise);
-             //PVector aptSourceAnchor = aptSource.cross(rise);
-             //aptSource.mult(lift);
              float destLatitude = destIteration.getFloat(6);
              float destLongitude = destIteration.getFloat(7);
              aptDestination = sphereToCart(radians(destLatitude), radians(destLongitude));
              aptDestination = aptDestination.mult(410);
              PVector aptDestinationAnchor = aptDestination.cross(rise);
-             //PVector aptDestinationAnchor = aptDestination.cross(rise);
-             //aptDestination.mult(lift);
              float midLatitude = srcLatitude + ((destLatitude - srcLatitude) / 2);
              float midLongitude = srcLongitude + ((destLongitude - srcLongitude) / 2);
              PVector aptMidpoint = sphereToCart(radians(midLatitude), radians(midLongitude));
              aptMidpoint = aptMidpoint.mult(410 + projection);
-             //stroke(0, 255, 0);
-             stroke(cp.getColorValue());
+             stroke(pathColor);
              strokeWeight(1);
-             //bezierDetail(50);
-             //bezier(aptSource.x, aptSource.y, aptSource.z, aptSourceAnchor.x, aptSourceAnchor.y, aptSourceAnchor.z, aptMidpoint.x, aptMidpoint.y, aptMidpoint.z, aptDestinationAnchor.x, aptDestinationAnchor.y, aptDestinationAnchor.z, aptDestination.x, aptDestination.y, aptDestination.z);
              beginShape();
-               
                curveVertex(aptSourceAnchor.x, aptSourceAnchor.y, aptSourceAnchor.z);
                curveVertex(aptSource.x, aptSource.y, aptSource.z);
                curveVertex(aptMidpoint.x, aptMidpoint.y, aptMidpoint.z);
                curveVertex(aptDestination.x, aptDestination.y, aptDestination.z);
                curveVertex(aptDestinationAnchor.x, aptDestinationAnchor.y, aptDestinationAnchor.z);
-               
              endShape();
-             println(i);
-             println(source + " , " + destination);
-             println(srcIteration + " , " + destIteration);
-             println(destLatitude + " , " + destLongitude);
-             print(aptSource + " , " + aptSourceAnchor);
-             //println(aptSource);
              float dist = PVector.dist(aptSource, aptDestination);
-             //println(dist); 
          }        
      }
   }
@@ -406,7 +416,7 @@ PVector sphereToCart(float lat, float lon){
 }
 
 
-
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void keyPressed() {
   switch(key) {
@@ -421,7 +431,7 @@ void keyPressed() {
   }
 }
 
-
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 // The following functions are for the Matrix UI
