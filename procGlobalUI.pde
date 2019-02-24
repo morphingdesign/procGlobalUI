@@ -47,7 +47,7 @@ import controlP5.*;
 **/
 
 IsoSkeleton attractorGeo;    // Used to pass through IsoSkeleton
-Radar strangeOne;            // into Attractor class
+Radar radarSys;            // into Attractor class
 Grid bkgdGrid;
 Globe earth;
 
@@ -158,8 +158,8 @@ void setup() {
 
   backText = new TextStream();                // Setup scrolling back text 
   
-  strangeOne = new Radar(attractorGeo);
-  attractorColor = color(0, 255, 0, 10);
+  radarSys = new Radar(attractorGeo);
+  attractorColor = color(0, 255, 0, 20);
 
   earth = new Globe();
 
@@ -277,7 +277,7 @@ void draw() {
  
   // ******************************************************* 
   //Background content
-  strangeOne.drawGeo();       // Draws the strange attractor in background
+  radarSys.posRadar();       // Draws the strange attractor in background
   backText.drawStream(40);    // Draws the text stream in background
   // *******************************************************    
 

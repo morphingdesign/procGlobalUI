@@ -57,12 +57,21 @@ class Radar {
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Methods
   
+  void posRadar(){
+    pushMatrix();
+    translate(1650, 830, 50);
+    drawGeo();
+    drawRadar();
+    popMatrix();
+  }
+  
   // *******************************************************
   // Create shape
   void drawGeo(){
     pushMatrix();
     lights();
-    translate(1600, 800, 50);
+    //translate(1600, 800, 50);
+    translate(585,245,-750);
     rotateZ(frameCount*0.1);
     rotateX(frameCount*0.2);
     rotateY(frameCount*0.1);
@@ -72,4 +81,20 @@ class Radar {
     popMatrix();
   }
   
+  void drawRadar(){
+    noFill();
+    pushMatrix();
+    int radius = 200;
+    int spacing = 10;
+    ellipseMode(RADIUS);
+    stroke(100, 100);
+    strokeWeight(1);
+    for(int i=10; i < radius; i+=spacing){
+       ellipse(0, 0, i, i);
+    }
+    stroke(100, 255);
+    strokeWeight(2);
+    ellipse(0, 0, radius, radius);
+    popMatrix();
+  }
 }  
