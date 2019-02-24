@@ -28,13 +28,13 @@ class Grid {
     pushMatrix();
     strokeWeight(1);
     stroke(bkgdGridColor);
-    translate(bkgdGridXOrigin, bkgdGridYOrigin);
+    translate(bkgdGridXOrigin, bkgdGridYOrigin, -1);
     // Horizontal Lines
     for(int i=0; i < height; i+=spacing){
-       line(0, i, width, i);
+       line(0, i, width/2, i);
     }
     // Vertical Lines
-    for(int i=0; i < width; i+=spacing){
+    for(int i=0; i < width/2; i+=spacing){
        line(i, 0, i, height);
     }
     popMatrix();

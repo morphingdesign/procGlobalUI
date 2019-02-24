@@ -267,8 +267,10 @@ void draw() {
   
   // *******************************************************
   // Background grid
-  //bkgdGrid.drawGeo();            // Figure out why it appears to be drawn on top of everything
+  bkgdGrid.drawGeo();            // Figure out why it appears to be drawn on top of everything
   // *******************************************************
+   
+
  
   // *******************************************************
   // Variable management
@@ -281,6 +283,9 @@ void draw() {
   backText.drawStream(40);    // Draws the text stream in background
   // *******************************************************    
 
+
+  
+
   if(extraTab){
     // create a control window canvas and add it to
     // the previously created control window.  
@@ -290,7 +295,9 @@ void draw() {
   }  
 
   pushMatrix();
+  earth.drawSphereMask();
   translate(width/2, height/2);
+  
   //rotateX(frameCount*0.001);
   //rotateX(mouseY*-0.003);
   rotateY(frameCount*0.003 + mouseX*0.003);
@@ -302,7 +309,9 @@ void draw() {
   //skeleton.plot(.05, 0);  // Thickness as parameter
   noStroke();
   fill(0, 0, 0, 255);
+  
   wrap.plot();
+  
   earth.drawGlobeGeo(400, 10);
   earth.globePaths();
   popMatrix();

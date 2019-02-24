@@ -21,9 +21,9 @@ class TextStream {
   
   void drawStream(int multiplier){
     pushMatrix();
-    translate(20, 0);
-    noFill();
-    stroke(0, 0, 0);
+    translate(20, 0, -1);
+    //noFill();
+    //stroke(0, 0, 0);
     //smooth(4);
 
     multiplier = 40;
@@ -48,13 +48,13 @@ class TextStream {
   
   void drawCurve(int alpha){
     int scalar = 10;
-    int arrayLength = (width/4)/scalar + scalar;
+    int arrayLength = (width/2)/scalar + scalar;
     int shift;
     
     noFill();
-    stroke(0, 0, 0);
+    //stroke(0, 0, 0);
     noStroke();
-    strokeWeight(0.3);
+    strokeWeight(1);
     
     float xList[] = new float[arrayLength];
     float yList[] = new float[arrayLength];
@@ -89,13 +89,13 @@ class TextStream {
     for(int i=0; i < arrayLength; i++){
        if(yList[i] > yList[0]){
          noStroke();
-         fill(153, 0, 0);
+         //fill(153, 0, 0);
          noFill();
          ellipse(xList[i], yList[i], 3, 3);
          
          textSize(10);
          textAlign(CENTER, CENTER);
-         fill(153, 0, 0);
+         //fill(153, 0, 0);
          
          fill(39, 255, 8, alpha);
          text(glyph[int(random(0, 95))], xList[i], yList[i]);

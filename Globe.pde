@@ -95,4 +95,15 @@ class Globe {
     PVector vNew = new PVector(-cos(lat) * cos(lon), -sin(lat), cos(lat) * sin(lon));
     return vNew;
   }
+  
+  void drawSphereMask(){
+    pushMatrix();
+    translate(width/2, height/2);
+    fill(10);
+    strokeWeight(1);
+    stroke(255);
+    ellipseMode(RADIUS);
+    ellipse(0, 0, height/2, height/2);
+    popMatrix();
+  }
 }  

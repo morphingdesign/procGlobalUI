@@ -82,19 +82,28 @@ class Radar {
   }
   
   void drawRadar(){
-    noFill();
+    
     pushMatrix();
     int radius = 200;
-    int spacing = 10;
+    int spacing = 13;
     ellipseMode(RADIUS);
-    stroke(100, 100);
+
+    noFill();
+    stroke(255, 10);
     strokeWeight(1);
     for(int i=10; i < radius; i+=spacing){
        ellipse(0, 0, i, i);
     }
+    popMatrix();
+    
+    pushMatrix();
+    translate(0,0,0);
+    fill(1);
+    //noFill();
     stroke(100, 255);
     strokeWeight(2);
     ellipse(0, 0, radius, radius);
     popMatrix();
+    
   }
 }  
