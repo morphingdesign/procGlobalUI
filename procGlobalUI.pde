@@ -47,9 +47,12 @@ import controlP5.*;
 **/
 
 IsoSkeleton attractorGeo;    // Used to pass through IsoSkeleton
-Radar radarSys;            // into Attractor class
+Radar radarSys;              // into Attractor class
 Grid bkgdGrid;
 Globe earth;
+
+ControlP5 arsenalCP;         // Used to pass through ControlP5
+Arsenal arsenalCtrlPanel;    // into Arsenal class
 
 IsoSkeleton skeleton;
 IsoWrap wrap;
@@ -160,6 +163,11 @@ void setup() {
   
   radarSys = new Radar(attractorGeo);
   attractorColor = color(0, 255, 0, 20);
+
+  arsenalCP = new ControlP5(this);
+  arsenalCtrlPanel = new Arsenal(arsenalCP);
+
+
 
   earth = new Globe();
 
@@ -283,7 +291,7 @@ void draw() {
   backText.drawStream(40);    // Draws the text stream in background
   // *******************************************************    
 
-
+  arsenalCtrlPanel.viewport();
   
 
   if(extraTab){
