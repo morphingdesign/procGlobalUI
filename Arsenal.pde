@@ -5,29 +5,29 @@ class Arsenal {
   
   // Class Variables
     ControlP5 arsenalClassCP;
-    PImage photo[] = new PImage[48];
-    String imgFileNameBase = "images/drone (";
-    String imgFileNameEnd = ").png";
-    int viewportSizeX = 416;
-    int viewportSizeY = 234;
+    int viewportSizeX = 416;      // Used for 16:9 aspect ratio
+    int viewportSizeY = 234;      // Used for 16:9 aspect ratio
+    int dataStreamSizeX = 360;
+    int dataStreamSizeY = 560;
     int viewport_ctrl = 47;
+    int iteration;
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
-  // Used to construct an instance of the Cog object.  The parameters passed through define the type of cog and its behavior
+  // Used to construct an instance of the Arsenal controller object.  
  
-  Arsenal(ControlP5 ctrlP5){
+  Arsenal(ControlP5 ctrlP5, String iterAdd){
      arsenalClassCP = ctrlP5;
-     for(int i=0; i < photo.length ; i++){
-        photo[i] = loadImage(imgFileNameBase + (i + 1) + imgFileNameEnd);
-     }
-     arsenalClassCP.addSlider("viewport_ctrl")
-       .setPosition(20, 270)
-       .setSize(viewportSizeX-70,10)
+     arsenalClassCP.addSlider("iteration-" + iterAdd)
+       .setPosition(20, 1040)
+       .plugTo(this, "setValue")
+       .setValue(10)
+       .setSize(viewportSizeX-60,10)
        .setRange(0,viewport_ctrl)
        .setSliderMode(Slider.FLEXIBLE)
        .setNumberOfTickMarks(47)
-       .shuffle()        // Sets to a random value
+       .setLabel("Rotate View")
+       //.shuffle()        // Sets to a random value
        .setValue(4)
        .setColorTickMark(color(0, 255, 0))
        .setColorForeground(color(0, 255, 0))
@@ -45,10 +45,23 @@ class Arsenal {
   // *******************************************************
   // Create shape
   
+  void dataStream(){
+    pushMatrix();
+    translate(20, 200);
+    fill(0, 180);
+    stroke(0, 255, 0);
+    rect(0, 0, dataStreamSizeX, dataStreamSizeY);
+    
+    popMatrix();
+  }
+  
   void viewport(){
      pushMatrix();
-     translate(20, 20);
-     image(photo[viewport_ctrl], 0, 0);
+     translate(20, 800);
+     fill(0);
+     noStroke();
+     rect(0, 0, viewportSizeX, viewportSizeY);
+     image(photo[iteration], 0, 0);
      noFill();
      stroke(color(0, 255, 0));
      strokeWeight(1);
@@ -56,5 +69,8 @@ class Arsenal {
      popMatrix();
   }
   
+  void setValue(int value){
+    iteration = value;
+  }
 
 }  

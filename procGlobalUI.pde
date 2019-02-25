@@ -78,6 +78,10 @@ color bkgdGridColor = (50);
 boolean extraTab = false;
 PVector aptSource, aptDestination;
 
+String imgFileNameBase = "images/drone (";
+String imgFileNameEnd = ").png";
+PImage photo[] = new PImage[48];
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Data
 
@@ -86,13 +90,19 @@ PVector aptSource, aptDestination;
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Table airports;
 Table routes;
-JSONArray airport;
-JSONArray airRoutes;
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Data for cities sourced from: https://simplemaps.com/data/world-cities
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Table cities;
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Data for armory sourced from: 
+// https://en.wikipedia.org/wiki/General_Atomics_MQ-9_Reaper
+// https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104470/mq-9-reaper/
+// https://www.globalsecurity.org/military/systems/aircraft/mq-9-specs.htm
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+JSONObject armory;
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -117,7 +127,6 @@ class MyCanvas extends Canvas {
   public void draw(PGraphics pg) {
       pushMatrix();
       pg.fill(100);
-      //pg.rect(mx-20, y-20, 240, 100);
       pg.rect(x, y, 240, 100);
       pg.fill(255);
       pg.text("This text is drawn by MyCanvas", x,y);
@@ -137,8 +146,11 @@ void setup() {
   airports = loadTable("airports.csv");
   cities = loadTable("worldcities.csv", "header");
   routes = loadTable("routes.csv");
-  airport = loadJSONArray("airport.json");
-  airRoutes = loadJSONArray("routes.json");
+  armory = loadJSONObject("armory.json");
+
+  for(int i=0; i < photo.length ; i++){
+     photo[i] = loadImage(imgFileNameBase + (i + 1) + imgFileNameEnd);
+  }
 
   // Create iso-skeleton
   //skeleton = new IsoSkeleton(this);
@@ -164,8 +176,10 @@ void setup() {
   radarSys = new Radar(attractorGeo);
   attractorColor = color(0, 255, 0, 20);
 
+  //int viewNumber = 0;
+
   arsenalCP = new ControlP5(this);
-  arsenalCtrlPanel = new Arsenal(arsenalCP);
+  arsenalCtrlPanel = new Arsenal(arsenalCP, "test");
 
 
 
@@ -291,6 +305,7 @@ void draw() {
   backText.drawStream(40);    // Draws the text stream in background
   // *******************************************************    
 
+  arsenalCtrlPanel.dataStream();
   arsenalCtrlPanel.viewport();
   
 
@@ -308,7 +323,19 @@ void draw() {
   
   //rotateX(frameCount*0.001);
   //rotateX(mouseY*-0.003);
-  rotateY(frameCount*0.003 + mouseX*0.003);
+  if(mouseX > width * 0.25 &&  mouseX < width * 0.75 && mouseY > height * 0.25 && mouseY < height * 0.75){
+     rotateY(frameCount * 0.003 + mouseX * 0.003);
+     //if(mouseY > height * 0.25 && mouseY < height * 0.75){
+        rotateX(mouseY * 0.001);
+     //}
+  }
+  else{
+    rotateY(frameCount * 0.003);
+  }
+  
+  
+  
+  //rotateY(frameCount*0.003 + mouseX*0.003);
   
   
   noStroke();
