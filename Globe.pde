@@ -3,13 +3,15 @@ class Globe {
   
   // Class Variables
 
-
+  color globeRingColor = color(0, 255, 0);
+  Grid globeRing;
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // Used to construct an instance of the Cog object.  The parameters passed through define the type of cog and its behavior
  
   Globe(){
+    globeRing = new Grid(globeRingColor, 5);
   }
    
  
@@ -99,11 +101,13 @@ class Globe {
   void drawSphereMask(){
     pushMatrix();
     translate(width/2, height/2);
-    fill(10);
+    fill(5);
     strokeWeight(1);
     stroke(255);
     ellipseMode(RADIUS);
     ellipse(0, 0, height/2, height/2);
+    
+    globeRing.radialGrid(height, 10, 10, 1, 1, 200, true);
     popMatrix();
   }
 }  

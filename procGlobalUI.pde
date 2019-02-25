@@ -267,7 +267,7 @@ void draw() {
   
   // *******************************************************
   // Background grid
-  bkgdGrid.drawGeo();            // Figure out why it appears to be drawn on top of everything
+  bkgdGrid.rectGrid();            // Figure out why it appears to be drawn on top of everything
   // *******************************************************
    
 
