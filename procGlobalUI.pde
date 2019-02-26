@@ -68,6 +68,8 @@ ColorPicker cp;              // UI for global path color
 
 TextStream backText;         // Scrolling text background 
 
+Screen overlay;
+
 int pathDensity = 100;
 int bkgdGridSpace = 20;
 
@@ -76,6 +78,7 @@ color attractorColor;       // Color for paths used for strange attractor
 color bkgdGridColor = (50);
 
 boolean extraTab = false;
+boolean inRadarHotSpot = false;
 PVector aptSource, aptDestination;
 
 String imgFileNameBase = "images/drone (";
@@ -83,6 +86,7 @@ String imgFileNameEnd = ").png";
 PImage photo[] = new PImage[48];
 
 PFont monoFont;
+PFont playFont;
 
 
 
@@ -147,7 +151,7 @@ class MyCanvas extends Canvas {
 
 void setup() {
   size(1920, 1080, P3D);
-  frameRate(30);
+  frameRate(60);
   airports = loadTable("airports.csv");
   cities = loadTable("worldcities.csv", "header");
   routes = loadTable("routes.csv");
@@ -155,6 +159,7 @@ void setup() {
   
   
   monoFont = createFont("fonts/PT_Mono/PTM55FT.ttf", 14);
+  playFont = createFont("fonts/Play/Play-Bold.ttf", 24);
 
   for(int i=0; i < photo.length ; i++){
      photo[i] = loadImage(imgFileNameBase + (i + 1) + imgFileNameEnd);
@@ -189,10 +194,11 @@ void setup() {
   arsenalCP = new ControlP5(this);
   arsenalCtrlPanel = new Arsenal(arsenalCP, "test");
 
-
+  overlay = new Screen();
 
   earth = new Globe();
 
+  /**
   // By default all controllers are stored inside Tab 'default' 
   // add a second tab with name 'extra'
   cp5.addTab("extra")
@@ -218,7 +224,7 @@ void setup() {
      
      
   ;
-
+  **/
 
 
 
@@ -270,6 +276,7 @@ void setup() {
       .setPosition(1460, 100)
       .setColorValue(color(0, 255, 0, 255))
       ;
+    
       
   //int sliderTicks1 = 100;
   //pathDensity = sliderTicks1;
@@ -281,11 +288,7 @@ void setup() {
      .setNumberOfTickMarks(3)
   ;    
 
-  cp5.getController("pathDensity").moveTo("extra");
-  //cp5.getController("slider").moveTo("global");
-  
-  // Tab 'global' is a tab that lies on top of any 
-  // other tab and is always visible
+
   
   
 }
@@ -315,28 +318,33 @@ void draw() {
   arsenalCtrlPanel.viewport();
   
 
-  if(extraTab){
-    // create a control window canvas and add it to
-    // the previously created control window.  
-    //cc = new MyCanvas();
-    //cc.pre(); // use cc.post(); to draw on top of existing controllers.  
-    //cp10.addCanvas(cc); // add the canvas to cp5 
-  }  
+
 
   pushMatrix();
   earth.drawSphereMask();
   translate(width/2, height/2);
   
+  int ctrTopPos = 490;
+  int ctrSidePos = 360;
+  
+  int hotSpotStartX = width/2 - ctrTopPos;
+  int hotSpotStartY = height/2 - ctrSidePos;
+  int hotSpotEndX = width/2 + ctrTopPos;
+  int hotSpotEndY = height/2 + ctrSidePos;
+  
   //rotateX(frameCount*0.001);
   //rotateX(mouseY*-0.003);
-  if(mouseX > width * 0.25 &&  mouseX < width * 0.75 && mouseY > height * 0.25 && mouseY < height * 0.75){
+  //if(mouseX > width * 0.25 &&  mouseX < width * 0.75 && mouseY > height * 0.25 && mouseY < height * 0.75){
+  if(mouseX > hotSpotStartX &&  mouseX < hotSpotEndX && mouseY > hotSpotStartY && mouseY < hotSpotEndY){  
      rotateY(frameCount * 0.003 + mouseX * 0.003);
      //if(mouseY > height * 0.25 && mouseY < height * 0.75){
-        rotateX(mouseY * 0.001);
+     rotateX(mouseY * 0.001);
      //}
+     inRadarHotSpot = true;
   }
   else{
     rotateY(frameCount * 0.003);
+    inRadarHotSpot = false;
   }
   
   
@@ -355,6 +363,8 @@ void draw() {
   earth.drawGlobeGeo(400, 10);
   earth.globePaths();
   popMatrix();
+  
+  overlay.plate();
 }
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

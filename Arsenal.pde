@@ -35,18 +35,22 @@ class Arsenal {
        //.shuffle()        // Sets to a random value
        .setValue(4)
        .setColorTickMark(color(0, 255, 0))
-       .setColorForeground(color(0, 255, 0))
+       .setColorForeground(color(255))
        .setColorBackground(color(0))
        .setColorActive(color(255, 0, 0))
        .setColorLabel(color(0, 255, 0))
        .setColorValue(color(0, 0, 0))
        ; 
      dataStreamText = arsenalClassCP.addTextarea("txt")
-       .setPosition(25,205)
+       .setPosition(25,225)
        .setSize(dataStreamSizeX - 10, dataStreamSizeY - 10)
        .setFont(monoFont)
        .setLineHeight(16)
-       .setColor(color(255))
+       .setColor(color(0, 255, 0))
+       
+       .setScrollBackground(color(0, 0))
+       .setScrollActive(color(255, 0, 0))
+       .setScrollForeground(color(255))
        .setColorBackground(color(0,100))
        .setColorForeground(color(255,100));
        ;  
@@ -61,7 +65,7 @@ class Arsenal {
   
   void dataStreamBox(){
     pushMatrix();
-    translate(20, 200);
+    translate(20, 220);
     fill(0, 180);
     stroke(0, 255, 0);
     rect(0, 0, dataStreamSizeX, dataStreamSizeY);

@@ -2,7 +2,8 @@
 class TextStream {  
   
   // Class Variables
-  
+  //color textColor = color(39, 255, 8);   // original color
+  color textColor = color(255, 0, 0); 
 
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,9 +31,9 @@ class TextStream {
     int numOfCurves = height / multiplier;
     int curveOffset = height / numOfCurves;
     
-    drawCurveArray(numOfCurves, curveOffset, 200);
-    drawCurveArray(numOfCurves, curveOffset, 150);
+    drawCurveArray(numOfCurves, curveOffset, 125);
     drawCurveArray(numOfCurves, curveOffset, 100);
+    drawCurveArray(numOfCurves, curveOffset, 75);
     drawCurveArray(numOfCurves, curveOffset, 50);     
     popMatrix(); 
   }
@@ -48,7 +49,7 @@ class TextStream {
   
   void drawCurve(int alpha){
     int scalar = 10;
-    int arrayLength = (width/2)/scalar + scalar;
+    int arrayLength = (width)/scalar + scalar;
     int shift;
     
     noFill();
@@ -97,7 +98,7 @@ class TextStream {
          textAlign(CENTER, CENTER);
          //fill(153, 0, 0);
          
-         fill(39, 255, 8, alpha);
+         fill(textColor, alpha);          // Defines color for all text in background
          text(glyph[int(random(0, 95))], xList[i], yList[i]);
        }
     }

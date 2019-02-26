@@ -3,7 +3,7 @@ class Globe {
   
   // Class Variables
 
-  color globeRingColor = color(0, 255, 0);
+  color globeRingColor = color(0, 0, 0);
   Grid globeRing;
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

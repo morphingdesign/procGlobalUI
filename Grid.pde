@@ -31,10 +31,10 @@ class Grid {
     translate(bkgdGridXOrigin, bkgdGridYOrigin, -1);
     // Horizontal Lines
     for(int i=0; i < height; i+=spacing){
-       line(0, i, width/2, i);
+       line(0, i, width, i);
     }
     // Vertical Lines
-    for(int i=0; i < width/2; i+=spacing){
+    for(int i=0; i < width; i+=spacing){
        line(i, 0, i, height);
     }
     popMatrix();
@@ -42,7 +42,7 @@ class Grid {
   
   void radialGrid(int diameter, int projection, int interval, int ringWeight, int tickWeight, int colorAlpha, boolean ticks){
     int lineLength;
-    color radarColor = color(0, 255, 0, colorAlpha);
+    color radarColor = color(gridColor, colorAlpha);
     pushMatrix();
     noFill();
     strokeWeight(ringWeight);
@@ -56,7 +56,7 @@ class Grid {
        lineLength = 0;
     }
     for(int i = 0; i < 360; i+=interval){
-      stroke(radarColor);
+      stroke(gridColor);
       strokeWeight(tickWeight);
       rotate(radians(i));
       line(lineLength, 0, diameter/2, 0);
