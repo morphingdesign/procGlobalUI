@@ -56,12 +56,12 @@ class Grid {
        lineLength = 0;
     }
     for(int i = 0; i < 360; i+=interval){
-      stroke(gridColor);
+      stroke(radarColor);
       strokeWeight(tickWeight);
       rotate(radians(i));
       line(lineLength, 0, diameter/2, 0);
       rotate(radians(-i));
     }
     popMatrix();
-  }
+  }  
 }  

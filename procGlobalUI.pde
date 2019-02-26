@@ -73,6 +73,11 @@ Screen overlay;
 int pathDensity = 100;
 int bkgdGridSpace = 20;
 
+// Color scheme
+color greenSolid = color(0, 255, 0);
+color redSolid = color(255, 0, 0);
+color whiteSolid = color(255);
+
 color pathColor;            // Color for paths around globe
 color attractorColor;       // Color for paths used for strange attractor
 color bkgdGridColor = (50);
@@ -302,7 +307,7 @@ void draw() {
   // Background grid
   bkgdGrid.rectGrid();            // Figure out why it appears to be drawn on top of everything
   // *******************************************************
- 
+  
   // *******************************************************
   // Variable management
   pathColor = cp.getColorValue();  // Assign color picker color to pathColor variable
