@@ -1,14 +1,92 @@
-
+[
 	{
-	"id": "id1",
+	"id": "0",
+	"codename": "id1",
 	"name": "name1",
-	"General Characteristics": "genChar1",
-	"Performance": "perf1",
-	"Armament": "armament1",
-	"Avionics": "avionics1"
+	"General Characteristics":{
+		"Crew":
+			"x1"
+			,
+		"Length":
+			"x2"
+			,
+		"Wingspan":
+			"x3"
+			,
+		"Height":
+			"x4"
+			,
+		"Empty weight":
+			"x5"
+			,
+		"Max takeoff weight":
+			"x6"
+			,
+		"Fuel capacity":
+			"x7"
+			,
+		"Payload":
+			"x8"
+			,
+		"Internal":
+			"x9"
+			,
+		"External":
+			"x10"
+			,
+		"Powerplant":
+			"x11"
+		},
+	"Performance":{
+		"Maximum speed":
+			"y1"
+			,
+		"Cruise speed":
+			"y2"
+			,
+		"Range":
+			"y3"
+			,
+		"Endurance":
+			"y4"
+			,
+		"Service ceiling":
+			"y5"
+			,
+		"Operational altitude":
+			"y6"
+			
+		},
+	"Armament":{
+		"1":
+			"z1",
+		"2":
+			"z2",
+		"3":
+			"z3",
+		"4":
+			"z4",
+		"5":
+			"z5",
+		"6":
+			"z6",
+		"7":
+			"z7",
+		"8":
+			"z8"
+		},
+	"Avionics":{
+		"1":
+			"a1",
+		"2":
+			"a2",
+		"3":
+			"a3"
+		}
 	},
 	{
-	"id":"MQ-9A",
+	"id": "1",
+	"codename":"MQ-9A",
 	"name":"Reaper",
 	"General Characteristics":{
 		"Crew":
@@ -42,7 +120,7 @@
 			"3,000 lb (1,400 kg)"
 			,
 		"Powerplant":
-			"1 × Honeywell TPE331-10 turboprop, 900 hp (671 kW) with Digital Electronic Engine Control (DEEC)"
+			"1 - Honeywell TPE331-10 turboprop, 900 hp (671 kW) with Digital Electronic Engine Control (DEEC)"
 		},
 	"Performance":{
 		"Maximum speed":
@@ -91,3 +169,4 @@
 			"Raytheon SeaVue Marine Search Radar (Guardian variants)"
 		}
 	}
+]

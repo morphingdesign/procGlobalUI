@@ -82,6 +82,10 @@ String imgFileNameBase = "images/drone (";
 String imgFileNameEnd = ").png";
 PImage photo[] = new PImage[48];
 
+PFont monoFont;
+
+
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Data
 
@@ -102,7 +106,8 @@ Table cities;
 // https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104470/mq-9-reaper/
 // https://www.globalsecurity.org/military/systems/aircraft/mq-9-specs.htm
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-JSONObject armory;
+
+JSONArray armory;
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -146,7 +151,10 @@ void setup() {
   airports = loadTable("airports.csv");
   cities = loadTable("worldcities.csv", "header");
   routes = loadTable("routes.csv");
-  armory = loadJSONObject("armory.json");
+  armory = loadJSONArray("armory.json");
+  
+  
+  monoFont = createFont("fonts/PT_Mono/PTM55FT.ttf", 14);
 
   for(int i=0; i < photo.length ; i++){
      photo[i] = loadImage(imgFileNameBase + (i + 1) + imgFileNameEnd);
@@ -291,8 +299,6 @@ void draw() {
   // Background grid
   bkgdGrid.rectGrid();            // Figure out why it appears to be drawn on top of everything
   // *******************************************************
-   
-
  
   // *******************************************************
   // Variable management
@@ -305,7 +311,7 @@ void draw() {
   backText.drawStream(40);    // Draws the text stream in background
   // *******************************************************    
 
-  arsenalCtrlPanel.dataStream();
+  arsenalCtrlPanel.dataStreamBox();
   arsenalCtrlPanel.viewport();
   
 
@@ -346,7 +352,6 @@ void draw() {
   fill(0, 0, 0, 255);
   
   wrap.plot();
-  
   earth.drawGlobeGeo(400, 10);
   earth.globePaths();
   popMatrix();
