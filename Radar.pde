@@ -1,23 +1,15 @@
 import ComputationalGeometry.*;
 
-
 // Class for all strange attractor construction and animation
 class Radar {
   
   // Class Variables
-  //IsoSkeleton attractorGeo;
   Grid radarRing;
-  
-  float zm = 0;
-  float sp = 0.01 * frameCount * 0.004;
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // Used to construct the radar system
- 
-  //Radar(IsoSkeleton isoSkeleton){
   Radar(){  
-    //attractorGeo = isoSkeleton;
     radarRing = new Grid(greenSolid, 0);
   }
   
@@ -34,8 +26,6 @@ class Radar {
     popMatrix();
   }
   
-
- 
   // *******************************************************
   // 
   void drawRadar(){

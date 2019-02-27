@@ -65,10 +65,7 @@ class Globe {
         .setPosition(1460, 100)
         .setColorValue(color(0, 255, 0, 255))
     ;
-    
-    
   }
-   
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Methods

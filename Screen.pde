@@ -1,17 +1,38 @@
+import controlP5.*;
+
 // Class for grid construction
 class Screen {  
   
   // Class Variables
+  ControlP5 programCP;
   int edgeOffset = 10;    // Offset from sketch border
   int ctrTopPos = 490;
   int ctrSidePos = 360;
   color highlightEdge;     // Color changes when mouse is in radar hotspot
+  String powerInfo = "Toggle this power switch to activate \n the main program.";
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
-  // Used to construct an instance of the Cog object.  The parameters passed through define the type of cog and its behavior
- 
-  Screen(){
+  // 
+  Screen(ControlP5 ctrlP5){
+    programCP = ctrlP5;
+    
+    programCP.addToggle("power")
+       .setPosition(20,100)
+       .setSize(40,20)
+       .setValue(false)
+       .setMode(ControlP5.SWITCH)
+       .plugTo(this, "power")
+       .setValueLabel("Power Switch")
+       .setCaptionLabel(powerInfo)
+       .setColorBackground(color(0, 0, 0))
+       .setColorForeground(color(20, 20, 20))
+       .setColorLabel(color(40, 40, 40))
+       .setColorValue(color(60, 60, 60))
+       .setColorValueLabel(color(80, 80, 80))
+       .setColorCaptionLabel(whiteSolid)
+       .setColorActive(color(230, 230, 230))
+       ;
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,6 +162,16 @@ class Screen {
     }
   }
   
+  // *******************************************************
+  // Creates power switch for main program
+  void power(boolean powerSwitch){
+    if(powerSwitch == true) {
+        programOn = true;               // Activates the main program
+        programCP.remove("power");      // Removes the power toggle CP from screen
+      } else {
+        programOn = false;              // Displays intro screen
+      }
+  }
   
   // *******************************************************
   // Creates a Tranguloid Trefoil shape as an abstract form

@@ -52,6 +52,7 @@ ControlP5 earthCP;           // Earth control panel
 ControlP5 arsenalCP;         // Used to pass through ControlP5 into Arsenal class
 Arsenal arsenalModule;       // Arsenal data and viewport
 Screen hudScreen;            // HUD graphics in foreground
+ControlP5 pwrCP;             // Used to pass through ControlP5 into Screen class
 
 int pathDensity = 100;
 int bkgdGridSpace = 20;
@@ -141,7 +142,8 @@ void setup() {
   eShell = new IsoWrap(this);
   earthCP = new ControlP5(this);
   earthModule = new Globe(eShell, earthCP);
-  hudScreen = new Screen();
+  pwrCP = new ControlP5(this);
+  hudScreen = new Screen(pwrCP);
 }
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -154,7 +156,7 @@ void draw() {
   bkgdGrid.rectGrid();               // Square grid
   hudScreen.renderStaticGraphics();  // Static HUD graphics
   
-  //if(programOn){
+  if(programOn){
     // *******************************************************
     // Main program content
     backText.renderStream(40);       // Background text stream
@@ -163,12 +165,12 @@ void draw() {
     arsenalModule.viewport();        // Scrollable 3D view
     earthModule.renderGlobe();       // Earth data points and paths
     hudScreen.renderRunGraphics();   // HUD screen graphics when program is on
-  //}
-  //else{
+  }
+  else{
     // ******************************************************* 
     // Content before program starts
     hudScreen.renderPreGraphics();   // HUD screen graphics when program is off
-    //hudScreen.screenSaver();
-  //}
+    hudScreen.screenSaver();
+  }
   
 }

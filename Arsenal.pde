@@ -199,9 +199,4 @@ class Arsenal {
         + "***************************************";
   }
   
-  void dropdownCtrl() {
-    //CColor c = new CColor();
-    //c.setBackground(color(255,0,0));
-    //arsenalClassCP.get(ScrollableList.class, "arsenal").getItem(1).put("color", c);
-  }
 }  
