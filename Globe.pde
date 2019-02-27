@@ -1,17 +1,70 @@
+import ComputationalGeometry.*;
+import controlP5.*;
+
 // Class for globe and global data construction and animation
 class Globe {  
   
   // Class Variables
-
+  IsoWrap earthShell;
+  ControlP5 globeClassCP;
+  ColorPicker globeClassPathColorPicker;    // UI for global path color
   color globeRingColor = color(0, 0, 0);
   Grid globeRing;
+  
+  float xOrigin = 0;
+  float yOrigin = 0;
+  float zOrigin = 0;
+  float xPoint, yPoint, zPoint;
+  float radius = 400;
+  float radiusSmall = 200;
+  float phi;
+  float theta;
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // Used to construct an instance of the Cog object.  The parameters passed through define the type of cog and its behavior
  
-  Globe(){
+  Globe(IsoWrap isoWrap, ControlP5 ctrlP5){
+    earthShell = isoWrap;
+    globeClassCP = ctrlP5;
+    
     globeRing = new Grid(globeRingColor, 5);
+    
+    PVector[] pts = new PVector[1000];
+    for (int i=0; i<pts.length; i++) {
+      phi = random(PI * -1, PI);
+      theta = random(TWO_PI * -1, TWO_PI);
+         xPoint = xOrigin + (radius * sin(phi) * cos(theta));
+         yPoint = yOrigin + (radius * sin(phi) * sin(theta));
+         zPoint = zOrigin + (radius * cos(phi));
+         //println(xPoint + " , " + yPoint + " , " + zPoint);
+         pts[i] = new PVector(xPoint, yPoint, zPoint);
+    }  
+  
+    for (int i=0; i<pts.length; i++) {
+      for (int j=i+1; j<pts.length; j++) {
+        if (pts[i].dist( pts[j] ) < 50) {
+          //skeleton.addEdge(pts[i], pts[j]);
+          eShell.addPt(pts[i]);
+        }
+      }
+    }
+    
+    // Earth control panel
+    globeClassCP.addSlider("pathDensity")
+       .setPosition(1460, 180)
+       .setSize(260,20)
+       .setRange(25,pathDensity)
+       .setNumberOfTickMarks(3)
+    ;  
+    
+    globeClassPathColorPicker = globeClassCP.addColorPicker("picker")
+        .setPosition(1460, 100)
+        .setColorValue(color(0, 255, 0, 255))
+    ;
+    // Earth control panel
+    
+    
   }
    
  
@@ -21,7 +74,43 @@ class Globe {
   // *******************************************************
   // Create globe
   
-  void drawGlobeGeo(int radius, int offset){
+  void renderGlobe(){
+    pathColor = globeClassPathColorPicker.getColorValue();  // Assign color picker color to pathColor variable
+    
+    pushMatrix();
+    earthModule.drawSphereMask();
+    translate(width/2, height/2);
+    
+    hotSpotStartX = width/2 - ctrTopPos;
+    hotSpotStartY = height/2 - ctrSidePos;
+    hotSpotEndX = width/2 + ctrTopPos;
+    hotSpotEndY = height/2 + ctrSidePos;
+    
+    if(mouseX > hotSpotStartX &&  mouseX < hotSpotEndX && mouseY > hotSpotStartY && mouseY < hotSpotEndY){  
+       rotateY(frameCount * 0.003 + mouseX * 0.003);
+       rotateX(mouseY * 0.001);
+       inRadarHotSpot = true;
+    }
+    else{
+      rotateY(frameCount * 0.003);
+      inRadarHotSpot = false;
+    }
+    earthModule.globeShell();
+    earthModule.globeGeo(400, 10);
+    earthModule.globePaths();
+    popMatrix();
+    
+    
+  }
+  
+  void globeShell(){
+    noFill();
+    noStroke();
+    fill(0, 0, 0, 255);
+    eShell.plot();
+  }
+  
+  void globeGeo(int radius, int offset){
     for(int i=0; i < cities.getRowCount(); i++){
        float latitude = cities.getFloat(i, "lat");
        float longitude = cities.getFloat(i, "lng");
@@ -101,7 +190,7 @@ class Globe {
   void drawSphereMask(){
     pushMatrix();
     translate(width/2, height/2);
-    fill(5);
+    fill(0);
     strokeWeight(1);
     stroke(255);
     ellipseMode(RADIUS);

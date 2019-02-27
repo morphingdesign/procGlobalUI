@@ -46,44 +46,36 @@ import controlP5.*;
     throughout the sketch and its contents built from various classes.  
 **/
 
-IsoSkeleton attractorGeo;    // Used to pass through IsoSkeleton
-Radar radarSys;              // into Attractor class
-Grid bkgdGrid;
-Globe earth;
-
-ControlP5 arsenalCP;         // Used to pass through ControlP5
-Arsenal arsenalCtrlPanel;    // into Arsenal class
-
-IsoSkeleton skeleton;
-IsoWrap wrap;
-IsoWrap wrapSmall;
-
-ControlP5 cp5;
-ControlP5 cp6;
-ControlP5 cp10;
-ControlWindow controlWindow;
-Canvas cc;
-
-ColorPicker cp;              // UI for global path color
-
+Grid bkgdGrid;               // Square grid background
 TextStream backText;         // Scrolling text background 
-
-Screen overlay;
+Radar radarModule;           // Radar system
+IsoWrap eShell;              // Used to pass through IsoWrap into Globe class
+Globe earthModule;           // Earth with data points and paths
+ControlP5 earthCP;           // Earth control panel
+//ColorPicker earthPathColorPicker;  // UI for global path color
+ControlP5 arsenalCP;         // Used to pass through ControlP5 into Arsenal class
+Arsenal arsenalModule;    // Arsenal data and viewport
+Screen hudScreen;            // HUD graphics in foreground
 
 int pathDensity = 100;
 int bkgdGridSpace = 20;
+
+int ctrTopPos = 490;
+int ctrSidePos = 360;
+int hotSpotStartX;
+int hotSpotStartY;
+int hotSpotEndX;
+int hotSpotEndY;
+boolean inRadarHotSpot = false;
 
 // Color scheme
 color greenSolid = color(0, 255, 0);
 color redSolid = color(255, 0, 0);
 color whiteSolid = color(255);
 
-color pathColor;            // Color for paths around globe
-color attractorColor;       // Color for paths used for strange attractor
+color pathColor;                              // Color for paths around globe
 color bkgdGridColor = (50);
 
-boolean extraTab = false;
-boolean inRadarHotSpot = false;
 PVector aptSource, aptDestination;
 
 String imgFileNameBase = "images/drone (";
@@ -92,8 +84,6 @@ PImage photo[] = new PImage[48];
 
 PFont monoFont;
 PFont playFont;
-
-
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Data
@@ -115,53 +105,18 @@ Table cities;
 // https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104470/mq-9-reaper/
 // https://www.globalsecurity.org/military/systems/aircraft/mq-9-specs.htm
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 JSONArray armory;
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-// MyCanvas, your Canvas render class
-class MyCanvas extends Canvas {
-  int x, y;
-  int mx = 0;
-  int my = 0;
-  public void setup(PGraphics pg) {
-    x = 100;
-    y = 200;
-  }  
-
-  public void update(PApplet p) {
-    mx = p.mouseX;
-    my = p.mouseY;
-  }
-
-  public void draw(PGraphics pg) {
-      pushMatrix();
-      pg.fill(100);
-      pg.rect(x, y, 240, 100);
-      pg.fill(255);
-      pg.text("This text is drawn by MyCanvas", x,y);
-      popMatrix();
-  }
-}
-
-
-
-
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void setup() {
   size(1920, 1080, P3D);
   frameRate(60);
+  
   airports = loadTable("airports.csv");
   cities = loadTable("worldcities.csv", "header");
   routes = loadTable("routes.csv");
   armory = loadJSONArray("armory.json");
-  
   
   monoFont = createFont("fonts/PT_Mono/PTM55FT.ttf", 14);
   playFont = createFont("fonts/Play/Play-Bold.ttf", 24);
@@ -170,132 +125,33 @@ void setup() {
      photo[i] = loadImage(imgFileNameBase + (i + 1) + imgFileNameEnd);
   }
 
-  // Create iso-skeleton
-  //skeleton = new IsoSkeleton(this);
-  attractorGeo = new IsoSkeleton(this);
-  wrap = new IsoWrap(this);
-  wrapSmall = new IsoWrap(this);
-  cp5 = new ControlP5(this);
-  cp10 = new ControlP5(this);
-  
-  float xOrigin = 0;
-  float yOrigin = 0;
-  float zOrigin = 0;
-  float xPoint, yPoint, zPoint;
-  float radius = 400;
-  float radiusSmall = 200;
-  float phi;
-  float theta;
-
+  eShell = new IsoWrap(this);
+  earthCP = new ControlP5(this);
   bkgdGrid = new Grid(bkgdGridColor, bkgdGridSpace);
-
-  backText = new TextStream();                // Setup scrolling back text 
-  
-  radarSys = new Radar(attractorGeo);
-  attractorColor = color(0, 255, 0, 20);
-
-  //int viewNumber = 0;
-
+  backText = new TextStream();                          // Setup scrolling back text 
+  radarModule = new Radar();
   arsenalCP = new ControlP5(this);
-  arsenalCtrlPanel = new Arsenal(arsenalCP, "test");
-
-  overlay = new Screen();
-
-  earth = new Globe();
-
+  arsenalModule = new Arsenal(arsenalCP, "suffix");
+  earthModule = new Globe(eShell, earthCP);
+  hudScreen = new Screen();
+  
   /**
-  // By default all controllers are stored inside Tab 'default' 
-  // add a second tab with name 'extra'
-  cp5.addTab("extra")
-     .setSize(100,50)
-     .setColorBackground(color(0, 160, 100))
-     .setColorLabel(color(255))
-     .setColorActive(color(255,128,0))
-  ;
-
-  // if you want to receive a controlEvent when
-  // a  tab is clicked, use activeEvent(true)
-  
-  cp5.getTab("default")
-     .setPosition(100,50)
-     .activateEvent(true)
-     .setLabel("my default tab")
-     .setId(1)
-  ;
-
-  cp5.getTab("extra")
-     .activateEvent(true)
-     .setId(2)
-     
-     
-  ;
-  **/
-
-
-
-
-
-  // Create points to make the network
-  PVector[] pts = new PVector[1000];
-  for (int i=0; i<pts.length; i++) {
-    phi = random(PI * -1, PI);
-    theta = random(TWO_PI * -1, TWO_PI);
-       xPoint = xOrigin + (radius * sin(phi) * cos(theta));
-       yPoint = yOrigin + (radius * sin(phi) * sin(theta));
-       zPoint = zOrigin + (radius * cos(phi));
-       //println(xPoint + " , " + yPoint + " , " + zPoint);
-       pts[i] = new PVector(xPoint, yPoint, zPoint);
-  }  
-
-  for (int i=0; i<pts.length; i++) {
-    for (int j=i+1; j<pts.length; j++) {
-      if (pts[i].dist( pts[j] ) < 50) {
-        //skeleton.addEdge(pts[i], pts[j]);
-        wrap.addPt(pts[i]);
-      }
-    }
-  }
-
-  
-  // Create points to make the network
-  PVector[] ptsSmall = new PVector[1000];
-  for (int i=0; i<ptsSmall.length; i++) {
-    phi = random(PI * -1, PI);
-    theta = random(TWO_PI * -1, TWO_PI);
-       xPoint = xOrigin + (radiusSmall * sin(phi) * cos(theta));
-       yPoint = yOrigin + (radiusSmall * sin(phi) * sin(theta));
-       zPoint = zOrigin + (radiusSmall * cos(phi));
-       ptsSmall[i] = new PVector(xPoint, yPoint, zPoint);
-  }  
-
-  for (int i=0; i<ptsSmall.length; i++) {
-    for (int j=i+1; j<ptsSmall.length; j++) {
-      if (ptsSmall[i].dist( ptsSmall[j] ) < 50) {
-        wrapSmall.addPt(ptsSmall[i]);
-      }
-    }
-  }
-  
-  cp6 = new ControlP5(this);
-  cp = cp6.addColorPicker("picker")
-      .setPosition(1460, 100)
-      .setColorValue(color(0, 255, 0, 255))
-      ;
-    
-      
-  //int sliderTicks1 = 100;
-  //pathDensity = sliderTicks1;
-  //cp5.addSlider("sliderTicks1")
-  cp5.addSlider("pathDensity")
+  // Move this control panel into the Globe class
+  // Earth control panel
+  earthCP.addSlider("pathDensity")
      .setPosition(1460, 180)
      .setSize(260,20)
      .setRange(25,pathDensity)
      .setNumberOfTickMarks(3)
-  ;    
-
-
+  ;  
   
-  
+  earthPathColorPicker = earthCP.addColorPicker("picker")
+      .setPosition(1460, 100)
+      .setColorValue(color(0, 255, 0, 255))
+  ;
+  // Earth control panel
+  **/
+
 }
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -305,71 +161,38 @@ void draw() {
   
   // *******************************************************
   // Background grid
-  bkgdGrid.rectGrid();            // Figure out why it appears to be drawn on top of everything
+  bkgdGrid.rectGrid();            // 
   // *******************************************************
   
   // *******************************************************
   // Variable management
-  pathColor = cp.getColorValue();  // Assign color picker color to pathColor variable
+  //pathColor = earthPathColorPicker.getColorValue();  // Assign color picker color to pathColor variable
   // *******************************************************
  
   // ******************************************************* 
   //Background content
-  radarSys.posRadar();       // Draws the strange attractor in background
-  backText.drawStream(40);    // Draws the text stream in background
+  backText.renderStream(40);     // Draws the text stream in background
   // *******************************************************    
 
-  arsenalCtrlPanel.dataStreamBox();
-  arsenalCtrlPanel.viewport();
+
+  radarModule.renderRadar();     // Draws the radar system
   
 
+  // *******************************************************  
+  // Arsenal data and viewport panels
+  arsenalModule.dataStreamBox();
+  arsenalModule.viewport();
+  // *******************************************************  
 
-
-  pushMatrix();
-  earth.drawSphereMask();
-  translate(width/2, height/2);
+  // *******************************************************  
+  // Earth and data points and paths
+  earthModule.renderGlobe();
+  // ******************************************************* 
   
-  int ctrTopPos = 490;
-  int ctrSidePos = 360;
-  
-  int hotSpotStartX = width/2 - ctrTopPos;
-  int hotSpotStartY = height/2 - ctrSidePos;
-  int hotSpotEndX = width/2 + ctrTopPos;
-  int hotSpotEndY = height/2 + ctrSidePos;
-  
-  //rotateX(frameCount*0.001);
-  //rotateX(mouseY*-0.003);
-  //if(mouseX > width * 0.25 &&  mouseX < width * 0.75 && mouseY > height * 0.25 && mouseY < height * 0.75){
-  if(mouseX > hotSpotStartX &&  mouseX < hotSpotEndX && mouseY > hotSpotStartY && mouseY < hotSpotEndY){  
-     rotateY(frameCount * 0.003 + mouseX * 0.003);
-     //if(mouseY > height * 0.25 && mouseY < height * 0.75){
-     rotateX(mouseY * 0.001);
-     //}
-     inRadarHotSpot = true;
-  }
-  else{
-    rotateY(frameCount * 0.003);
-    inRadarHotSpot = false;
-  }
-  
-  
-  
-  //rotateY(frameCount*0.003 + mouseX*0.003);
-  
-  
-  noStroke();
-  stroke(255);
-  noFill();
-  //skeleton.plot(.05, 0);  // Thickness as parameter
-  noStroke();
-  fill(0, 0, 0, 255);
-  
-  wrap.plot();
-  earth.drawGlobeGeo(400, 10);
-  earth.globePaths();
-  popMatrix();
-  
-  overlay.plate();
+  // *******************************************************  
+  // HUD screen graphics
+  hudScreen.renderGraphics();
+  // *******************************************************  
 }
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -378,11 +201,11 @@ void keyPressed() {
   switch(key) {
     case('1'):
     // method A to change color
-    cp.setArrayValue(new float[] {0, 255, 0, 255});
+    //earthPathColorPicker.setArrayValue(new float[] {0, 255, 0, 255});
     break;
     case('2'):
     // method B to change color
-    cp.setColorValue(color(255, 0, 0, 255));
+    //earthPathColorPicker.setColorValue(color(255, 0, 0, 255));
     break;
   }
 }

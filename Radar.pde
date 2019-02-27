@@ -5,7 +5,7 @@ import ComputationalGeometry.*;
 class Radar {
   
   // Class Variables
-  IsoSkeleton attractorGeo;
+  //IsoSkeleton attractorGeo;
   Grid radarRing;
   
   float zm = 0;
@@ -15,8 +15,9 @@ class Radar {
   // Class Constructor
   // Used to construct the radar system
  
-  Radar(IsoSkeleton isoSkeleton){
-    attractorGeo = isoSkeleton;
+  //Radar(IsoSkeleton isoSkeleton){
+  Radar(){  
+    //attractorGeo = isoSkeleton;
     radarRing = new Grid(greenSolid, 0);
   }
   
@@ -25,7 +26,7 @@ class Radar {
   
   // *******************************************************
   // 
-  void posRadar(){
+  void renderRadar(){
     pushMatrix();
     translate(1650, 830, 50);
     //drawScanGeo();

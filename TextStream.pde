@@ -20,7 +20,7 @@ class TextStream {
   // *******************************************************
   // Create shape
   
-  void drawStream(int multiplier){
+  void renderStream(int multiplier){
     pushMatrix();
     translate(20, 0, -1);
     //noFill();

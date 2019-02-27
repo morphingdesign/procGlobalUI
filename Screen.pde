@@ -18,7 +18,7 @@ class Screen {
   // *******************************************************
   // Create shape
   
-  void plate(){
+  void renderGraphics(){
     // Outer frame on left side
     pushMatrix();
     translate(0, 0);
