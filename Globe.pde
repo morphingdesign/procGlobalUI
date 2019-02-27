@@ -54,15 +54,16 @@ class Globe {
     // The data set "routes" includes a very large number of paths,
     // so this allows user to show only a few or a lot in the UI
     globeClassCP.addSlider("pathDensity")
-       .setPosition(1460, 180)
-       .setSize(260,20)
+       .setPosition(1520, 180)
+       .setSize(200,10)
        .setRange(25,pathDensity)
+       .setLabel("Path Detail")
        .setNumberOfTickMarks(3)
     ;  
     
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassPathColorPicker = globeClassCP.addColorPicker("picker")
-        .setPosition(1460, 100)
+        .setPosition(1520, 100)
         .setColorValue(color(0, 255, 0, 255))
     ;
   }

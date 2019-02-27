@@ -9,7 +9,7 @@ class Screen {
   int ctrTopPos = 490;
   int ctrSidePos = 360;
   color highlightEdge;     // Color changes when mouse is in radar hotspot
-  String powerInfo = "Toggle this power switch to activate \n the main program.";
+  String powerInfo = "Toggle switch to activate / deactivate global view & data.";
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
@@ -18,20 +18,18 @@ class Screen {
     programCP = ctrlP5;
     
     programCP.addToggle("power")
-       .setPosition(20,100)
+       .setPosition(20,140)
        .setSize(40,20)
        .setValue(false)
-       .setMode(ControlP5.SWITCH)
+       .setMode(ControlP5.DEFAULT)
+       //.setMode(ControlP5.SWITCH)    // Visualizes a switch
        .plugTo(this, "power")
        .setValueLabel("Power Switch")
        .setCaptionLabel(powerInfo)
-       .setColorBackground(color(0, 0, 0))
-       .setColorForeground(color(20, 20, 20))
-       .setColorLabel(color(40, 40, 40))
-       .setColorValue(color(60, 60, 60))
-       .setColorValueLabel(color(80, 80, 80))
-       .setColorCaptionLabel(whiteSolid)
-       .setColorActive(color(230, 230, 230))
+       .setColorBackground(whiteSolid)
+       .setColorForeground(redSolid)
+       .setColorCaptionLabel(greenSolid)
+       .setColorActive(greenSolid)
        ;
   }
  
@@ -167,7 +165,7 @@ class Screen {
   void power(boolean powerSwitch){
     if(powerSwitch == true) {
         programOn = true;               // Activates the main program
-        programCP.remove("power");      // Removes the power toggle CP from screen
+        //programCP.remove("power");      // Removes the power toggle CP from screen
       } else {
         programOn = false;              // Displays intro screen
       }

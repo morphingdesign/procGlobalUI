@@ -151,18 +151,20 @@ void setup() {
 void draw() {
   background(0);
   
+  
+  
   // ******************************************************* 
   // Static HUD screen graphics
   bkgdGrid.rectGrid();               // Square grid
   hudScreen.renderStaticGraphics();  // Static HUD graphics
+  arsenalModule.dataStreamBox();   // Text box with data
+  arsenalModule.viewport();        // Scrollable 3D view
   
   if(programOn){
     // *******************************************************
     // Main program content
     backText.renderStream(40);       // Background text stream
     radarModule.renderRadar();       // Radar system
-    arsenalModule.dataStreamBox();   // Text box with data
-    arsenalModule.viewport();        // Scrollable 3D view
     earthModule.renderGlobe();       // Earth data points and paths
     hudScreen.renderRunGraphics();   // HUD screen graphics when program is on
   }

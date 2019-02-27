@@ -12,7 +12,7 @@ class Arsenal {
     int viewportSizeX = 416;      // Used for 16:9 aspect ratio
     int viewportSizeY = 234;      // Used for 16:9 aspect ratio
     int dataStreamSizeX = 360;
-    int dataStreamSizeY = 560;
+    int dataStreamSizeY = 540;
     int viewport_ctrl = 47;
     int iteration;
     int dataSelection;
@@ -41,7 +41,7 @@ class Arsenal {
        .setColorValue(color(0, 0, 0))
        ; 
      dataStreamText = arsenalClassCP.addTextarea("txt")
-       .setPosition(25,225)
+       .setPosition(25,245)
        .setSize(dataStreamSizeX - 10, dataStreamSizeY - 10)
        .setFont(monoFont)
        .setLineHeight(16)
@@ -53,19 +53,20 @@ class Arsenal {
        .setColorForeground(color(255,100));
        ;  
      arsenalSelect = arsenalClassCP.addScrollableList("arsenal")
-       .setPosition(20, 180)
+       .setPosition(20, 200)
        .setSize(360, 100)
        .setBarHeight(20)
        .setItemHeight(20)
        .addItems(arsenalList)
+       .setLabel("Arsenal Dropdown Menu")
        .plugTo(this, "setArsenalValue")
        //.setValue(0)
        .setType(ControlP5.DROPDOWN)  
        .setOpen(false)
-       .setColorActive(color(255, 255, 255))
-       .setColorLabel(color(0, 255, 0))
-       .setColorValue(color(255, 0, 0))
-       .setColorForeground(color(255, 255, 255))
+       .setColorActive(whiteSolid)
+       .setColorLabel(greenSolid)
+       .setColorValue(greenSolid)
+       .setColorForeground(redSolid)
        .setColorBackground(color(0))
        ;
   }
@@ -74,10 +75,26 @@ class Arsenal {
   // Class Methods
   
   // *******************************************************
+  // 
+  /**
+  void arsenalVis(){
+    if(programOn == false) {
+      arsenalClassCP.setVisible(false);
+      //arsenalClassCP.remove("slider");
+      //arsenalClassCP.remove(arsenalSelect);
+      println("remove arsenal");
+    }
+    else{
+      arsenalClassCP.setVisible(true);
+    }
+  }
+  **/
+  
+  // *******************************************************
   // Create shape
   void dataStreamBox(){
     pushMatrix();
-    translate(20, 180);
+    translate(20, 200);
     fill(0, 180);
     stroke(0, 255, 0);
     strokeWeight(1);
