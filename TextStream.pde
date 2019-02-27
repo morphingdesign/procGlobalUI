@@ -2,8 +2,7 @@
 class TextStream {  
   
   // Class Variables
-  //color textColor = color(39, 255, 8);   // original color
-  color textColor = color(255, 0, 0); 
+
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
@@ -91,7 +90,7 @@ class TextStream {
          textSize(10);
          textAlign(CENTER, CENTER);
          
-         fill(textColor, alpha);          // Defines color for all text in background
+         fill(redSolid, alpha);          // Defines color for all text in background
          text(glyph[int(random(0, 95))], xList[i], yList[i]);
        }
     }

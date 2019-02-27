@@ -6,6 +6,8 @@ class Arsenal {
   // Class Variables
     ControlP5 arsenalClassCP;
     Textarea dataStreamText;
+    ScrollableList arsenalSelect;
+    
     String text;
     int viewportSizeX = 416;      // Used for 16:9 aspect ratio
     int viewportSizeY = 234;      // Used for 16:9 aspect ratio
@@ -13,9 +15,7 @@ class Arsenal {
     int dataStreamSizeY = 560;
     int viewport_ctrl = 47;
     int iteration;
-    
-    int dataSelection = 1;
-    int i = dataSelection;
+    int dataSelection;
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
@@ -23,7 +23,7 @@ class Arsenal {
  
   Arsenal(ControlP5 ctrlP5){
      arsenalClassCP = ctrlP5;
-     arsenalClassCP.addSlider("iteration-")
+     arsenalClassCP.addSlider("slider")
        .setPosition(20, 1040)
        .plugTo(this, "setValue")
        .setValue(10)
@@ -32,7 +32,6 @@ class Arsenal {
        .setSliderMode(Slider.FLEXIBLE)
        .setNumberOfTickMarks(47)
        .setLabel("Rotate View")
-       //.shuffle()        // Sets to a random value
        .setValue(4)
        .setColorTickMark(color(0, 255, 0))
        .setColorForeground(color(255))
@@ -47,13 +46,28 @@ class Arsenal {
        .setFont(monoFont)
        .setLineHeight(16)
        .setColor(color(0, 255, 0))
-       
        .setScrollBackground(color(0, 0))
        .setScrollActive(color(255, 0, 0))
        .setScrollForeground(color(255))
        .setColorBackground(color(0,100))
        .setColorForeground(color(255,100));
        ;  
+     arsenalSelect = arsenalClassCP.addScrollableList("arsenal")
+       .setPosition(20, 180)
+       .setSize(360, 100)
+       .setBarHeight(20)
+       .setItemHeight(20)
+       .addItems(arsenalList)
+       .plugTo(this, "setArsenalValue")
+       //.setValue(0)
+       .setType(ControlP5.DROPDOWN)  
+       .setOpen(false)
+       .setColorActive(color(255, 255, 255))
+       .setColorLabel(color(0, 255, 0))
+       .setColorValue(color(255, 0, 0))
+       .setColorForeground(color(255, 255, 255))
+       .setColorBackground(color(0))
+       ;
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,10 +77,12 @@ class Arsenal {
   // Create shape
   void dataStreamBox(){
     pushMatrix();
-    translate(20, 220);
+    translate(20, 180);
     fill(0, 180);
     stroke(0, 255, 0);
-    rect(0, 0, dataStreamSizeX, dataStreamSizeY);
+    strokeWeight(1);
+    rect(0, 0, dataStreamSizeX, 20);
+    rect(0, 40, dataStreamSizeX, dataStreamSizeY);
     dataStream();
     dataStreamText.setText(text.toUpperCase());
     popMatrix();
@@ -89,15 +105,20 @@ class Arsenal {
   }
   
   // *******************************************************
-  // 
+  // Allows the slider to change the iteration number of the image array
   void setValue(int value){
     iteration = value;
+  }
+  
+  void setArsenalValue(int i){
+    arsenalClassCP.get(ScrollableList.class, "arsenal").getItem(i);
+    dataSelection = i;
   }
   
   // *******************************************************
   // 
   void dataStream(){
-      JSONObject drone = armory.getJSONObject(i);
+      JSONObject drone = armory.getJSONObject(dataSelection);
       String id = drone.getString("id");
       String codeName = drone.getString("codename");
       String name = drone.getString("name");
@@ -176,5 +197,11 @@ class Arsenal {
         + "*** " + av2 + " "
         + "*** " + av3 + "\n"
         + "***************************************";
+  }
+  
+  void dropdownCtrl() {
+    //CColor c = new CColor();
+    //c.setBackground(color(255,0,0));
+    //arsenalClassCP.get(ScrollableList.class, "arsenal").getItem(1).put("color", c);
   }
 }  

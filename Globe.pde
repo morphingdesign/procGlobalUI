@@ -8,7 +8,6 @@ class Globe {
   IsoWrap earthShell;
   ControlP5 globeClassCP;
   ColorPicker globeClassPathColorPicker;    // UI for global path color
-  color globeRingColor = color(0, 0, 0);
   Grid globeRing;
   
   float xOrigin = 0;
@@ -28,7 +27,7 @@ class Globe {
     earthShell = isoWrap;
     globeClassCP = ctrlP5;
     
-    globeRing = new Grid(globeRingColor, 5);
+    globeRing = new Grid(blackSolid, 5);
     
     PVector[] pts = new PVector[1000];
     for (int i=0; i<pts.length; i++) {
@@ -44,7 +43,7 @@ class Globe {
     for (int i=0; i<pts.length; i++) {
       for (int j=i+1; j<pts.length; j++) {
         if (pts[i].dist( pts[j] ) < 50) {
-          eShell.addPt(pts[i]);
+          earthShell.addPt(pts[i]);
         }
       }
     }

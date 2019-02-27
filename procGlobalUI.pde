@@ -49,7 +49,6 @@ Radar radarModule;           // Radar system
 IsoWrap eShell;              // Used to pass through IsoWrap into Globe class
 Globe earthModule;           // Earth with data points and paths
 ControlP5 earthCP;           // Earth control panel
-//ColorPicker earthPathColorPicker;  // UI for global path color
 ControlP5 arsenalCP;         // Used to pass through ControlP5 into Arsenal class
 Arsenal arsenalModule;       // Arsenal data and viewport
 Screen hudScreen;            // HUD graphics in foreground
@@ -64,16 +63,21 @@ int hotSpotStartY;
 int hotSpotEndX;
 int hotSpotEndY;
 boolean inRadarHotSpot = false;
+boolean programOn = false;
+boolean programRunning = false;
 
 // Color scheme
 color greenSolid = color(0, 255, 0);
 color redSolid = color(255, 0, 0);
 color whiteSolid = color(255);
+color blackSolid = color(0, 0, 0);
 
 color pathColor;                              // Color for paths around globe
 color bkgdGridColor = (50);
 
 PVector aptSource, aptDestination;
+
+String[] arsenalList = {"MQ-9A Reaper", "RQ-1 Predator", "GNAT-750"};
 
 String imgFileNameBase = "images/drone (";
 String imgFileNameEnd = ").png";
@@ -145,27 +149,26 @@ void setup() {
 void draw() {
   background(0);
   
-  // *******************************************************
-  // Background content
+  // ******************************************************* 
+  // Static HUD screen graphics
   bkgdGrid.rectGrid();               // Square grid
-  backText.renderStream(40);         // Text stream
+  hudScreen.renderStaticGraphics();  // Static HUD graphics
   
-  // *******************************************************    
-  // Radar system
-  radarModule.renderRadar();     
-     
-  // *******************************************************   
-  // Arsenal data and viewport panels
-  arsenalModule.dataStreamBox();     // Text box with data
-  arsenalModule.viewport();          // Scrollable 3D view
+  //if(programOn){
+    // *******************************************************
+    // Main program content
+    backText.renderStream(40);       // Background text stream
+    radarModule.renderRadar();       // Radar system
+    arsenalModule.dataStreamBox();   // Text box with data
+    arsenalModule.viewport();        // Scrollable 3D view
+    earthModule.renderGlobe();       // Earth data points and paths
+    hudScreen.renderRunGraphics();   // HUD screen graphics when program is on
+  //}
+  //else{
+    // ******************************************************* 
+    // Content before program starts
+    hudScreen.renderPreGraphics();   // HUD screen graphics when program is off
+    //hudScreen.screenSaver();
+  //}
   
-  // *******************************************************  
-  // Earth and data points and paths
-  earthModule.renderGlobe();
-  
-  // *******************************************************  
-  // HUD screen graphics
-  hudScreen.renderGraphics();
 }
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,8 +1,94 @@
 [
+	
 	{
 	"id": "0",
-	"codename": "id1",
-	"name": "name1",
+	"codename":"MQ-9A",
+	"name":"Reaper",
+	"General Characteristics":{
+		"Crew":
+			"0 onboard, 2 in ground station"
+			,
+		"Length":
+			"36 ft 1 in (11 m)"
+			,
+		"Wingspan":
+			"65 ft 7 in (20 m)"
+			,
+		"Height":
+			"12 ft 6 in (3.81 m)"
+			,
+		"Empty weight":
+			"4,901 lb (2,223 kg)"
+			,
+		"Max takeoff weight":
+			"10,494 lb (4,760 kg)"
+			,
+		"Fuel capacity":
+			"4,000 lb (1,800 kg)"
+			,
+		"Payload":
+			"3,800 lb (1,700 kg)"
+			,
+		"Internal":
+			"800 lb (360 kg)"
+			,
+		"External":
+			"3,000 lb (1,400 kg)"
+			,
+		"Powerplant":
+			"1 - Honeywell TPE331-10 turboprop, 900 hp (671 kW) with Digital Electronic Engine Control (DEEC)"
+		},
+	"Performance":{
+		"Maximum speed":
+			"300 mph; 260 kn (482 km/h)"
+			,
+		"Cruise speed":
+			"194 mph; 169 kn (313 km/h)"
+			,
+		"Range":
+			"1,151 mi; 1,852 km (1,000 nmi)"
+			,
+		"Endurance":
+			"14 hours fully loaded"
+			,
+		"Service ceiling":
+			"50,000 ft (15,000 m)"
+			,
+		"Operational altitude":
+			"25,000 ft (7.5 km)"
+			
+		},
+	"Armament":{
+		"1":
+			"Up to 1,500 lb (680 kg) on the two inboard weapons stations",
+		"2":
+			"Up to 750 lb (340 kg) on the two middle stations",
+		"3":
+			"Up to 150 lb (68 kg) on the outboard stations",
+		"4":
+			"Center station not used",
+		"5":
+			"4 AGM-114 Hellfire air to ground missiles",
+		"6":
+			"4 Hellfire missiles",
+		"7":
+			"2 500 lb (230 kg) GBU-12 Paveway II laser-guided bombs",
+		"8":
+			"1 500 lb (230 kg) GBU-38 Joint Direct Attack Munition (JDAM)"
+		},
+	"Avionics":{
+		"1":
+			"AN/DAS-1 MTS-B Multi-Spectral Targeting System",
+		"2":
+			"AN/APY-8 Lynx II radar",
+		"3":
+			"Raytheon SeaVue Marine Search Radar (Guardian variants)"
+		}
+	},
+	{
+	"id": "1",
+	"codename": "RQ-1",
+	"name": "Predator",
 	"General Characteristics":{
 		"Crew":
 			"x1"
@@ -85,88 +171,88 @@
 		}
 	},
 	{
-	"id": "1",
-	"codename":"MQ-9A",
-	"name":"Reaper",
+	"id": "2",
+	"codename": "GNAT-750",
+	"name": "Recon",
 	"General Characteristics":{
 		"Crew":
-			"0 onboard, 2 in ground station"
+			"x1"
 			,
 		"Length":
-			"36 ft 1 in (11 m)"
+			"x2"
 			,
 		"Wingspan":
-			"65 ft 7 in (20 m)"
+			"x3"
 			,
 		"Height":
-			"12 ft 6 in (3.81 m)"
+			"x4"
 			,
 		"Empty weight":
-			"4,901 lb (2,223 kg)"
+			"x5"
 			,
 		"Max takeoff weight":
-			"10,494 lb (4,760 kg)"
+			"x6"
 			,
 		"Fuel capacity":
-			"4,000 lb (1,800 kg)"
+			"x7"
 			,
 		"Payload":
-			"3,800 lb (1,700 kg)"
+			"x8"
 			,
 		"Internal":
-			"800 lb (360 kg)"
+			"x9"
 			,
 		"External":
-			"3,000 lb (1,400 kg)"
+			"x10"
 			,
 		"Powerplant":
-			"1 - Honeywell TPE331-10 turboprop, 900 hp (671 kW) with Digital Electronic Engine Control (DEEC)"
+			"x11"
 		},
 	"Performance":{
 		"Maximum speed":
-			"300 mph; 260 kn (482 km/h)"
+			"y1"
 			,
 		"Cruise speed":
-			"194 mph; 169 kn (313 km/h)"
+			"y2"
 			,
 		"Range":
-			"1,151 mi; 1,852 km (1,000 nmi)"
+			"y3"
 			,
 		"Endurance":
-			"14 hours fully loaded"
+			"y4"
 			,
 		"Service ceiling":
-			"50,000 ft (15,000 m)"
+			"y5"
 			,
 		"Operational altitude":
-			"25,000 ft (7.5 km)"
+			"y6"
 			
 		},
 	"Armament":{
 		"1":
-			"Up to 1,500 lb (680 kg) on the two inboard weapons stations",
+			"z1",
 		"2":
-			"Up to 750 lb (340 kg) on the two middle stations",
+			"z2",
 		"3":
-			"Up to 150 lb (68 kg) on the outboard stations",
+			"z3",
 		"4":
-			"Center station not used",
+			"z4",
 		"5":
-			"4 AGM-114 Hellfire air to ground missiles",
+			"z5",
 		"6":
-			"4 Hellfire missiles",
+			"z6",
 		"7":
-			"2 500 lb (230 kg) GBU-12 Paveway II laser-guided bombs",
+			"z7",
 		"8":
-			"1 500 lb (230 kg) GBU-38 Joint Direct Attack Munition (JDAM)"
+			"z8"
 		},
 	"Avionics":{
 		"1":
-			"AN/DAS-1 MTS-B Multi-Spectral Targeting System",
+			"a1",
 		"2":
-			"AN/APY-8 Lynx II radar",
+			"a2",
 		"3":
-			"Raytheon SeaVue Marine Search Radar (Guardian variants)"
+			"a3"
 		}
 	}
 ]
