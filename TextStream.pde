@@ -4,28 +4,22 @@ class TextStream {
   // Class Variables
   //color textColor = color(39, 255, 8);   // original color
   color textColor = color(255, 0, 0); 
-
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
-  // Used to construct an instance of the Cog object.  The parameters passed through define the type of cog and its behavior
+  // Used to construct the text stream
  
   TextStream(){
   }
-   
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Methods
   
   // *******************************************************
-  // Create shape
-  
+  // Render dynamic text stream
   void renderStream(int multiplier){
     pushMatrix();
     translate(20, 0, -1);
-    //noFill();
-    //stroke(0, 0, 0);
-    //smooth(4);
 
     multiplier = 40;
     int numOfCurves = height / multiplier;
@@ -38,6 +32,8 @@ class TextStream {
     popMatrix(); 
   }
   
+  // *******************************************************
+  // 
   void drawCurveArray(int numOfCurves, int offset, int alpha){
     for(int i=0; i < numOfCurves; i++){
       pushMatrix();
@@ -47,13 +43,14 @@ class TextStream {
     }
   }
   
+  // *******************************************************
+  // 
   void drawCurve(int alpha){
     int scalar = 10;
     int arrayLength = (width)/scalar + scalar;
     int shift;
     
     noFill();
-    //stroke(0, 0, 0);
     noStroke();
     strokeWeight(1);
     
@@ -66,8 +63,6 @@ class TextStream {
        yList[i] = scalar * (sin(i) + shift);
     }
     beginShape();
-    //curveVertex(0, 0);
-    //curveVertex(0, 0);
     curveVertex(xList[0], yList[0]);
     curveVertex(xList[0], yList[0]);
     
@@ -90,21 +85,15 @@ class TextStream {
     for(int i=0; i < arrayLength; i++){
        if(yList[i] > yList[0]){
          noStroke();
-         //fill(153, 0, 0);
          noFill();
          ellipse(xList[i], yList[i], 3, 3);
          
          textSize(10);
          textAlign(CENTER, CENTER);
-         //fill(153, 0, 0);
          
          fill(textColor, alpha);          // Defines color for all text in background
          text(glyph[int(random(0, 95))], xList[i], yList[i]);
        }
     }
   }
-  
-  
-  
-  
 }  

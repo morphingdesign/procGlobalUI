@@ -44,13 +44,16 @@ class Globe {
     for (int i=0; i<pts.length; i++) {
       for (int j=i+1; j<pts.length; j++) {
         if (pts[i].dist( pts[j] ) < 50) {
-          //skeleton.addEdge(pts[i], pts[j]);
           eShell.addPt(pts[i]);
         }
       }
     }
     
-    // Earth control panel
+    // Main Earth control panel
+    
+    // Controls the amount of paths visible in the Earth module
+    // The data set "routes" includes a very large number of paths,
+    // so this allows user to show only a few or a lot in the UI
     globeClassCP.addSlider("pathDensity")
        .setPosition(1460, 180)
        .setSize(260,20)
@@ -58,11 +61,11 @@ class Globe {
        .setNumberOfTickMarks(3)
     ;  
     
+    // Color picker for paths on Earth, part of main Earth control panel
     globeClassPathColorPicker = globeClassCP.addColorPicker("picker")
         .setPosition(1460, 100)
         .setColorValue(color(0, 255, 0, 255))
     ;
-    // Earth control panel
     
     
   }
@@ -72,11 +75,11 @@ class Globe {
   // Class Methods
   
   // *******************************************************
-  // Create globe
-  
+  // Render globe with all data sets
   void renderGlobe(){
     pathColor = globeClassPathColorPicker.getColorValue();  // Assign color picker color to pathColor variable
-    
+                                                            // Updates the path color in Earth control panel
+                                                            // Needed to be included in draw() to update accordingly
     pushMatrix();
     earthModule.drawSphereMask();
     translate(width/2, height/2);
@@ -99,10 +102,10 @@ class Globe {
     earthModule.globeGeo(400, 10);
     earthModule.globePaths();
     popMatrix();
-    
-    
   }
   
+  // *******************************************************
+  // 
   void globeShell(){
     noFill();
     noStroke();
@@ -110,6 +113,8 @@ class Globe {
     eShell.plot();
   }
   
+  // *******************************************************
+  // 
   void globeGeo(int radius, int offset){
     for(int i=0; i < cities.getRowCount(); i++){
        float latitude = cities.getFloat(i, "lat");
@@ -129,9 +134,10 @@ class Globe {
        strokeWeight(1);
        point(aPt.x, aPt.y, aPt.z);
     }    
-    
   }
-  
+
+  // *******************************************************
+  // 
   void globePaths(){
     float lift = 1;
     PVector rise = new PVector(0, 0, 0);
@@ -177,6 +183,8 @@ class Globe {
     }
   }
 
+  // *******************************************************
+  // 
   PVector sphereToCart(float lat, float lon){
     // Algorithms for mapping spherical coordinates to three-dimensional Cartesian
     // coordinates derived from the following resource link:
@@ -187,6 +195,8 @@ class Globe {
     return vNew;
   }
   
+  // *******************************************************
+  // 
   void drawSphereMask(){
     pushMatrix();
     translate(width/2, height/2);
@@ -195,7 +205,6 @@ class Globe {
     stroke(255);
     ellipseMode(RADIUS);
     ellipse(0, 0, height/2, height/2);
-    
     globeRing.radialGrid(height, 10, 10, 1, 1, 200, true);
     popMatrix();
   }

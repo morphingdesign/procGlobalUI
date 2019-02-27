@@ -33,9 +33,6 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 // Processing Libraries
-/**   
-**/
-
 import ComputationalGeometry.*;
 import controlP5.*;
 
@@ -54,7 +51,7 @@ Globe earthModule;           // Earth with data points and paths
 ControlP5 earthCP;           // Earth control panel
 //ColorPicker earthPathColorPicker;  // UI for global path color
 ControlP5 arsenalCP;         // Used to pass through ControlP5 into Arsenal class
-Arsenal arsenalModule;    // Arsenal data and viewport
+Arsenal arsenalModule;       // Arsenal data and viewport
 Screen hudScreen;            // HUD graphics in foreground
 
 int pathDensity = 100;
@@ -111,47 +108,36 @@ JSONArray armory;
 
 void setup() {
   size(1920, 1080, P3D);
-  frameRate(60);
+  frameRate(30);
   
+  // *******************************************************
+  // Load data sets used in globe and arsenal classes
   airports = loadTable("airports.csv");
   cities = loadTable("worldcities.csv", "header");
   routes = loadTable("routes.csv");
   armory = loadJSONArray("armory.json");
   
+  // *******************************************************
+  // Load unique fonts used in arsenal and screen classes
   monoFont = createFont("fonts/PT_Mono/PTM55FT.ttf", 14);
   playFont = createFont("fonts/Play/Play-Bold.ttf", 24);
-
+  
+  // *******************************************************
+  // Load images used in arsenal class
   for(int i=0; i < photo.length ; i++){
      photo[i] = loadImage(imgFileNameBase + (i + 1) + imgFileNameEnd);
   }
-
-  eShell = new IsoWrap(this);
-  earthCP = new ControlP5(this);
+ 
+  // ******************************************************* 
   bkgdGrid = new Grid(bkgdGridColor, bkgdGridSpace);
-  backText = new TextStream();                          // Setup scrolling back text 
+  backText = new TextStream(); 
   radarModule = new Radar();
   arsenalCP = new ControlP5(this);
-  arsenalModule = new Arsenal(arsenalCP, "suffix");
+  arsenalModule = new Arsenal(arsenalCP); 
+  eShell = new IsoWrap(this);
+  earthCP = new ControlP5(this);
   earthModule = new Globe(eShell, earthCP);
   hudScreen = new Screen();
-  
-  /**
-  // Move this control panel into the Globe class
-  // Earth control panel
-  earthCP.addSlider("pathDensity")
-     .setPosition(1460, 180)
-     .setSize(260,20)
-     .setRange(25,pathDensity)
-     .setNumberOfTickMarks(3)
-  ;  
-  
-  earthPathColorPicker = earthCP.addColorPicker("picker")
-      .setPosition(1460, 100)
-      .setColorValue(color(0, 255, 0, 255))
-  ;
-  // Earth control panel
-  **/
-
 }
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -160,52 +146,26 @@ void draw() {
   background(0);
   
   // *******************************************************
-  // Background grid
-  bkgdGrid.rectGrid();            // 
-  // *******************************************************
+  // Background content
+  bkgdGrid.rectGrid();               // Square grid
+  backText.renderStream(40);         // Text stream
   
-  // *******************************************************
-  // Variable management
-  //pathColor = earthPathColorPicker.getColorValue();  // Assign color picker color to pathColor variable
-  // *******************************************************
- 
-  // ******************************************************* 
-  //Background content
-  backText.renderStream(40);     // Draws the text stream in background
   // *******************************************************    
-
-
-  radarModule.renderRadar();     // Draws the radar system
-  
-
-  // *******************************************************  
+  // Radar system
+  radarModule.renderRadar();     
+     
+  // *******************************************************   
   // Arsenal data and viewport panels
-  arsenalModule.dataStreamBox();
-  arsenalModule.viewport();
-  // *******************************************************  
-
+  arsenalModule.dataStreamBox();     // Text box with data
+  arsenalModule.viewport();          // Scrollable 3D view
+  
   // *******************************************************  
   // Earth and data points and paths
   earthModule.renderGlobe();
-  // ******************************************************* 
   
   // *******************************************************  
   // HUD screen graphics
   hudScreen.renderGraphics();
-  // *******************************************************  
 }
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-void keyPressed() {
-  switch(key) {
-    case('1'):
-    // method A to change color
-    //earthPathColorPicker.setArrayValue(new float[] {0, 255, 0, 255});
-    break;
-    case('2'):
-    // method B to change color
-    //earthPathColorPicker.setColorValue(color(255, 0, 0, 255));
-    break;
-  }
-}

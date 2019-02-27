@@ -21,9 +21,9 @@ class Arsenal {
   // Class Constructor
   // Used to construct an instance of the Arsenal controller object.  
  
-  Arsenal(ControlP5 ctrlP5, String iterAdd){
+  Arsenal(ControlP5 ctrlP5){
      arsenalClassCP = ctrlP5;
-     arsenalClassCP.addSlider("iteration-" + iterAdd)
+     arsenalClassCP.addSlider("iteration-")
        .setPosition(20, 1040)
        .plugTo(this, "setValue")
        .setValue(10)
@@ -55,14 +55,12 @@ class Arsenal {
        .setColorForeground(color(255,100));
        ;  
   }
-   
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Methods
   
   // *******************************************************
   // Create shape
-  
   void dataStreamBox(){
     pushMatrix();
     translate(20, 220);
@@ -74,6 +72,8 @@ class Arsenal {
     popMatrix();
   }
   
+  // *******************************************************
+  // 
   void viewport(){
      pushMatrix();
      translate(20, 800);
@@ -88,10 +88,14 @@ class Arsenal {
      popMatrix();
   }
   
+  // *******************************************************
+  // 
   void setValue(int value){
     iteration = value;
   }
   
+  // *******************************************************
+  // 
   void dataStream(){
       JSONObject drone = armory.getJSONObject(i);
       String id = drone.getString("id");

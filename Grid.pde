@@ -7,23 +7,20 @@ class Grid {
   int spacing;
   color gridColor;
 
-  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // Used to construct an instance of the Cog object.  The parameters passed through define the type of cog and its behavior
  
-  Grid(color gColor, int gSpace){
+  Grid(color gColor, int gSpace){      //!!!!!!!!!!!!!!!! MOVE SPACE INTERVAL VAR TO RECTGRID() METHOD
     gridColor = gColor;
     spacing = gSpace;
   }
-   
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Methods
   
   // *******************************************************
-  // Create shape
-  
+  // Create rectangular grid
   void rectGrid(){
     pushMatrix();
     strokeWeight(1);
@@ -40,6 +37,8 @@ class Grid {
     popMatrix();
   }
   
+  // *******************************************************
+  // 
   void radialGrid(int diameter, int projection, int interval, int ringWeight, int tickWeight, int colorAlpha, boolean ticks){
     int lineLength;
     color radarColor = color(gridColor, colorAlpha);

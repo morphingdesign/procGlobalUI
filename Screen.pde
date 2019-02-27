@@ -10,14 +10,12 @@ class Screen {
  
   Screen(){
   }
-   
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Methods
   
   // *******************************************************
-  // Create shape
-  
+  // 
   void renderGraphics(){
     // Outer frame on left side
     pushMatrix();
@@ -89,9 +87,9 @@ class Screen {
     rotate(PI/2);
     sideEdge(ctrSidePos * 2, highlightEdge);
     popMatrix();
-    
   }
   
+  // *******************************************************
   // Creates a single iteration of a line with an end line at one point
   void cornerEdge(){
     int length1 = 20;
@@ -105,6 +103,7 @@ class Screen {
     line(edgeOffset, height - edgeOffset, length1, height - edgeOffset);
   }
   
+  // *******************************************************
   // Creates a single iteration of a line with end lines at each point
   void sideEdge(int length, color lineColor){
     int length1 = 20;
@@ -115,6 +114,7 @@ class Screen {
     line(length, 0, length, length1);
   }
   
+  // *******************************************************
   // Creates pulsing row of lines
   void pulse(){
     stroke(greenSolid);  
