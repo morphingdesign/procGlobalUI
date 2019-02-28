@@ -171,6 +171,7 @@ class Screen {
   void power(boolean powerSwitch){
     if(powerSwitch == true) {
         programOn = true;               // Activates the main program
+        programCP.remove("power");      // Removes the power toggle CP from screen
       } else {
         programOn = false;              // Displays intro screen
       }

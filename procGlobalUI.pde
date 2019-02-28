@@ -153,14 +153,14 @@ void draw() {
   // ******************************************************* 
   // Static HUD screen graphics
   hudScreen.renderStaticGraphics();  // Static HUD graphics
-  arsenalModule.dataStreamBox();     // Text box with data
-  arsenalModule.viewport();          // Scrollable 3D viewVis();
   
   if(programOn){
     // *******************************************************
     // Main program content
     bkgdGrid.rectGrid(bkgdGridSpace);// Square grid
     backText.renderStream(40);       // Background text stream
+    arsenalModule.dataStreamBox();   // Text box with data
+    arsenalModule.viewport();        // Scrollable 3D view
     radarModule.renderRadar();       // Radar system
     earthModule.renderGlobe();       // Earth data points andD view
     hudScreen.renderRunGraphics();   // HUD screen graphics when program is on

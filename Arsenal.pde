@@ -7,6 +7,7 @@ class Arsenal {
     ControlP5 arsenalClassCP;
     Textarea dataStreamText;
     ScrollableList arsenalSelect;
+    Slider viewSlider;
     
     String text;
     int viewportSizeX = 416;      // Used for 16:9 aspect ratio
@@ -19,11 +20,10 @@ class Arsenal {
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
-  // Used to construct an instance of the Arsenal controller object.  
- 
+  // Used to construct an instance of the Arsenal controller object.   
   Arsenal(ControlP5 ctrlP5){
      arsenalClassCP = ctrlP5;
-     arsenalClassCP.addSlider("slider")
+       viewSlider = arsenalClassCP.addSlider("slider")
        .setPosition(20, 1040)
        .plugTo(this, "setValue")
        .setValue(10)
@@ -39,6 +39,7 @@ class Arsenal {
        .setColorActive(color(255, 0, 0))
        .setColorLabel(color(0, 255, 0))
        .setColorValue(color(0, 0, 0))
+       .setVisible(false)
        ; 
      dataStreamText = arsenalClassCP.addTextarea("txt")
        .setPosition(25,245)
@@ -50,7 +51,8 @@ class Arsenal {
        .setScrollActive(color(255, 0, 0))
        .setScrollForeground(color(255))
        .setColorBackground(color(0,100))
-       .setColorForeground(color(255,100));
+       .setColorForeground(color(255,100))
+       .setVisible(false)
        ;  
      arsenalSelect = arsenalClassCP.addScrollableList("arsenal")
        .setPosition(20, 200)
@@ -68,6 +70,7 @@ class Arsenal {
        .setColorValue(greenSolid)
        .setColorForeground(redSolid)
        .setColorBackground(color(0))
+       .setVisible(false)
        ;
   }
  
@@ -75,25 +78,11 @@ class Arsenal {
   // Class Methods
   
   // *******************************************************
-  // 
-  /**
-  void arsenalVis(){
-    if(programOn == false) {
-      arsenalClassCP.setVisible(false);
-      //arsenalClassCP.remove("slider");
-      //arsenalClassCP.remove(arsenalSelect);
-      println("remove arsenal");
-    }
-    else{
-      setup();
-      arsenalClassCP.setVisible(true);
-    }
-  }
-  **/
-  
-  // *******************************************************
   // Create shape
   void dataStreamBox(){
+    viewSlider.setVisible(true); 
+    dataStreamText.setVisible(true); 
+    
     pushMatrix();
     translate(20, 200);
     fill(0, 180);
@@ -109,6 +98,8 @@ class Arsenal {
   // *******************************************************
   // 
   void viewport(){
+     arsenalSelect.setVisible(true); 
+    
      pushMatrix();
      translate(20, 800);
      fill(0);
