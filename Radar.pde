@@ -10,7 +10,7 @@ class Radar {
   // Class Constructor
   // Used to construct the radar system
   Radar(){  
-    radarRing = new Grid(greenSolid, 0);
+    radarRing = new Grid(greenSolid);
   }
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

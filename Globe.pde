@@ -27,7 +27,7 @@ class Globe {
     earthShell = isoWrap;
     globeClassCP = ctrlP5;
     
-    globeRing = new Grid(blackSolid, 5);
+    globeRing = new Grid(blackSolid);
     
     PVector[] pts = new PVector[1000];
     for (int i=0; i<pts.length; i++) {

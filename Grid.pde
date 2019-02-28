@@ -9,11 +9,10 @@ class Grid {
 
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
-  // Used to construct an instance of the Cog object.  The parameters passed through define the type of cog and its behavior
+  // 
  
-  Grid(color gColor, int gSpace){      //!!!!!!!!!!!!!!!! MOVE SPACE INTERVAL VAR TO RECTGRID() METHOD
+  Grid(color gColor){  
     gridColor = gColor;
-    spacing = gSpace;
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,17 +20,17 @@ class Grid {
   
   // *******************************************************
   // Create rectangular grid
-  void rectGrid(){
+  void rectGrid(int gridSpace){
     pushMatrix();
     strokeWeight(1);
     stroke(bkgdGridColor);
     translate(bkgdGridXOrigin, bkgdGridYOrigin, -1);
     // Horizontal Lines
-    for(int i=0; i < height; i+=spacing){
+    for(int i=0; i < height; i+=gridSpace){
        line(0, i, width, i);
     }
     // Vertical Lines
-    for(int i=0; i < width; i+=spacing){
+    for(int i=0; i < width; i+=gridSpace){
        line(i, 0, i, height);
     }
     popMatrix();

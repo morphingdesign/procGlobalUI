@@ -134,7 +134,7 @@ void setup() {
   }
  
   // ******************************************************* 
-  bkgdGrid = new Grid(bkgdGridColor, bkgdGridSpace);
+  bkgdGrid = new Grid(bkgdGridColor);
   backText = new TextStream(); 
   radarModule = new Radar();
   arsenalCP = new ControlP5(this);
@@ -150,22 +150,19 @@ void setup() {
 
 void draw() {
   background(0);
-  
-  
-  
   // ******************************************************* 
   // Static HUD screen graphics
-  bkgdGrid.rectGrid();               // Square grid
   hudScreen.renderStaticGraphics();  // Static HUD graphics
-  arsenalModule.dataStreamBox();   // Text box with data
-  arsenalModule.viewport();        // Scrollable 3D view
+  arsenalModule.dataStreamBox();     // Text box with data
+  arsenalModule.viewport();          // Scrollable 3D viewVis();
   
   if(programOn){
     // *******************************************************
     // Main program content
+    bkgdGrid.rectGrid(bkgdGridSpace);// Square grid
     backText.renderStream(40);       // Background text stream
     radarModule.renderRadar();       // Radar system
-    earthModule.renderGlobe();       // Earth data points and paths
+    earthModule.renderGlobe();       // Earth data points andD view
     hudScreen.renderRunGraphics();   // HUD screen graphics when program is on
   }
   else{

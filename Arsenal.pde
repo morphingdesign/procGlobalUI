@@ -64,7 +64,7 @@ class Arsenal {
        .setType(ControlP5.DROPDOWN)  
        .setOpen(false)
        .setColorActive(whiteSolid)
-       .setColorLabel(greenSolid)
+       .setColorLabel(color(0, 255, 0))
        .setColorValue(greenSolid)
        .setColorForeground(redSolid)
        .setColorBackground(color(0))
@@ -85,6 +85,7 @@ class Arsenal {
       println("remove arsenal");
     }
     else{
+      setup();
       arsenalClassCP.setVisible(true);
     }
   }

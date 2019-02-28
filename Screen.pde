@@ -5,18 +5,19 @@ class Screen {
   
   // Class Variables
   ControlP5 programCP;
+  Grid centralGrid;
   int edgeOffset = 10;    // Offset from sketch border
   int ctrTopPos = 490;
   int ctrSidePos = 360;
   color highlightEdge;     // Color changes when mouse is in radar hotspot
   String powerInfo = "Toggle switch to activate / deactivate global view & data.";
+  float animSpeed = 0.03;  // Speed for screen saver animation
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // 
   Screen(ControlP5 ctrlP5){
     programCP = ctrlP5;
-    
     programCP.addToggle("power")
        .setPosition(20,140)
        .setSize(40,20)
@@ -31,6 +32,8 @@ class Screen {
        .setColorCaptionLabel(greenSolid)
        .setColorActive(greenSolid)
        ;
+       
+    centralGrid = new Grid(whiteSolid);   
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,33 +82,48 @@ class Screen {
     rotate(PI/2);
     sideEdge(ctrSidePos * 2, highlightEdge);
     popMatrix();
+    
+    // Top line for radar
+    pushMatrix();
+    translate(width/2 - ctrTopPos, 90);
+    sideEdge(ctrTopPos * 2, greenSolid);    
+    popMatrix();
+    
+    // Bottom line for radar
+    pushMatrix();
+    translate(width/2 + ctrTopPos, height - 90);
+    rotate(PI);
+    sideEdge(ctrTopPos * 2, greenSolid);
+    popMatrix();
+    
+    // Variable to identify radar hotspot
+    if(inRadarHotSpot){
+       highlightEdge = redSolid;
+    }
+    else{
+      highlightEdge = whiteSolid;
+    };
   }
   
   // *******************************************************
   //
   void renderPreGraphics(){
     // 
-    pushMatrix();
-    translate(width/2, height/2, -100);
     fill(0);
     strokeWeight(1);
     stroke(255);
-    ellipseMode(RADIUS);
-    ellipse(0, 0, height/2, height/2);
+    
+    pushMatrix();
+    translate(width/2, height/2, -100);
+    // (int diameter, int projection, int interval, int ringWeight, int tickWeight, int colorAlpha, boolean ticks)
+    rotateZ(frameCount * animSpeed);
+    centralGrid.radialGrid(height, -10, 2, 0, 1, 255, true);
+    
+    rotateZ(frameCount * animSpeed * -1.5);
+    centralGrid.radialGrid(height + 20, -5, 4, 0, 1, 255, true);
     popMatrix();
     
-    // Top line for screen saver
-    pushMatrix();
-    translate(width/2 - ctrTopPos, 90);
-    sideEdge(ctrTopPos * 2, greenSolid);    
-    popMatrix();
     
-    // Bottom line for screen saver
-    pushMatrix();
-    translate(width/2 + ctrTopPos, height - 90);
-    rotate(PI);
-    sideEdge(ctrTopPos * 2, greenSolid);
-    popMatrix();
   }
   
   // *******************************************************
@@ -116,14 +134,6 @@ class Screen {
     translate(20, 90);
     pulse();                       
     popMatrix();
-    
-    // Variable to identify radar hotspot
-    if(inRadarHotSpot){
-       highlightEdge = redSolid;
-    }
-    else{
-      highlightEdge = whiteSolid;
-    };
   }  
   
   // *******************************************************
@@ -165,7 +175,6 @@ class Screen {
   void power(boolean powerSwitch){
     if(powerSwitch == true) {
         programOn = true;               // Activates the main program
-        //programCP.remove("power");      // Removes the power toggle CP from screen
       } else {
         programOn = false;              // Displays intro screen
       }
@@ -178,12 +187,11 @@ class Screen {
     float x, y, z, u, v;
     float scalar = 45;
     float iteration = .05;
-    float speed = 0.03;
     pushMatrix();
     translate(width/2, height/2, 400);
-    rotateX(frameCount * speed);
-    rotateY(frameCount * speed);
-    rotateZ(frameCount * speed);
+    rotateX(frameCount * animSpeed);
+    rotateY(frameCount * animSpeed);
+    rotateZ(frameCount * animSpeed);
     stroke(255);
     strokeWeight(1);
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
