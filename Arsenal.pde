@@ -104,12 +104,12 @@ class Arsenal {
      translate(20, 800);
      fill(0);
      noStroke();
-     rect(0, 0, viewportSizeX, viewportSizeY);
-     image(photo[iteration], 0, 0);
+     rect(0, 0, viewportSizeX, viewportSizeY);      // Solid black background behind images
+     image(photo[iteration], 0, 0);                 // Since some images have transparency
      noFill();
      stroke(color(0, 255, 0));
      strokeWeight(1);
-     rect(0, 0, viewportSizeX, viewportSizeY);
+     rect(0, 0, viewportSizeX, viewportSizeY);      // Border around viewport
      popMatrix();
   }
   

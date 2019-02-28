@@ -5,22 +5,26 @@ class Grid {
   int bkgdGridXOrigin = 0;
   int bkgdGridYOrigin = 0;
   int spacing;
-  color gridColor;
+  //color gridColor;
+  
+  color bkgdGridColor = (50);
+  int bkgdGridSpace = 20;
 
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // 
  
-  Grid(color gColor){  
-    gridColor = gColor;
+  Grid(){  
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Methods
   
+  
+  
   // *******************************************************
   // Create rectangular grid
-  void rectGrid(int gridSpace){
+  void rectGrid(int bkgdGridColor, int gridSpace){
     pushMatrix();
     strokeWeight(1);
     stroke(bkgdGridColor);
@@ -38,7 +42,7 @@ class Grid {
   
   // *******************************************************
   // 
-  void radialGrid(int diameter, int projection, int interval, int ringWeight, int tickWeight, int colorAlpha, boolean ticks){
+  void radialGrid(int diameter, int projection, int interval, int ringWeight, int tickWeight, color gridColor, int colorAlpha, boolean ticks){
     int lineLength;
     color radarColor = color(gridColor, colorAlpha);
     pushMatrix();

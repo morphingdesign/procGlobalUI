@@ -33,7 +33,7 @@ class Screen {
        .setColorActive(greenSolid)
        ;
        
-    centralGrid = new Grid(whiteSolid);   
+    centralGrid = new Grid();   
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -114,9 +114,9 @@ class Screen {
     // Stroke color, alpha, and weight are in the radialGrid() method
     // (int diameter, int projection, int interval, int ringWeight, int tickWeight, int colorAlpha, boolean ticks)
     rotateZ(frameCount * animSpeed);
-    centralGrid.radialGrid(height, -10, 2, 0, 1, 100, true);
+    centralGrid.radialGrid(height, -10, 2, 0, 1, whiteSolid, 100, true);
     rotateZ(frameCount * animSpeed +.1);
-    centralGrid.radialGrid(height + 20, -5, 4, 0, 1, 150, true);
+    centralGrid.radialGrid(height + 20, -5, 4, 0, 1, whiteSolid, 150, true);
     popMatrix();
     
     

@@ -11,20 +11,25 @@ class Globe {
   ColorPicker globeClassPathColorPicker;    // UI for global path color
   Slider globeClassPathSlider;              // UI for global path density
   CheckBox globeClassDataCheckBox;          // UI for global data visibility
+  Knob globeClassScaleKnob;                 // UI for global scale
   Knob globeClassDataOffsetKnob;            // UI for global data offset distance
+  Knob globeClassPathOffsetKnob;            // UI for global path offset distance
   
   Grid globeRing;
+  
+  PVector[] pts = new PVector[1000];
   
   float xOrigin = 0;
   float yOrigin = 0;
   float zOrigin = 0;
   float xPoint, yPoint, zPoint;
   float radius = 400;
+  float offset = 0;
+  float projection = 30;
+  float dataPtScale = 1;
   float radiusSmall = 200;
   float phi;
   float theta;
-  boolean dataView;
-  boolean pathView;
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
@@ -34,9 +39,10 @@ class Globe {
     earthShell = isoWrap;
     globeClassCP = ctrlP5;
     
-    globeRing = new Grid(blackSolid);
     
-    PVector[] pts = new PVector[1000];
+    globeRing = new Grid();
+    
+    //PVector[] pts = new PVector[1000];
     for (int i=0; i<pts.length; i++) {
       phi = random(PI * -1, PI);
       theta = random(TWO_PI * -1, TWO_PI);
@@ -53,56 +59,101 @@ class Globe {
           earthShell.addPt(pts[i]);
         }
       }
-    }
+    }    
     
     // Main Earth control panel
     
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassPathColorPicker = globeClassCP.addColorPicker("picker")
-        .setPosition(1520, 100)
+        .setPosition(1540, 100)
         .setColorValue(color(0, 255, 0, 255))
+        .setVisible(false)
     ;
     
     // Controls the amount of paths visible in the Earth module
     // The data set "routes" includes a very large number of paths,
     // so this allows user to show only a few or a lot in the UI
     globeClassPathSlider = globeClassCP.addSlider("pathDensity")
-       .setPosition(1520, 180)
+       .setPosition(1540, 180)
        .setSize(200,10)
        .setRange(25,pathDensity)
        .setLabel("Path Detail")
-       .setNumberOfTickMarks(3)
+       //.setNumberOfTickMarks(3)
+       .setColorBackground(whiteSolid)
+       .setColorForeground(greenSolid)
+       .setColorActive(redSolid)
+       .setColorValue(greenSolid)
+       .setColorLabel(greenSolid)
+       .setVisible(false)
     ;  
     
     // 
     globeClassDataCheckBox = globeClassCP.addCheckBox("checkBox")
-        .setPosition(1520, 220)
-        .setColorForeground(color(120))
-        .setColorActive(color(255))
-        .setColorLabel(color(255))
+        .setPosition(1540, 220)
+        .setColorBackground(whiteSolid)
+        .setColorForeground(redSolid)
+        .setColorActive(greenSolid)
+        .setColorLabel(greenSolid)
         .setSize(20, 20)
         .setItemsPerRow(3)
         .setSpacingColumn(60)
         .setSpacingRow(20)
         .addItem("Airports", 0)
         .addItem("Flight Paths", 1)
+        .setVisible(false)
     ;          
     
     //
-    globeClassDataOffsetKnob = globeClassCP.addKnob("dataOffset")
-        .setPosition(1520, 260)
-        .setRange(0,255)
-        .setValue(220)
-        .setRadius(40)
-        .setNumberOfTickMarks(10)
-        .setTickMarkLength(4)
+    globeClassScaleKnob = globeClassCP.addKnob("dataScale")
+        .setPosition(1540, 260)
+        .setRange(0,5)
+        .setValue(1)
+        .setRadius(30)
+        .setNumberOfTickMarks(5)
+        .setTickMarkLength(2)
         .snapToTickMarks(true)
-        .setColorForeground(color(255))
-        .setColorBackground(color(0, 160, 100))
-        .setColorActive(color(255,255,0))
+        .setColorForeground(whiteSolid)
+        .setColorBackground(blackSolid)
+        .setColorActive(redSolid)
+        .setColorLabel(greenSolid)
         .setDragDirection(Knob.HORIZONTAL)
+        .setLabel("City Scale")
+        .setVisible(false)
     ; 
     
+    globeClassDataOffsetKnob = globeClassCP.addKnob("dataOffset")
+        .setPosition(1620, 260)
+        .setRange(0,20)
+        .setValue(10)
+        .setRadius(30)
+        .setNumberOfTickMarks(5)
+        .setTickMarkLength(2)
+        .snapToTickMarks(false)
+        .setColorForeground(whiteSolid)
+        .setColorBackground(blackSolid)
+        .setColorActive(redSolid)
+        .setColorLabel(greenSolid)
+        .setDragDirection(Knob.HORIZONTAL)
+        .setLabel("Data Offset")
+        .setVisible(false)
+    ;  
+    
+    globeClassPathOffsetKnob = globeClassCP.addKnob("pathOffset")
+        .setPosition(1700, 260)
+        .setRange(10,40)
+        .setValue(30)
+        .setRadius(30)
+        .setNumberOfTickMarks(5)
+        .setTickMarkLength(2)
+        .snapToTickMarks(false)
+        .setColorForeground(whiteSolid)
+        .setColorBackground(blackSolid)
+        .setColorActive(redSolid)
+        .setColorLabel(greenSolid)
+        .setDragDirection(Knob.HORIZONTAL)
+        .setLabel("Path Projection")
+        .setVisible(false)
+    ; 
     
   }
  
@@ -112,9 +163,8 @@ class Globe {
   // *******************************************************
   // Render globe with all data sets
   void renderGlobe(){
-    pathColor = globeClassPathColorPicker.getColorValue();  // Assign color picker color to pathColor variable
-                                                            // Updates the path color in Earth control panel
-                                                            // Needed to be included in draw() to update accordingly
+
+    
     pushMatrix();
     earthModule.drawSphereMask();
     translate(width/2, height/2);
@@ -133,19 +183,48 @@ class Globe {
       rotateY(frameCount * 0.003);
       inRadarHotSpot = false;
     }
+    
+    dataPtScale = globeClassScaleKnob.getValue();
+    offset = globeClassDataOffsetKnob.getValue();
+    projection = globeClassPathOffsetKnob.getValue();
+    pathColor = globeClassPathColorPicker.getColorValue();  // Assign color picker color to pathColor variable
+                                                            // Updates the path color in Earth control panel
+                                                            // Needed to be included in draw() to update accordingly
+
+    
     earthModule.globeShell();
     earthModule.globeGeo();
     
-    if(dataView){
-       earthModule.globeData(10);
+    if(globeClassDataCheckBox.getArrayValue(0) == 1){
+       earthModule.globeData();  
     }
     
-    if(pathView){
+    if(globeClassDataCheckBox.getArrayValue(1) == 1){
        earthModule.globePaths();
     }
     
     popMatrix();
   }
+  
+  // *******************************************************
+  // 
+  void viewport(){
+     globeClassPathColorPicker.setVisible(true);
+     globeClassPathSlider.setVisible(true);
+     globeClassDataCheckBox.setVisible(true);
+     globeClassScaleKnob.setVisible(true);
+     globeClassDataOffsetKnob.setVisible(true);
+     globeClassPathOffsetKnob.setVisible(true);
+    
+     pushMatrix();
+     translate(1520, 80);
+     fill(blackSolid);
+     stroke(greenSolid);
+     strokeWeight(1);
+     rect(0, 0, 340, 280);
+     popMatrix();
+  }
+  
   
   // *******************************************************
   // 
@@ -165,14 +244,14 @@ class Globe {
        PVector aPt = sphereToCart(radians(latitude), radians(longitude));
        aPt.mult(radius);
        stroke(255);
-       strokeWeight(1);
+       strokeWeight(dataPtScale);
        point(aPt.x, aPt.y, aPt.z);
     }  
   }
 
   // *******************************************************
   // 
-  void globeData(int offset){
+  void globeData(){
     for(int i=0; i < airports.getRowCount(); i++){
        float latitude = airports.getFloat(i, 6);
        float longitude = airports.getFloat(i, 7);
@@ -189,7 +268,6 @@ class Globe {
   void globePaths(){
     float lift = 1;
     PVector rise = new PVector(0, 0, 0);
-    float projection = 30;
     //for(int i=0; i < routes.getRowCount(); i++){
     //for(int i=0; i < 3000; i++){
     for(int i=0; i < routes.getRowCount(); i+=pathDensity){  
@@ -197,7 +275,7 @@ class Globe {
        String destination = routes.getString(i, 1);
        TableRow srcIteration = airports.findRow(source, 4);
        TableRow destIteration = airports.findRow(destination, 4);
-       if(srcIteration != null && destIteration != null){
+       if(srcIteration != null && destIteration != null){          // Check to verify data line item is valid
            String aptCodeSrc = srcIteration.getString(4);
            String aptCodeDest = destIteration.getString(4);
            if(source.equals(aptCodeSrc) && destination.equals(aptCodeDest)){
@@ -205,7 +283,7 @@ class Globe {
                float srcLatitude = srcIteration.getFloat(6);
                float srcLongitude = srcIteration.getFloat(7);
                aptSource = sphereToCart(radians(srcLatitude), radians(srcLongitude));
-               aptSource = aptSource.mult(410);
+               aptSource = aptSource.mult(radius + offset);
                PVector aptSourceAnchor = aptSource.cross(rise);
                float destLatitude = destIteration.getFloat(6);
                float destLongitude = destIteration.getFloat(7);
@@ -215,7 +293,7 @@ class Globe {
                float midLatitude = srcLatitude + ((destLatitude - srcLatitude) / 2);
                float midLongitude = srcLongitude + ((destLongitude - srcLongitude) / 2);
                PVector aptMidpoint = sphereToCart(radians(midLatitude), radians(midLongitude));
-               aptMidpoint = aptMidpoint.mult(410 + projection);
+               aptMidpoint = aptMidpoint.mult(radius + offset + projection);
                stroke(pathColor);
                strokeWeight(1);
                beginShape();
@@ -247,36 +325,19 @@ class Globe {
   // 
   void drawSphereMask(){
     pushMatrix();
-    translate(width/2, height/2);
+    translate(width/2, height/2, 0);
     fill(0);
     strokeWeight(1);
-    stroke(255);
+    stroke(255, 100);
     ellipseMode(RADIUS);
     ellipse(0, 0, height/2, height/2);
-    globeRing.radialGrid(height, 10, 10, 1, 1, 200, true);
+    globeRing.radialGrid(height-10, -5, 10, 1, 1, whiteSolid, 100, true);
+    globeRing.radialGrid(height-20, -5, 5, 1, 1, whiteSolid, 100, true);
+    globeRing.radialGrid(height-20, 5, 1, 1, 1, whiteSolid, 100, true);
     popMatrix();
   }
   
   // *******************************************************
   // 
-  /**
-  void controlEvent(ControlEvent theEvent) {
-    if (theEvent.isFrom(checkbox)) {
-      myColorBackground = 0;
-      print("got an event from "+checkbox.getName()+"\t\n");
-      // checkbox uses arrayValue to store the state of 
-      // individual checkbox-items. usage:
-      println(checkbox.getArrayValue());
-      int col = 0;
-      for (int i=0;i<checkbox.getArrayValue().length;i++) {
-        int n = (int)checkbox.getArrayValue()[i];
-        print(n);
-        if(n==1) {
-          myColorBackground += checkbox.getItem(i).internalValue();
-        }
-      }
-      println();    
-    }
-  }
-  **/
+    
 }  

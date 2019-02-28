@@ -10,7 +10,7 @@ class Radar {
   // Class Constructor
   // Used to construct the radar system
   Radar(){  
-    radarRing = new Grid(greenSolid);
+    radarRing = new Grid();
   }
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -64,12 +64,12 @@ class Radar {
     translate(0, 0);
     radarScanArc(radarHeight);
     
-    radarRing.radialGrid(radarHeight/4, -3, 10, 1, 1, 150 ,true);
-    radarRing.radialGrid(radarHeight/2, 5, 20, 1, 1, 100, true);
-    radarRing.radialGrid(int(radarHeight * 0.75), 10, 10, 1, 1, 150, true);
-    radarRing.radialGrid(radarHeight, 5, 2, 1, 1, 150, true);
-    radarRing.radialGrid(radarHeight, 0, 45, 1, 1, 100, false);
-    radarRing.radialGrid(radarHeight, 0, 90, 1, 1, 100, false);    
+    radarRing.radialGrid(radarHeight/4, -3, 10, 1, 1, greenSolid, 150 ,true);
+    radarRing.radialGrid(radarHeight/2, 5, 20, 1, 1, greenSolid, 100, true);
+    radarRing.radialGrid(int(radarHeight * 0.75), 10, 10, 1, 1, greenSolid, 150, true);
+    radarRing.radialGrid(radarHeight, 5, 2, 1, 1, greenSolid, 150, true);
+    radarRing.radialGrid(radarHeight, 0, 45, 1, 1, greenSolid, 100, false);
+    radarRing.radialGrid(radarHeight, 0, 90, 1, 1, greenSolid, 100, false);    
     
     tangoPts(radarHeight/2 - radarHeight/4);
     popMatrix();

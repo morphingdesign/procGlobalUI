@@ -55,7 +55,7 @@ Screen hudScreen;            // HUD graphics in foreground
 ControlP5 pwrCP;             // Used to pass through ControlP5 into Screen class
 
 int pathDensity = 100;
-int bkgdGridSpace = 20;
+
 
 int ctrTopPos = 490;
 int ctrSidePos = 360;
@@ -74,7 +74,6 @@ color whiteSolid = color(255);
 color blackSolid = color(0, 0, 0);
 
 color pathColor;                              // Color for paths around globe
-color bkgdGridColor = (50);
 
 PVector aptSource, aptDestination;
 
@@ -134,7 +133,7 @@ void setup() {
   }
  
   // ******************************************************* 
-  bkgdGrid = new Grid(bkgdGridColor);
+  bkgdGrid = new Grid();
   backText = new TextStream(); 
   radarModule = new Radar();
   arsenalCP = new ControlP5(this);
@@ -157,11 +156,12 @@ void draw() {
   if(programOn){
     // *******************************************************
     // Main program content
-    bkgdGrid.rectGrid(bkgdGridSpace);// Square grid
+    bkgdGrid.rectGrid(50, 20);       // Square grid
     backText.renderStream(40);       // Background text stream
     arsenalModule.dataStreamBox();   // Text box with data
     arsenalModule.viewport();        // Scrollable 3D view
     radarModule.renderRadar();       // Radar system
+    earthModule.viewport();
     earthModule.renderGlobe();       // Earth data points andD view
     hudScreen.renderRunGraphics();   // HUD screen graphics when program is on
   }
