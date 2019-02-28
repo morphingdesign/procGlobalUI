@@ -108,19 +108,15 @@ class Screen {
   // *******************************************************
   //
   void renderPreGraphics(){
-    // 
-    fill(0);
-    strokeWeight(1);
-    stroke(255);
-    
+    //     
     pushMatrix();
     translate(width/2, height/2, -100);
+    // Stroke color, alpha, and weight are in the radialGrid() method
     // (int diameter, int projection, int interval, int ringWeight, int tickWeight, int colorAlpha, boolean ticks)
     rotateZ(frameCount * animSpeed);
-    centralGrid.radialGrid(height, -10, 2, 0, 1, 255, true);
-    
-    rotateZ(frameCount * animSpeed * -1.5);
-    centralGrid.radialGrid(height + 20, -5, 4, 0, 1, 255, true);
+    centralGrid.radialGrid(height, -10, 2, 0, 1, 100, true);
+    rotateZ(frameCount * animSpeed +.1);
+    centralGrid.radialGrid(height + 20, -5, 4, 0, 1, 150, true);
     popMatrix();
     
     
