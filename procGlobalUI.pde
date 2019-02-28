@@ -74,6 +74,8 @@ color whiteSolid = color(255);
 color blackSolid = color(0, 0, 0);
 
 color pathColor;                              // Color for paths around globe
+color cityColor;
+color aptColor;
 
 PVector aptSource, aptDestination;
 
