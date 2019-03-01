@@ -18,8 +18,8 @@ class TextStream {
   // Render dynamic text stream
   void renderStream(int multiplier){
     pushMatrix();
-    translate(20, 0, -1);
-
+    translate(22, 105, -1);
+    
     multiplier = 40;
     int numOfCurves = height / multiplier;
     int curveOffset = height / numOfCurves;
@@ -27,8 +27,15 @@ class TextStream {
     drawCurveArray(numOfCurves, curveOffset, 125);
     drawCurveArray(numOfCurves, curveOffset, 100);
     drawCurveArray(numOfCurves, curveOffset, 75);
-    drawCurveArray(numOfCurves, curveOffset, 50);     
+    drawCurveArray(numOfCurves, curveOffset, 50);   
+    
+    
     popMatrix(); 
+    
+    pushMatrix();
+    translate(22, 100, -1);
+    pulse();
+    popMatrix();
   }
   
   // *******************************************************
@@ -43,10 +50,19 @@ class TextStream {
   }
   
   // *******************************************************
+  // Creates pulsing row of lines
+  void pulse(){
+    stroke(whiteSolid, 200);  
+    for(int i = 0; i < 70; i++){
+       line(i + (i * 5), 0, i + (i * 5), random(5, 30));
+    }
+  }
+  
+  // *******************************************************
   // 
   void drawCurve(int alpha){
     int scalar = 10;
-    int arrayLength = (width)/scalar + scalar;
+    int arrayLength = (320)/scalar + scalar;
     int shift;
     
     noFill();
@@ -90,7 +106,7 @@ class TextStream {
          textSize(10);
          textAlign(CENTER, CENTER);
          
-         fill(redSolid, alpha);          // Defines color for all text in background
+         fill(whiteSolid, alpha);          // Defines color for all text in background
          text(glyph[int(random(0, 95))], xList[i], yList[i]);
        }
     }

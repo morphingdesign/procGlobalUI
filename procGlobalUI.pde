@@ -165,13 +165,13 @@ void draw() {
     radarModule.renderRadar();       // Radar system
     earthModule.viewport();
     earthModule.renderGlobe();       // Earth data points andD view
-    hudScreen.renderRunGraphics();   // HUD screen graphics when program is on
+    hudScreen.renderRunGraphics();   // HUD graphics when running
   }
   else{
     // ******************************************************* 
     // Content before program starts
     hudScreen.renderPreGraphics();   // HUD screen graphics when program is off
-    hudScreen.screenSaver();
+    hudScreen.geoTrefoil();
   }
   
 }

@@ -2,7 +2,7 @@
 class Grid {  
   
   // Class Variables
-  int bkgdGridXOrigin = 0;
+  int bkgdGridXOrigin = width/2;
   int bkgdGridYOrigin = 0;
   int spacing;
   //color gridColor;
@@ -29,6 +29,8 @@ class Grid {
     strokeWeight(1);
     stroke(bkgdGridColor);
     translate(bkgdGridXOrigin, bkgdGridYOrigin, -1);
+    
+    /**
     // Horizontal Lines
     for(int i=0; i < height; i+=gridSpace){
        line(0, i, width, i);
@@ -37,6 +39,17 @@ class Grid {
     for(int i=0; i < width; i+=gridSpace){
        line(i, 0, i, height);
     }
+    **/
+    
+    // Horizontal Lines
+    for(int i=0; i < height; i+=gridSpace){
+       line(0, i, width/2, i);
+    }
+    // Vertical Lines
+    for(int i=0; i < width/2; i+=gridSpace){
+       line(i, 0, i, height);
+    }
+    
     popMatrix();
   }
   
