@@ -124,13 +124,42 @@ class Screen {
     rotateZ(frameCount * animSpeed +.1);
     centralGrid.radialGrid(height + 20, -5, 4, 0, 1, whiteSolid, 150, true);
     popMatrix();
-    
+
     int plusAlpha = 100;
-    plusSign(width - 250, height/2, 40, whiteSolid, plusAlpha);
-    plusSign(width/2 + 400, height/2 + 400, 20, whiteSolid, plusAlpha);
-    plusSign(width/2 + 400, height/2 - 400, 20, whiteSolid, plusAlpha);
-    plusSign(width/2 - 400, height/2 + 400, 20, whiteSolid, plusAlpha);
-    plusSign(width/2 - 400, height/2 - 400, 20, whiteSolid, plusAlpha);
+    plusIcon(width - 250, height/2, 40, whiteSolid, plusAlpha);
+    plusIcon(width/2 + 400, height/2 + 400, 20, whiteSolid, plusAlpha);
+    plusIcon(width/2 + 400, height/2 - 400, 20, whiteSolid, plusAlpha);
+    plusIcon(width/2 - 400, height/2 + 400, 20, whiteSolid, plusAlpha);
+    plusIcon(width/2 - 400, height/2 - 400, 20, whiteSolid, plusAlpha);
+    
+    int rectAlpha = 100;
+    rectIcon(50, 50, 20, whiteSolid, rectAlpha);
+    rectIcon(50, height - 50, 20, whiteSolid, rectAlpha);
+    rectIcon(width - 50, 50, 20, whiteSolid, rectAlpha);
+    rectIcon(width - 50, height - 50, 20, whiteSolid, rectAlpha);
+  
+    int angleAlpha = 100;
+    color highlightColor = whiteSolid;
+    int s = second();
+    
+    angleIcon(400, 180, -45, 15, whiteSolid, angleAlpha);
+    angleIcon(width - 400, 180, 135, 15, whiteSolid, angleAlpha);
+    angleIcon(400, height - 180, -45, 15, whiteSolid, angleAlpha);
+    angleIcon(width - 400, height - 180, 135, 15, whiteSolid, angleAlpha);
+    
+    if(millis() > 5000){
+      if(s % 2 == 1){
+         highlightColor = redSolid;
+         angleAlpha = 255;
+      }
+      else{
+         highlightColor = whiteSolid;
+         angleAlpha = 100;
+      }
+    }
+    
+    angleIcon(180, height/2 + 10, -45, 20, highlightColor, angleAlpha);
+    angleIcon(260, height/2 + 10, 135, 20, highlightColor, angleAlpha);
   } 
   
   // *******************************************************
@@ -160,8 +189,8 @@ class Screen {
 
   // *******************************************************
   // Creates a single iteration of a line with end lines at each point
-  void plusSign(int x, int y, int length, color lineColor, int alpha){
-    length = length / 2;
+  void plusIcon(int x, int y, int length, color lineColor, int alpha){
+    length = length/2;
     pushMatrix();
     translate(x, y);
     strokeWeight(1);
@@ -170,6 +199,32 @@ class Screen {
     line(0, -length, 0, length);
     popMatrix();
   }  
+  
+  // *******************************************************
+  // Creates a single iteration of a square at each point
+  void rectIcon(int x, int y, int length, color lineColor, int alpha){
+    pushMatrix();
+    translate(x, y);
+    strokeWeight(1);
+    stroke(lineColor, alpha);
+    rectMode(CENTER);
+    rect(0, 0, length, length);
+    rectMode(CORNER);
+    popMatrix();
+  }  
+  
+  // *******************************************************
+  // Creates a single iteration of an arrowhead at each point
+  void angleIcon(int x, int y, int angle, int length, color lineColor, int alpha){
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(angle));
+    strokeWeight(1);
+    stroke(lineColor, alpha);
+    line(-length, 0, 0, 0);
+    line(0, -length, 0, 0);
+    popMatrix();
+  }     
 
   // *******************************************************
   // Creates power switch for main program
@@ -246,7 +301,7 @@ class Screen {
         
         float x2, y2, z2, u2, v2;
         float iteration2 = .4;
-        float scalar2 = 800;
+        float scalar2 = 1200;
         float a = 1;            // Changes variation of Hyperbolic Helicoid
         for(u2=0; u2 < TWO_PI; u2+=iteration2){
           for(v2=0; v2 < PI; v2+=iteration2){
