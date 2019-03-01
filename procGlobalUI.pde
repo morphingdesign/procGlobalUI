@@ -4,7 +4,20 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 /** PROJECT DESCRIPTION
-    Add description here
+    This interactive sketch is composed of an initial splash screen followed by a 
+    main workspace screen.  It is intended to provide a framework for a futuristic 
+    HUD as part of an global aerial security system game interface.  The splash 
+    screen is a dynamic and interactive display of math formulas used to create 
+    point geometry.  It also includes a button for activating the main workspace
+    screen.  The main workspace is a dashboard/HUD for managing global aerial 
+    security, namely airports and flight paths, which can be monitored in the 
+    center of the screen.  Its visual display controls are at the top right of the 
+    screen.  The security network integrates the use of an arsenal of reconnaissance 
+    drones, listed in the dropdown menu on the left of the screen. At the moment, 
+    only 3 are listed and 1 has data and a visual display, located at the bottom 
+    left corner of the screen. The visual display of the drone has a slider to view
+    the drone from different angles.  The radar system at the bottom right can be 
+    linked to a drone once it has been deployed for use.
     
     --------------------------------------------------------------------------------
     REFERENCED CODE
@@ -26,15 +39,17 @@
             
     --------------------------------------------------------------------------------    
     IMAGES
-    
+    The PNG images used for the safe content within this program and located in the
+    accompanying 'data' folder were created by Hans Palacios.  Each were modeled, 
+    textured, and rendered in SideFX Houdini.
     
 **/
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 // Processing Libraries
-import ComputationalGeometry.*;
-import controlP5.*;
+import ComputationalGeometry.*;    // Library for use with 3D meshes
+import controlP5.*;                // Library for use with UI elements
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -43,53 +58,62 @@ import controlP5.*;
     throughout the sketch and its contents built from various classes.  
 **/
 
-Grid bkgdGrid;               // Square grid background
-TextStream backText;         // Scrolling text background 
-Radar radarModule;           // Radar system
-IsoWrap eShell;              // Used to pass through IsoWrap into Globe class
-Globe earthModule;           // Earth with data points and paths
-ControlP5 earthCP;           // Earth control panel
-ControlP5 arsenalCP;         // Used to pass through ControlP5 into Arsenal class
-Arsenal arsenalModule;       // Arsenal data and viewport
-Screen hudScreen;            // HUD graphics in foreground
-ControlP5 pwrCP;             // Used to pass through ControlP5 into Screen class
+Grid bkgdGrid;                       // Square grid background
+TextStream backText;                 // Scrolling text background 
+Radar radarModule;                   // Radar system
+IsoWrap eShell;                      // Used to pass through IsoWrap into Globe class
+Globe earthModule;                   // Earth with data points and paths
+ControlP5 earthCP;                   // Earth control panel
+ControlP5 arsenalCP;                 // Used to pass through ControlP5 into Arsenal class
+Arsenal arsenalModule;               // Arsenal data and viewport
+Screen hudScreen;                    // HUD graphics in foreground
+MathGeo abstractGeo;                 // 3D geometry created using complex math
+ControlP5 pwrCP;                     // Used to pass through ControlP5 into Screen class
 
-int pathDensity = 100;
-
-
-int ctrTopPos = 490;
-int ctrSidePos = 360;
-int hotSpotStartX;
-int hotSpotStartY;
-int hotSpotEndX;
-int hotSpotEndY;
-boolean inRadarHotSpot = false;
-boolean programOn = false;
-boolean programRunning = false;
+int pathDensity = 100;               // Defines the iteration for the airport data for loop
+                                     // Has to be located in main program as Setup() is run
+int ctrTopPos = 490;                 // Top offset value for use with defining hot spot
+int ctrSidePos = 360;                // Side offset value for use with defining hot spot
+int hotSpotStartX;                   // X position for start of hot spot
+int hotSpotStartY;                   // Y position for start of hot spot
+int hotSpotEndX;                     // X position for end of hot spot
+int hotSpotEndY;                     // Y position for end of hot spot
+boolean inGlobalHotSpot = false;     // Defines state for use when mouse is in hotspot
+boolean programOn = false;           // Defines state for when main program is activated
+boolean programRunning = false;      // Defines state for when main program is running
 
 // Color scheme
-color greenSolid = color(0, 255, 0);
-color redSolid = color(255, 0, 0);
-color whiteSolid = color(255);
-color blackSolid = color(0, 0, 0);
+color greenSolid = color(0, 255, 0); 
+color redSolid = color(255, 0, 0);   
+color whiteSolid = color(255);       
+color blackSolid = color(0);   
 
-color pathColor;                              // Color for paths around globe
-color cityColor;
-color aptColor;
+color pathColor;                     // Color for paths around globe
+color cityColor;                     // Color for world cities
+color aptColor;                      // Color for airport locations
 
-PVector aptSource, aptDestination;
+PVector aptSource, aptDestination;   // Vectors derived from airport dat using Lat/Long
 
-String[] arsenalList = {"MQ-9A Reaper", "RQ-1 Predator", "GNAT-750"};
+String[] arsenalList = {             // List of arsenal, aligned with data in armory.json
+  "MQ-9A Reaper", 
+  "RQ-1 Predator", 
+  "GNAT-750"
+  };                                 
 
-String imgFileNameBase = "images/drone (";
-String imgFileNameEnd = ").png";
-PImage photo[] = new PImage[48];
+String imgFileNameBase = "images/drone (";    // String prefix for calling the image files
+String imgFileNameEnd = ").png";     // String suffix for calling the image files
+PImage photo[] = new PImage[48];     // Array for encapsulating accompanying PNG images
+                                     // Images located in the accompanying "data" folder
 
-PFont monoFont;
-PFont playFont;
+PFont monoFont;                      // Unique fonts used in the program
+PFont playFont;                      // Font files located in the accompanying "data" folder
+                                     // Fonts sourced from Google Fonts:
+                                     // https://fonts.google.com/specimen/PT+Mono
+                                     // https://fonts.google.com/specimen/Play
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Data
+// Data files are located in the accompany "data" folder
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Data for airports and routes sourced from: https://openflights.org/data.html
@@ -99,6 +123,8 @@ Table routes;
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Data for cities sourced from: https://simplemaps.com/data/world-cities
+// License for use of this free version of database is
+// located in the accompanying "data" folder.
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Table cities;
 
@@ -108,7 +134,7 @@ Table cities;
 // https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104470/mq-9-reaper/
 // https://www.globalsecurity.org/military/systems/aircraft/mq-9-specs.htm
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-JSONArray armory;
+JSONArray arsenal;
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -121,7 +147,7 @@ void setup() {
   airports = loadTable("airports.csv");
   cities = loadTable("worldcities.csv", "header");
   routes = loadTable("routes.csv");
-  armory = loadJSONArray("armory.json");
+  arsenal = loadJSONArray("arsenal.json");
   
   // *******************************************************
   // Load unique fonts used in arsenal and screen classes
@@ -135,16 +161,17 @@ void setup() {
   }
  
   // ******************************************************* 
-  bkgdGrid = new Grid();
-  backText = new TextStream(); 
-  radarModule = new Radar();
-  arsenalCP = new ControlP5(this);
-  arsenalModule = new Arsenal(arsenalCP); 
-  eShell = new IsoWrap(this);
-  earthCP = new ControlP5(this);
-  earthModule = new Globe(eShell, earthCP);
-  pwrCP = new ControlP5(this);
-  hudScreen = new Screen(pwrCP);
+  bkgdGrid = new Grid();                    // Square grid background
+  backText = new TextStream();              // Scrolling text background 
+  radarModule = new Radar();                // Radar system
+  arsenalCP = new ControlP5(this);          // Used to pass through ControlP5 into Arsenal class
+  arsenalModule = new Arsenal(arsenalCP);   // Arsenal data and viewport
+  eShell = new IsoWrap(this);               // Used to pass through IsoWrap into Globe class
+  earthCP = new ControlP5(this);            // Earth control panel
+  earthModule = new Globe(eShell, earthCP); // Earth with data points and paths
+  pwrCP = new ControlP5(this);              // Used to pass through ControlP5 into Screen class
+  abstractGeo = new MathGeo();              // 3D geometry created using complex math
+  hudScreen = new Screen(pwrCP);            // HUD graphics in foreground  
 }
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -153,7 +180,7 @@ void draw() {
   background(0);
   // ******************************************************* 
   // Static HUD screen graphics
-  hudScreen.renderStaticGraphics();  // Static HUD graphics
+  hudScreen.renderStaticGraphics();  
   
   if(programOn){
     // *******************************************************
@@ -163,15 +190,16 @@ void draw() {
     arsenalModule.dataStreamBox();   // Text box with data
     arsenalModule.viewport();        // Scrollable 3D view
     radarModule.renderRadar();       // Radar system
-    earthModule.viewport();
-    earthModule.renderGlobe();       // Earth data points andD view
+    earthModule.viewport();          // UI for managing earth data
+    earthModule.renderGlobe();       // Earth data points and 3D view
     hudScreen.renderRunGraphics();   // HUD graphics when running
   }
   else{
     // ******************************************************* 
-    // Content before program starts
+    // Content before main program starts
     hudScreen.renderPreGraphics();   // HUD screen graphics when program is off
-    hudScreen.geoTrefoil();
+    abstractGeo.geoHelicoid();         // Rotating and interactive geo shape
+    abstractGeo.geoTrefoil();          // Rotating geo shape 
   }
   
 }

@@ -127,7 +127,7 @@ class Arsenal {
   // *******************************************************
   // 
   void dataStream(){
-      JSONObject drone = armory.getJSONObject(dataSelection);
+      JSONObject drone = arsenal.getJSONObject(dataSelection);
       String id = drone.getString("id");
       String codeName = drone.getString("codename");
       String name = drone.getString("name");

@@ -235,11 +235,11 @@ class Globe {
     if(mouseX > hotSpotStartX &&  mouseX < hotSpotEndX && mouseY > hotSpotStartY && mouseY < hotSpotEndY){  
        rotateY(frameCount * 0.003 + mouseX * 0.003);
        rotateX(mouseY * 0.001);
-       inRadarHotSpot = true;
+       inGlobalHotSpot = true;
     }
     else{
       rotateY(frameCount * 0.003);
-      inRadarHotSpot = false;
+      inGlobalHotSpot = false;
     }
     
     dataPtScale = globeClassScaleKnob.getValue();
