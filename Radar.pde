@@ -1,10 +1,9 @@
-import ComputationalGeometry.*;
-
-// Class for all strange attractor construction and animation
+// Class for radar system construction and animation
 class Radar {
   
   // Class Variables
   Grid radarRing;
+  int rotateSpeed = 1;
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
@@ -83,8 +82,10 @@ class Radar {
     color scanColorDark = color(0, 255, 0, 100);
     int angle = 45;
     pushMatrix();
-    float rotateSpeed = map(second(), 0, 59, 0, TWO_PI) * rSpeed;
-    rotate(rotateSpeed);                       // Dynamic rotation initiated
+    //float rotateSpeed = map(second(), 0, 59, 0, TWO_PI) * rSpeed;
+    rotateSpeed++;
+    rotate(radians(rotateSpeed * 6));
+    //rotate(rotateSpeed);            // Dynamic rotation initiated
     for(float i = 0; i < angle; i+=0.25){
       float gradRange = map(i, 0, angle, 0.0, 1.0);
       color gradient = lerpColor(scanColorLight, scanColorDark, gradRange);

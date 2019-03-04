@@ -1,6 +1,4 @@
-import controlP5.*;
-
-// Class for grid construction
+// Class for screen HUD graphics construction
 class Screen {  
   
   // Class Variables

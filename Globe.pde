@@ -1,6 +1,3 @@
-import ComputationalGeometry.*;
-import controlP5.*;
-
 // Class for globe and global data construction and animation
 class Globe {  
   

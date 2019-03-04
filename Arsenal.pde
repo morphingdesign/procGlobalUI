@@ -1,6 +1,4 @@
-import controlP5.*;
-
-// Class for grid construction
+// Class for arsenal construction
 class Arsenal {  
   
   // Class Variables

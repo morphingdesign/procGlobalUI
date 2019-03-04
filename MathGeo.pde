@@ -1,4 +1,4 @@
-// Class for grid construction
+// Class for math geometry construction
 class MathGeo {  
   
   // Class Variables
