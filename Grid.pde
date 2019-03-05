@@ -24,11 +24,11 @@ class Grid {
   
   // *******************************************************
   // Create rectangular grid
-  void rectGrid(int bkgdGridColor, int gridSpace){
+  void rectGrid(int x, int bkgdGridColor, int gridSpace){
     pushMatrix();
     strokeWeight(1);
     stroke(bkgdGridColor);
-    translate(bkgdGridXOrigin, bkgdGridYOrigin, -1);
+    translate(x, bkgdGridYOrigin, -1);
     
     /**
     // Horizontal Lines
@@ -43,10 +43,10 @@ class Grid {
     
     // Horizontal Lines
     for(int i=0; i < height; i+=gridSpace){
-       line(0, i, width/2, i);
+       line(0, i, width, i);
     }
     // Vertical Lines
-    for(int i=0; i < width/2; i+=gridSpace){
+    for(int i=0; i < width; i+=gridSpace){
        line(i, 0, i, height);
     }
     

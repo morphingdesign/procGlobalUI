@@ -77,15 +77,13 @@ class Radar {
   // *******************************************************
   // 
   void radarScanArc(int diameter){
-    float rSpeed = 1;
+    float rSpeed = 6;
     color scanColorLight = color(0, 255, 0, 10);
     color scanColorDark = color(0, 255, 0, 100);
     int angle = 45;
     pushMatrix();
-    //float rotateSpeed = map(second(), 0, 59, 0, TWO_PI) * rSpeed;
     rotateSpeed++;
-    rotate(radians(rotateSpeed * 6));
-    //rotate(rotateSpeed);            // Dynamic rotation initiated
+    rotate(radians(rotateSpeed * rSpeed));      // Dynamic rotation initiated
     for(float i = 0; i < angle; i+=0.25){
       float gradRange = map(i, 0, angle, 0.0, 1.0);
       color gradient = lerpColor(scanColorLight, scanColorDark, gradRange);
@@ -104,7 +102,7 @@ class Radar {
     float ptXPos, ptYPos, ptRad;
     int numOfTangoes = 10;
     ptRad = 2;
-    int alpha = int(map(second(), 0, 10, 150, 255));
+    int alpha = int(map(second(), 0, 5, 0, 255));    
     for(int i=0; i < numOfTangoes; i++){
        ptXPos = random(-diameter, diameter);
        ptYPos = random(-diameter, diameter);

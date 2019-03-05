@@ -88,6 +88,10 @@ color redSolid = color(255, 0, 0);
 color whiteSolid = color(255);       
 color blackSolid = color(0);   
 
+color whiteGrad10 = color(255, 10);
+color whiteGrad20 = color(255, 20);
+color whiteGrad50 = color(255, 50); 
+
 color pathColor;                     // Color for paths around globe
 color cityColor;                     // Color for world cities
 color aptColor;                      // Color for airport locations
@@ -185,7 +189,8 @@ void draw() {
   if(programOn){
     // *******************************************************
     // Main program content
-    bkgdGrid.rectGrid(50, 20);       // Square grid
+    bkgdGrid.rectGrid(width/2, whiteGrad20, 20);       // Small square grid
+    bkgdGrid.rectGrid(width/2, whiteGrad50, 140);       // Large square grid
     backText.renderStream(40);       // Background text stream
     arsenalModule.dataStreamBox();   // Text box with data
     arsenalModule.viewport();        // Scrollable 3D view
@@ -197,6 +202,8 @@ void draw() {
   else{
     // ******************************************************* 
     // Content before main program starts
+    bkgdGrid.rectGrid(0, whiteGrad10, 20);       // Small square grid
+    bkgdGrid.rectGrid(0, whiteGrad20, 140);      // Large square grid
     hudScreen.renderPreGraphics();   // HUD screen graphics when program is off
     abstractGeo.geoHelicoid();         // Rotating and interactive geo shape
     abstractGeo.geoTrefoil();          // Rotating geo shape 

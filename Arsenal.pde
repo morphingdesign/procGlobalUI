@@ -53,7 +53,7 @@ class Arsenal {
        .setVisible(false)
        ;  
      arsenalSelect = arsenalClassCP.addScrollableList("arsenal")
-       .setPosition(20, 200)
+       .setPosition(20, 140)
        .setSize(360, 100)
        .setBarHeight(20)
        .setItemHeight(20)
@@ -82,12 +82,12 @@ class Arsenal {
     dataStreamText.setVisible(true); 
     
     pushMatrix();
-    translate(20, 200);
+    translate(20, 140);
     fill(0, 180);
     stroke(0, 255, 0);
     strokeWeight(1);
     rect(0, 0, dataStreamSizeX, 20);
-    rect(0, 40, dataStreamSizeX, dataStreamSizeY);
+    rect(0, 100, dataStreamSizeX, dataStreamSizeY);
     dataStream();
     dataStreamText.setText(text.toUpperCase());
     popMatrix();
