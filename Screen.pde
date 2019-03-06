@@ -7,22 +7,16 @@ class Screen {
   int edgeOffset = 10;    // Offset from sketch border
   int ctrTopPos = 490;
   int ctrSidePos = 360;
-  color highlightEdge;     // Color changes when mouse is in radar hotspot
+  color highlightEdge;     // Color changes 
+  color highlightStroke;   // Stroke changes 
   String powerInfo = "activate \nprogram";
   float animSpeed = 0.03;  // Speed for screen saver animation
   
-  Arc[] arcShape = new Arc[21];
+  Arc[] arcShape = new Arc[10];
   
   int dia1Out = 1080 - 20;
-  int dia1In = dia1Out - 40;
-  int dia2Out = dia1In - 10;
-  int dia2In = dia2Out - 2;
-  int dia3Out = dia2In - 10;
-  int dia3In = dia3Out - 40;
-  int dia4Out = dia3In - 10;
-  int dia4In = dia4Out - 2;
-  int dia5Out = dia4In - 10;
-  int dia5In = dia5Out - 20;
+  int dia1In = dia1Out - 20;
+
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
@@ -62,31 +56,7 @@ class Screen {
      arcShape[8] = new Arc(dia1Out, dia1In, 334, 336, 0, whiteGrad50);
      arcShape[9] = new Arc(dia1Out, dia1In, 338, 340, 0, whiteGrad50);
      
-     // Ring2
-     // Lines
-     arcShape[10] = new Arc(dia2Out, dia2In, 30, 140, 0, whiteGrad50);
-     arcShape[11] = new Arc(dia2Out, dia2In, 220, 310, 0, whiteGrad50);
-     
-     // Ring3
-     // Outlines
-     arcShape[12] = new Arc(dia3Out, dia3In, 0, 90, 0, whiteGrad50);
-     arcShape[13] = new Arc(dia3Out, dia3In, 110, 120, 0, whiteGrad50);
-     arcShape[14] = new Arc(dia3Out, dia3In, 125, 135, 0, whiteGrad50);
-     // Outlines
-     arcShape[15] = new Arc(dia3Out, dia3In, 180, 230, 0, whiteGrad50); 
-     // Solids
-     arcShape[16] = new Arc(dia3Out, dia3In, 280, 320, 0, whiteGrad50);
-     // Outlines
-     arcShape[17] = new Arc(dia3Out, dia3In, 325, 340, 0, whiteGrad50);
-     
-     // Ring4
-     // Lines
-     arcShape[18] = new Arc(dia4Out, dia4In, 80, 150, 0, whiteGrad50);
-     arcShape[19] = new Arc(dia4Out, dia4In, 280, 350, 0, whiteGrad50);
-     
-     // Ring5
-     // Solids
-     arcShape[20] = new Arc(dia5Out, dia5In, 170, 270, 0, whiteGrad50);
+
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -162,7 +132,7 @@ class Screen {
     text("STRATOSPHERE", 40, 36);  
     
     pushMatrix();
-    translate(0, 0, -600);
+    translate(0, 0, -800);
     rotateArc();
     popMatrix();
   }
@@ -204,24 +174,26 @@ class Screen {
     color highlightColor = whiteSolid;
     int s = second();
     
-    angleIcon(400, 180, -45, 15, whiteSolid, angleAlpha);
-    angleIcon(width - 400, 180, 135, 15, whiteSolid, angleAlpha);
-    angleIcon(400, height - 180, -45, 15, whiteSolid, angleAlpha);
-    angleIcon(width - 400, height - 180, 135, 15, whiteSolid, angleAlpha);
+    angleIcon(400, 180, -45, 15, 1, whiteSolid, angleAlpha);
+    angleIcon(width - 400, 180, 135, 15, 1, whiteSolid, angleAlpha);
+    angleIcon(400, height - 180, -45, 15, 1, whiteSolid, angleAlpha);
+    angleIcon(width - 400, height - 180, 135, 15, 1, whiteSolid, angleAlpha);
     
     if(millis() > 5000){
       if(s % 2 == 1){
          highlightColor = redSolid;
+         highlightStroke = 3;
          angleAlpha = 255;
       }
       else{
          highlightColor = whiteSolid;
+         highlightStroke = 1;
          angleAlpha = 100;
       }
     }
     
-    angleIcon(180, height/2 + 10, -45, 20, highlightColor, angleAlpha);
-    angleIcon(260, height/2 + 10, 135, 20, highlightColor, angleAlpha);
+    angleIcon(180, height/2 + 10, -45, 20, highlightStroke, highlightColor, angleAlpha);
+    angleIcon(260, height/2 + 10, 135, 20, highlightStroke, highlightColor, angleAlpha);
   } 
   
   // *******************************************************
@@ -277,11 +249,11 @@ class Screen {
   
   // *******************************************************
   // Creates a single iteration of an arrowhead at each point
-  void angleIcon(int x, int y, int angle, int length, color lineColor, int alpha){
+  void angleIcon(int x, int y, int angle, int length, int sWeight, color lineColor, int alpha){
     pushMatrix();
     translate(x, y);
     rotate(radians(angle));
-    strokeWeight(1);
+    strokeWeight(sWeight);
     stroke(lineColor, alpha);
     line(-length, 0, 0, 0);
     line(0, -length, 0, 0);
@@ -308,21 +280,6 @@ class Screen {
      arcShape[8].rotateArc(1, 0);
      arcShape[9].rotateArc(1, 0);
      
-     arcShape[10].rotateArc(-1, 0);
-     arcShape[11].rotateArc(-1, 0);
-     
-     arcShape[12].rotateArc(-2, 1);
-     arcShape[13].rotateArc(-2, 1);
-     arcShape[14].rotateArc(-2, 1);
-     
-     arcShape[15].rotateArc(-2, 0);
-     arcShape[16].rotateArc(-2, 1);
-     arcShape[17].rotateArc(-2, 0);
-     
-     arcShape[18].rotateArc(-1, 0);
-     arcShape[19].rotateArc(-1, 0);
-     
-     arcShape[20].rotateArc(2, 0);
      popMatrix();
   }
 
