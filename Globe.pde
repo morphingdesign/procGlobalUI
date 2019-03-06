@@ -32,6 +32,8 @@ class Globe {
   float phi;
   float theta;
   
+  float knobYPos = 330;
+  
   String title = ("GLOBAL VIEW CONTROL PANEL");
   String description = ("Visualize global network of airports and flight paths using \n the following control panel and settings.");
   
@@ -65,14 +67,14 @@ class Globe {
     // Main Earth control panel
     
     globeClassTextTitle = globeClassCP.addTextlabel("titleText")
-        .setPosition(1540, 60)
+        .setPosition(1560, 40)
         .setText(title)
         .setColorValue(greenSolid)
         .setVisible(false)
     ;
     
     globeClassTextDesc = globeClassCP.addTextlabel("descText")
-        .setPosition(1540, 72)
+        .setPosition(1560, 52)
         .setText(description)
         .setColorValue(greenSolid)
         .setVisible(false)
@@ -80,7 +82,7 @@ class Globe {
 
     // 
     globeClassDataCheckBox = globeClassCP.addCheckBox("checkBox")
-        .setPosition(1540, 100)
+        .setPosition(1560, 80)
         .setColorBackground(whiteSolid)
         .setColorForeground(redSolid)
         .setColorActive(greenSolid)
@@ -99,7 +101,7 @@ class Globe {
     
     //
     globeClassScaleKnob = globeClassCP.addKnob("dataScale")
-        .setPosition(1540, 200)
+        .setPosition(1560, knobYPos)
         .setRange(0,5)
         .setValue(1)
         .setRadius(30)
@@ -116,7 +118,7 @@ class Globe {
     ; 
     
     globeClassDataOffsetKnob = globeClassCP.addKnob("dataOffset")
-        .setPosition(1620, 200)
+        .setPosition(1640, knobYPos)
         .setRange(0,20)
         .setValue(10)
         .setRadius(30)
@@ -133,7 +135,7 @@ class Globe {
     ;  
     
     globeClassPathOffsetKnob = globeClassCP.addKnob("pathOffset")
-        .setPosition(1700, 200)
+        .setPosition(1720, knobYPos)
         .setRange(10,40)
         .setValue(30)
         .setRadius(30)
@@ -153,7 +155,7 @@ class Globe {
     // The data set "routes" includes a very large number of paths,
     // so this allows user to show only a few or a lot in the UI
     globeClassPathDetailKnob = globeClassCP.addKnob("pathDensity")
-       .setPosition(1780, 200)
+       .setPosition(1800, knobYPos)
        .setRange(25,pathDensity)
        .setValue(100)
        .setRadius(30)
@@ -171,7 +173,7 @@ class Globe {
 
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassPathColorPicker = globeClassCP.addColorPicker("pathPicker")
-        .setPosition(1540, 180)
+        .setPosition(1560, 270)
         .setSize(260, 60)
         .setColorLabel(greenSolid)
         .setColorValue(color(0, 255, 0, 100))      // Defines the starting color of the data paths
@@ -185,7 +187,7 @@ class Globe {
 
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassAptColorPicker = globeClassCP.addColorPicker("aptPicker")
-        .setPosition(1540, 160)
+        .setPosition(1560, 195)
         .setSize(260, 60)
         .setColorLabel(greenSolid)
         .setColorValue(color(255, 0, 0, 255))      // Defines the starting color of the airport locations
@@ -199,7 +201,7 @@ class Globe {
     
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassCityColorPicker = globeClassCP.addColorPicker("cityPicker")
-        .setPosition(1540, 140)
+        .setPosition(1560, 120)
         .setSize(260, 60)
         .setColorLabel(greenSolid)
         .setColorValue(color(255, 255, 255, 255))      // Defines the starting color of the cities
@@ -277,11 +279,11 @@ class Globe {
      globeClassPathDetailKnob.setVisible(true);
     
      pushMatrix();
-     translate(1520, 40);
+     translate(1540, 20);
      fill(blackSolid);
      stroke(greenSolid);
      strokeWeight(1);
-     rect(0, 0, 340, 320);
+     rect(0, 0, 340, 400);
      popMatrix();
   }
   

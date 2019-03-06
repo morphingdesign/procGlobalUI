@@ -40,23 +40,17 @@ class Screen {
        
     centralGrid = new Grid();   
     
-    // Ring1
-     // Solids
      arcShape[0] = new Arc(dia1Out, dia1In, 0, 90, 0, whiteGrad50); 
      arcShape[1] = new Arc(dia1Out, dia1In, 94, 98, 0, whiteGrad50);
      arcShape[2] = new Arc(dia1Out, dia1In, 100, 104, 0, whiteGrad50); 
-     
      arcShape[3] = new Arc(dia1Out, dia1In, 140, 200, 0, whiteGrad50); 
-     
      arcShape[4] = new Arc(dia1Out, dia1In, 220, 250, 0, whiteGrad50); 
      arcShape[5] = new Arc(dia1Out, dia1In, 254, 258, 0, whiteGrad50);
      arcShape[6] = new Arc(dia1Out, dia1In, 260, 262, 0, whiteGrad50);
-     
      arcShape[7] = new Arc(dia1Out, dia1In, 290, 330, 0, whiteGrad50); 
      arcShape[8] = new Arc(dia1Out, dia1In, 334, 336, 0, whiteGrad50);
      arcShape[9] = new Arc(dia1Out, dia1In, 338, 340, 0, whiteGrad50);
      
-
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

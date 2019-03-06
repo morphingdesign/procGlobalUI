@@ -5,11 +5,33 @@ class Radar {
   Grid radarRing;
   int rotateSpeed = 1;
   
+  int radarRadius = 200;
+  int radarDiameter = radarRadius * 2;
+  //int radius = 200;
+  int spacing = 13;
+  //int radarHeight = 400;
+  
+  int numOfTango = 10;
+  int ptXPos[] = new int[numOfTango];
+  int ptYPos[] = new int[numOfTango];
+  float ptRad = 2;
+  int tango[] = new int[numOfTango];
+  int alphaOne = 0;
+  int alphaLast = 600;
+  int growth = 2;
+  
+  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // Used to construct the radar system
   Radar(){  
     radarRing = new Grid();
+    
+    for(int i=0; i < tango.length; i++){
+      tango[i] = i;
+      ptXPos[i] = int(random(-radarDiameter/3, radarDiameter/3));
+      ptYPos[i] = int(random(-radarDiameter/3, radarDiameter/3));
+    }
   }
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,20 +52,16 @@ class Radar {
   void drawRadar(){
     
     pushMatrix();
-    int radius = 200;
-    int spacing = 13;
     ellipseMode(RADIUS);
-
     noFill();
     stroke(255, 5);
     strokeWeight(2);
-    for(int i=10; i < radius; i+=spacing){
+    for(int i=10; i < radarRadius; i+=spacing){
        ellipse(0, 0, i, i);
     }
-    
     stroke(255, 50);
     strokeWeight(1);
-    for(int i=5; i < radius; i+=spacing){
+    for(int i=5; i < radarRadius; i+=spacing){
        ellipse(0, 0, i, i);
     }
     popMatrix();
@@ -54,24 +72,28 @@ class Radar {
     //noFill();
     stroke(100, 255);
     strokeWeight(2);
-    ellipse(0, 0, radius, radius);
+    ellipse(0, 0, radarRadius, radarRadius);
     popMatrix();
     
-    int radarHeight = 400;
+    
   
     pushMatrix();
-    translate(0, 0);
-    radarScanArc(radarHeight);
+    translate(0, 0, 0);
+    radarScanArc(radarDiameter);
     
-    radarRing.radialGrid(radarHeight/4, -3, 10, 1, 1, greenSolid, 150 ,true);
-    radarRing.radialGrid(radarHeight/2, 5, 20, 1, 1, greenSolid, 100, true);
-    radarRing.radialGrid(int(radarHeight * 0.75), 10, 10, 1, 1, greenSolid, 150, true);
-    radarRing.radialGrid(radarHeight, 5, 2, 1, 1, greenSolid, 150, true);
-    radarRing.radialGrid(radarHeight, 0, 45, 1, 1, greenSolid, 100, false);
-    radarRing.radialGrid(radarHeight, 0, 90, 1, 1, greenSolid, 100, false);    
+    radarRing.radialGrid(radarDiameter/4, -3, 10, 1, 1, greenSolid, 150 ,true);
+    radarRing.radialGrid(radarDiameter/2, 5, 20, 1, 1, greenSolid, 100, true);
+    radarRing.radialGrid(int(radarDiameter * 0.75), 10, 10, 1, 1, greenSolid, 150, true);
+    radarRing.radialGrid(radarDiameter, 5, 2, 1, 1, greenSolid, 150, true);
+    radarRing.radialGrid(radarDiameter, 0, 45, 1, 1, greenSolid, 100, false);
+    radarRing.radialGrid(radarDiameter, 0, 90, 1, 1, greenSolid, 100, false);    
     
-    tangoPts(radarHeight/2 - radarHeight/4);
+    //tangoPts(radarHeight/2 - radarHeight/4);
+    tangoPts();
     popMatrix();
+    
+    
+    
   }
 
   // *******************************************************
@@ -97,6 +119,7 @@ class Radar {
   
   // *******************************************************
   // 
+  /**
   void tangoPts(int diameter){
     pushMatrix();
     float ptXPos, ptYPos, ptRad;
@@ -113,4 +136,39 @@ class Radar {
     }
     popMatrix();
   }
+  **/
+  
+  void tangoPts(){
+    for(int i=0; i < tango.length; i++){
+       pushMatrix();
+       //translate(width/2, height/2);
+       //int tXPos = ptXPos[i];
+       //int tYPos = ptYPos[i];
+       tangoPt(ptXPos[i], ptYPos[i]);
+       popMatrix();
+       //println("start: " + tXPos + " , " + tYPos);
+       //int addX = int(random(-growth, growth));
+       //ptXPos[i] += addX;
+       //int addY = int(random(-growth, growth));
+       //ptYPos[i] += addY;
+       //println("add: " + addX + " , " + addY);
+       //println("next: " + ptXPos[i] + " , " + ptYPos[i]);
+    }
+  }
+  
+  void tangoPt(int x, int y){
+      pushMatrix();
+      //translate(ptRad/2, ptRad/2);
+      if(alphaOne != alphaLast){
+         alphaOne++;
+      }
+      else{
+         alphaOne = 0;
+      }
+      fill(redSolid, alphaOne);
+      noStroke();
+      ellipse(x, y, ptRad, ptRad);
+      popMatrix();
+  }
+  
 }  

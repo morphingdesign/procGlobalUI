@@ -73,7 +73,7 @@ class TextStream {
     float yList[] = new float[arrayLength];
     
     for(int i=0; i < arrayLength; i++){
-       shift = int(random(0, 2));
+       shift = int(random(0, 5));
        xList[i] = scalar * i;
        yList[i] = scalar * (sin(i) + shift);
     }
