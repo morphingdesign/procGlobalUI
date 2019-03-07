@@ -190,23 +190,23 @@ void draw() {
     // *******************************************************
     // Main program content
     bkgdGrid.rectGrid(width/2, whiteGrad20, 20);       // Small square grid
-    bkgdGrid.rectGrid(width/2, whiteGrad50, 140);       // Large square grid
-    backText.renderStream(40);       // Background text stream
-    arsenalModule.dataStreamBox();   // Text box with data
-    arsenalModule.viewport();        // Scrollable 3D view
-    radarModule.renderRadar();       // Radar system
-    earthModule.viewport();          // UI for managing earth data
-    earthModule.renderGlobe();       // Earth data points and 3D view
-    hudScreen.renderRunGraphics();   // HUD graphics when running
+    bkgdGrid.rectGrid(width/2, whiteGrad50, 140);      // Large square grid
+    backText.renderStream(40);             // Background text stream
+    arsenalModule.dataStreamBox();         // Text box with data
+    arsenalModule.viewport();              // Scrollable 3D view
+    radarModule.renderRadar();             // Radar system
+    earthModule.viewport();                // UI for managing earth data
+    earthModule.renderGlobe();             // Earth data points and 3D view
+    hudScreen.renderRunGraphics();         // HUD graphics when running
   }
   else{
     // ******************************************************* 
     // Content before main program starts
-    bkgdGrid.rectGrid(0, whiteGrad10, 20);       // Small square grid
-    bkgdGrid.rectGrid(0, whiteGrad20, 140);      // Large square grid
-    hudScreen.renderPreGraphics();   // HUD screen graphics when program is off
-    abstractGeo.geoHelicoid();         // Rotating and interactive geo shape
-    abstractGeo.geoTrefoil();          // Rotating geo shape 
+    bkgdGrid.rectGrid(0, whiteGrad10, 20);  // Small square grid
+    bkgdGrid.rectGrid(0, whiteGrad20, 140); // Large square grid
+    hudScreen.renderPreGraphics();          // HUD screen graphics when program is off
+    abstractGeo.geoHelicoid();              // Rotating and interactive geo shape
+    abstractGeo.geoTrefoil();               // Rotating geo shape 
   }
   
 }
