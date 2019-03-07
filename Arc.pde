@@ -1,3 +1,4 @@
+// Class for arc shape construction and animation
 class Arc {
 
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
