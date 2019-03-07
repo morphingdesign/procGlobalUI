@@ -23,15 +23,15 @@ class Arc {
     //}    
     rotate(radians((angle++) * direction));
     if(fillOpt == 1){
-       createOutline();
+       createArcOutline();
     }
     else{
-       createSolid();
+       createArcSolid();
     }
     popMatrix();
   }
 
-  void createSolid(){
+  void createArcSolid(){
       noStroke();
       fill(arcColor);
       arc(0, 0, outDiameter, outDiameter, radians(firstAngle), radians(secondAngle), PIE); 
@@ -41,7 +41,7 @@ class Arc {
       ellipse(0, 0, inDiameter, inDiameter); 
   }
   
-  void createOutline(){
+  void createArcOutline(){
       noStroke();
       // Outer line
       fill(arcColor);

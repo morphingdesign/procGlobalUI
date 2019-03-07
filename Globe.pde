@@ -32,7 +32,7 @@ class Globe {
   float phi;
   float theta;
   
-  float knobYPos = 330;
+  float knobYPos = 290;
   
   String title = ("GLOBAL VIEW CONTROL PANEL");
   String description = ("Visualize global network of airports and flight paths using \n the following control panel and settings.");
@@ -173,7 +173,7 @@ class Globe {
 
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassPathColorPicker = globeClassCP.addColorPicker("pathPicker")
-        .setPosition(1560, 270)
+        .setPosition(1560, 230)
         .setSize(260, 60)
         .setColorLabel(greenSolid)
         .setColorValue(color(0, 255, 0, 100))      // Defines the starting color of the data paths
@@ -187,7 +187,7 @@ class Globe {
 
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassAptColorPicker = globeClassCP.addColorPicker("aptPicker")
-        .setPosition(1560, 195)
+        .setPosition(1560, 175)
         .setSize(260, 60)
         .setColorLabel(greenSolid)
         .setColorValue(color(255, 0, 0, 255))      // Defines the starting color of the airport locations
@@ -283,7 +283,7 @@ class Globe {
      fill(blackSolid);
      stroke(greenSolid);
      strokeWeight(1);
-     rect(0, 0, 340, 400);
+     rect(0, 0, 340, 360);
      popMatrix();
   }
   

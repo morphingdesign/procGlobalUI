@@ -3,6 +3,17 @@ class Radar {
   
   // Class Variables
   Grid radarRing;
+  
+  ControlP5 radarClassCP;
+  Textlabel radarClassTextTitle;            // Title text
+  Textlabel radarClassTextDesc;             // Description text
+  ColorPicker radarClassTangoColorPicker;   // UI for tango point color
+  Knob radarClassTangoScaleKnob;            // UI for tango point scale
+  Knob radarClassTangoDensityKnob;           // UI for tango point density
+  String title = ("RADAR SYSTEM CONTROL PANEL");
+  String description = ("Visualize global network of airports and flight paths using \n the following control panel and settings.");
+  float knobYPos = 530;
+  
   int rotateSpeed = 1;
   
   int radarRadius = 200;
@@ -11,13 +22,11 @@ class Radar {
   int spacing = 13;
   //int radarHeight = 400;
   
-  int numOfTango = 10;
-  PVector ptPos[] = new PVector[numOfTango];
-  
-  int ptXPos[] = new int[numOfTango];
-  int ptYPos[] = new int[numOfTango];
-  float ptRad = 2;
-  int tango[] = new int[numOfTango];
+  int maxTango = 20;
+  PVector ptPos[] = new PVector[maxTango];
+    
+
+  float tangoPtRadius = 1;
   int alphaOne = 0;
   int alphaLast = 600;
   int growth = 2;
@@ -26,15 +35,87 @@ class Radar {
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // Used to construct the radar system
-  Radar(){  
+  Radar(ControlP5 ctrlP5){  
     radarRing = new Grid();
+    radarClassCP = ctrlP5;
+    
+
+    
+    
+    // Radar system control panel
+    
+    radarClassTextTitle = radarClassCP.addTextlabel("titleText")
+        .setPosition(1560, 420)
+        .setText(title)
+        .setColorValue(greenSolid)
+        .setVisible(false)
+    ;
+    
+    radarClassTextDesc = radarClassCP.addTextlabel("descText")
+        .setPosition(1560, 432)
+        .setText(description)
+        .setColorValue(greenSolid)
+        .setVisible(false)
+    ;
+    
+    //
+    radarClassTangoScaleKnob = radarClassCP.addKnob("tangoScale")
+        .setPosition(1560, knobYPos)
+        .setRange(0,5)
+        .setValue(2)
+        .setRadius(30)
+        .setNumberOfTickMarks(5)
+        .setTickMarkLength(2)
+        .snapToTickMarks(true)
+        .setColorForeground(whiteSolid)
+        .setColorBackground(blackSolid)
+        .setColorActive(redSolid)
+        .setColorLabel(greenSolid)
+        .setDragDirection(Knob.HORIZONTAL)
+        .setLabel("Tango Scale")
+        .setVisible(false)
+    ; 
+    
+    // Controls the amount of paths visible in the Earth module
+    // The data set "routes" includes a very large number of paths,
+    // so this allows user to show only a few or a lot in the UI
+    radarClassTangoDensityKnob = radarClassCP.addKnob("tangoDensity")
+       .setPosition(1640, knobYPos)
+       .setRange(0, maxTango)
+       .setValue(10)
+       .setRadius(30)
+       .setNumberOfTickMarks(5)
+       .setTickMarkLength(2)
+       .snapToTickMarks(false)
+       .setColorForeground(whiteSolid)
+       .setColorBackground(blackSolid)
+       .setColorActive(redSolid)
+       .setColorLabel(greenSolid)
+       .setDragDirection(Knob.HORIZONTAL)
+       .setLabel("Tango Density")
+       .setVisible(false)
+    ;  
+
+    // Color picker for paths on Earth, part of main Earth control panel
+    radarClassTangoColorPicker = radarClassCP.addColorPicker("tangoPicker")
+        .setPosition(1560, 470)
+        .setSize(260, 60)
+        .setColorLabel(greenSolid)
+        .setColorValue(color(255, 0, 0, 255))      // Defines the starting color of the data paths
+        .showBar()
+        .setBarHeight(10)
+        .enableCollapse()
+        .close()
+        .setLabel("Tango Point Color Selector")
+        .setVisible(false)
+    ;    
     
     for(int i=0; i < ptPos.length; i++){
-      tango[i] = i;
       float ptPX = random(-radarRadius/2, radarRadius/2);
       float ptPY = random(-radarRadius/2, radarRadius/2);
       ptPos[i] = new PVector(ptPX, ptPY);
     }
+    
   }
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -45,9 +126,31 @@ class Radar {
   void renderRadar(){
     pushMatrix();
     translate(1650, 830, 50);
-    //drawScanGeo();
+    
+    tangoPtRadius = radarClassTangoScaleKnob.getValue();
+    tangoDensity = int(radarClassTangoDensityKnob.getValue());
+    tangoColor = radarClassTangoColorPicker.getColorValue();
+    
     drawRadar();
     popMatrix();
+  }
+  
+  // *******************************************************
+  // 
+  void viewport(){
+     radarClassTextTitle.setVisible(true);
+     radarClassTextDesc.setVisible(true);
+     radarClassTangoColorPicker.setVisible(true);
+     radarClassTangoScaleKnob.setVisible(true);
+     radarClassTangoDensityKnob.setVisible(true);
+    
+     pushMatrix();
+     translate(1540, 400);
+     fill(blackSolid);
+     stroke(greenSolid);
+     strokeWeight(1);
+     rect(0, 0, 340, 220);
+     popMatrix();
   }
   
   // *******************************************************
@@ -122,27 +225,15 @@ class Radar {
   
   // *******************************************************
   // 
-  /**
-  void tangoPts(int diameter){
-    pushMatrix();
-    float ptXPos, ptYPos, ptRad;
-    int numOfTangoes = 10;
-    ptRad = 2;
-    int alpha = int(map(second(), 0, 5, 0, 255));    
-    for(int i=0; i < numOfTangoes; i++){
-       ptXPos = random(-diameter, diameter);
-       ptYPos = random(-diameter, diameter);
-       color tangoColor = color(255, 0, 0, alpha);
-       stroke(tangoColor);
-       strokeWeight(2);
-       ellipse(ptXPos, ptYPos, ptRad, ptRad);
-    }
-    popMatrix();
-  }
-  **/
+
   
   void tangoPts(){
-    for(int i=0; i < ptPos.length; i++){
+    //PVector ptPos[] = new PVector[numOfTango];
+    
+
+    
+    
+    for(int i=0; i < tangoDensity; i++){
        pushMatrix();
        tangoPt(ptPos[i].x, ptPos[i].y);
        popMatrix();
@@ -161,12 +252,10 @@ class Radar {
            int addY = int(random(-growth, growth));
            ptPos[i].y += addY;
        }
-       
-       
-       //println("add: " + addX + " , " + addY);
-       //println("next: " + ptXPos[i] + " , " + ptYPos[i]);
     }
   }
+ 
+  
   
   void tangoPt(float x, float y){
       pushMatrix();
@@ -177,10 +266,9 @@ class Radar {
       else{
          alphaOne = 0;
       }
-      fill(redSolid, alphaOne);
+      fill(tangoColor, alphaOne);
       noStroke();
-      ellipse(x, y, ptRad, ptRad);
+      ellipse(x, y, tangoPtRadius, tangoPtRadius);
       popMatrix();
   }
-  
 }  

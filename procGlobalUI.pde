@@ -63,7 +63,8 @@ TextStream backText;                 // Scrolling text background
 Radar radarModule;                   // Radar system
 IsoWrap eShell;                      // Used to pass through IsoWrap into Globe class
 Globe earthModule;                   // Earth with data points and paths
-ControlP5 earthCP;                   // Earth control panel
+ControlP5 earthCP;                   // Used to pass through ControlP5 into Earth class
+ControlP5 radarCP;                   // Used to pass through ControlP5 into Radar class
 ControlP5 arsenalCP;                 // Used to pass through ControlP5 into Arsenal class
 Arsenal arsenalModule;               // Arsenal data and viewport
 Screen hudScreen;                    // HUD graphics in foreground
@@ -71,7 +72,8 @@ MathGeo abstractGeo;                 // 3D geometry created using complex math
 ControlP5 pwrCP;                     // Used to pass through ControlP5 into Screen class
 
 int pathDensity = 100;               // Defines the iteration for the airport data for loop
-                                     // Has to be located in main program as Setup() is run
+int tangoDensity = 10;
+//int numOfTango = 10;
 int ctrTopPos = 490;                 // Top offset value for use with defining hot spot
 int ctrSidePos = 360;                // Side offset value for use with defining hot spot
 int hotSpotStartX;                   // X position for start of hot spot
@@ -95,6 +97,7 @@ color whiteGrad50 = color(255, 50);
 color pathColor;                     // Color for paths around globe
 color cityColor;                     // Color for world cities
 color aptColor;                      // Color for airport locations
+color tangoColor;                    // Color for radar tango points
 
 PVector aptSource, aptDestination;   // Vectors derived from airport dat using Lat/Long
 
@@ -167,10 +170,11 @@ void setup() {
   // ******************************************************* 
   bkgdGrid = new Grid();                    // Square grid background
   backText = new TextStream();              // Scrolling text background 
-  radarModule = new Radar();                // Radar system
   arsenalCP = new ControlP5(this);          // Used to pass through ControlP5 into Arsenal class
   arsenalModule = new Arsenal(arsenalCP);   // Arsenal data and viewport
   eShell = new IsoWrap(this);               // Used to pass through IsoWrap into Globe class
+  radarCP = new ControlP5(this);            // Radar system control panel
+  radarModule = new Radar(radarCP);         // Radar system
   earthCP = new ControlP5(this);            // Earth control panel
   earthModule = new Globe(eShell, earthCP); // Earth with data points and paths
   pwrCP = new ControlP5(this);              // Used to pass through ControlP5 into Screen class
@@ -194,6 +198,7 @@ void draw() {
     backText.renderStream(40);             // Background text stream
     arsenalModule.dataStreamBox();         // Text box with data
     arsenalModule.viewport();              // Scrollable 3D view
+    radarModule.viewport();                // UI for managing radar system
     radarModule.renderRadar();             // Radar system
     earthModule.viewport();                // UI for managing earth data
     earthModule.renderGlobe();             // Earth data points and 3D view
