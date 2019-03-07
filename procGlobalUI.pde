@@ -72,8 +72,7 @@ MathGeo abstractGeo;                 // 3D geometry created using complex math
 ControlP5 pwrCP;                     // Used to pass through ControlP5 into Screen class
 
 int pathDensity = 100;               // Defines the iteration for the airport data for loop
-int tangoDensity = 10;
-//int numOfTango = 10;
+int tangoDensity = 10;               // Defines the density of tango points in the radar
 int ctrTopPos = 490;                 // Top offset value for use with defining hot spot
 int ctrSidePos = 360;                // Side offset value for use with defining hot spot
 int hotSpotStartX;                   // X position for start of hot spot
