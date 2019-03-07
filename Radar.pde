@@ -29,8 +29,8 @@ class Radar {
     
     for(int i=0; i < tango.length; i++){
       tango[i] = i;
-      ptXPos[i] = int(random(-radarDiameter/3, radarDiameter/3));
-      ptYPos[i] = int(random(-radarDiameter/3, radarDiameter/3));
+      ptXPos[i] = int(random(-radarRadius/2, radarRadius/2));
+      ptYPos[i] = int(random(-radarRadius/2, radarRadius/2));
     }
   }
   
@@ -141,16 +141,25 @@ class Radar {
   void tangoPts(){
     for(int i=0; i < tango.length; i++){
        pushMatrix();
-       //translate(width/2, height/2);
-       //int tXPos = ptXPos[i];
-       //int tYPos = ptYPos[i];
        tangoPt(ptXPos[i], ptYPos[i]);
        popMatrix();
        //println("start: " + tXPos + " , " + tYPos);
-       //int addX = int(random(-growth, growth));
-       //ptXPos[i] += addX;
-       //int addY = int(random(-growth, growth));
-       //ptYPos[i] += addY;
+       if(ptXPos[i] == radarRadius/2 || ptXPos[i] == -radarRadius/2){
+           ptXPos[i] = 0;
+       }
+       else{
+           int addX = int(random(-growth, growth));
+           ptXPos[i] += addX;
+       }
+       if(ptYPos[i] == radarRadius/2 || ptYPos[i] == -radarRadius/2){
+           ptYPos[i] = 0;
+       }
+       else{
+           int addY = int(random(-growth, growth));
+           ptYPos[i] += addY;
+       }
+       
+       
        //println("add: " + addX + " , " + addY);
        //println("next: " + ptXPos[i] + " , " + ptYPos[i]);
     }
