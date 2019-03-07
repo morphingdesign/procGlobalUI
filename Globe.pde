@@ -233,7 +233,7 @@ class Globe {
     
     if(mouseX > hotSpotStartX &&  mouseX < hotSpotEndX && mouseY > hotSpotStartY && mouseY < hotSpotEndY){  
        rotateY(frameCount * 0.003 + mouseX * 0.003);
-       rotateX(mouseY * 0.001);
+       rotateX(mouseY * 0.003);
        inGlobalHotSpot = true;
     }
     else{
