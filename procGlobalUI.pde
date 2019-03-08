@@ -89,9 +89,9 @@ color redSolid = color(255, 0, 0);
 color whiteSolid = color(255);       
 color blackSolid = color(0);   
 
-color whiteGrad10 = color(255, 10);
-color whiteGrad20 = color(255, 20);
-color whiteGrad50 = color(255, 50); 
+color whiteAlpha10 = color(255, 10);
+color whiteAlpha20 = color(255, 20);
+color whiteAlpha50 = color(255, 50); 
 
 color pathColor;                     // Color for paths around globe
 color cityColor;                     // Color for world cities
@@ -108,7 +108,8 @@ String[] arsenalList = {             // List of arsenal, aligned with data in ar
 
 String imgFileNameBase = "images/drone (";    // String prefix for calling the image files
 String imgFileNameEnd = ").png";     // String suffix for calling the image files
-PImage photo[] = new PImage[48];     // Array for encapsulating accompanying PNG images
+int numOfFrames = 48;                // Define number of frames used for image array
+PImage photo[] = new PImage[numOfFrames];     // Array for encapsulating accompanying PNG images
                                      // Images located in the accompanying "data" folder
 
 PFont monoFont;                      // Unique fonts used in the program
@@ -192,8 +193,8 @@ void draw() {
   if(programOn){
     // *******************************************************
     // Main program content
-    bkgdGrid.rectGrid(width/2, whiteGrad20, 20);       // Small square grid
-    bkgdGrid.rectGrid(width/2, whiteGrad50, 140);      // Large square grid
+    bkgdGrid.rectGrid(width/2, whiteAlpha20, 20);       // Small square grid
+    bkgdGrid.rectGrid(width/2, whiteAlpha50, 140);      // Large square grid
     backText.renderStream(40);             // Background text stream
     arsenalModule.dataStreamBox();         // Text box with data
     arsenalModule.viewport();              // Scrollable 3D view
@@ -206,8 +207,8 @@ void draw() {
   else{
     // ******************************************************* 
     // Content before main program starts
-    bkgdGrid.rectGrid(0, whiteGrad10, 20);  // Small square grid
-    bkgdGrid.rectGrid(0, whiteGrad20, 140); // Large square grid
+    bkgdGrid.rectGrid(0, whiteAlpha10, 20);  // Small square grid
+    bkgdGrid.rectGrid(0, whiteAlpha20, 140); // Large square grid
     hudScreen.renderPreGraphics();          // HUD screen graphics when program is off
     abstractGeo.geoHelicoid();              // Rotating and interactive geo shape
     abstractGeo.geoTrefoil();               // Rotating geo shape 

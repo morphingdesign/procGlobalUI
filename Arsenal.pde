@@ -1,58 +1,55 @@
-// Class for arsenal construction
+// Class for arsenal viewer and UI construction
 class Arsenal {  
   
   // Class Variables
-    ControlP5 arsenalClassCP;
-    Textarea dataStreamText;
-    ScrollableList arsenalSelect;
-    Slider viewSlider;
-    
-    String text;
-    int viewportSizeX = 416;      // Used for 16:9 aspect ratio
-    int viewportSizeY = 234;      // Used for 16:9 aspect ratio
-    int dataStreamSizeX = 360;
-    int dataStreamSizeY = 540;
-    int viewport_ctrl = 47;
-    int iteration;
-    int dataSelection;
+    ControlP5 arsenalClassCP;     // Used to pass through Control P5 into this class
+    Textarea dataStreamText;      // Control P5 text field for arsenal data
+    ScrollableList arsenalSelect; // Control P5 list that serves as a collapsable dropdown menu
+    Slider viewSlider;            // Control P5 slider for interactive image viewport
+    String guideText;             // String of text used to create framework
+    int viewportSizeX = 416;      // Sizes image viewport width to align with 16:9 aspect ratio
+    int viewportSizeY = 234;      // Sizes image viewport height to align with 16:9 aspect ratio
+    int dataStreamSizeX = 360;    // Width of main text field
+    int dataStreamSizeY = 540;    // Height of main text field
+    int iteration;                // 
+    int dataSelection;            // 
   
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
-  // Used to construct an instance of the Arsenal controller object.   
-  Arsenal(ControlP5 ctrlP5){
-     arsenalClassCP = ctrlP5;
-       viewSlider = arsenalClassCP.addSlider("slider")
-       .setPosition(20, 1040)
-       .plugTo(this, "setValue")
-       .setValue(10)
-       .setSize(viewportSizeX-60,10)
-       .setRange(0,viewport_ctrl)
-       .setSliderMode(Slider.FLEXIBLE)
-       .setNumberOfTickMarks(47)
-       .setLabel("Rotate View")
-       .setValue(4)
-       .setColorTickMark(color(0, 255, 0))
-       .setColorForeground(color(255))
-       .setColorBackground(color(0))
-       .setColorActive(color(255, 0, 0))
-       .setColorLabel(color(0, 255, 0))
-       .setColorValue(color(0, 0, 0))
-       .setVisible(false)
-       ; 
-     dataStreamText = arsenalClassCP.addTextarea("txt")
+  // Used to construct the assets within the arsenal module 
+  Arsenal(ControlP5 ctrlP5){                  // Construct the Arsenal controller object 
+     arsenalClassCP = ctrlP5;                 // Pass through ControlP5 into this class
+     viewSlider = arsenalClassCP.addSlider("slider")  // Add slider UI element
+       .setPosition(20, 1040)                 // Position slider below image portal
+       .plugTo(this, "setValue")              // Connect the slider value to viewport method
+       .setSize(viewportSizeX-60,10)          // Coordinate slider size with image viewport
+       .setRange(0,numOfFrames - 1)           // Max value defined by number of image frames
+       .setSliderMode(Slider.FLEXIBLE)        // Show slider control as a triangle vs. a bar
+       .setNumberOfTickMarks(numOfFrames - 1) // Align tick marks with number of image frames
+       .setLabel("Rotate View")               // Set the visible label adjacent to slider
+       .setValue(4)                           // Set initial value on slider for runtime
+       .setColorTickMark(greenSolid)          // Set colors for different elements in slider
+       .setColorForeground(whiteSolid)
+       .setColorBackground(blackSolid)
+       .setColorActive(redSolid)
+       .setColorLabel(greenSolid)
+       .setColorValue(blackSolid)
+       .setVisible(false)                     // Initially hide slider for intro screen and link  
+       ;                                      // ....to main page view visibility
+     dataStreamText = arsenalClassCP.addTextarea("txt")  // 
        .setPosition(25,245)
        .setSize(dataStreamSizeX - 10, dataStreamSizeY - 10)
        .setFont(monoFont)
        .setLineHeight(16)
-       .setColor(color(0, 255, 0))
-       .setScrollBackground(color(0, 0))
-       .setScrollActive(color(255, 0, 0))
-       .setScrollForeground(color(255))
-       .setColorBackground(color(0,100))
-       .setColorForeground(color(255,100))
-       .setVisible(false)
-       ;  
-     arsenalSelect = arsenalClassCP.addScrollableList("arsenal")
+       .setColor(greenSolid)                  // Set color of text in text box
+       .setScrollBackground(blackSolid)       // Set color of scroll bar background
+       .setScrollActive(redSolid)             // Set color of scroll handle to red when active
+       .setScrollForeground(whiteSolid)       // Set color of scroll handle to white when inactive
+       .setColorBackground(color(blackSolid,100))    // Transparency added to allow text stream
+       .setColorForeground(color(whiteSolid,100))    // ....in background to show through       
+       .setVisible(false)                     // Initially hide slider for intro screen and link 
+       ;                                      // ....to main page view visibility  
+     arsenalSelect = arsenalClassCP.addScrollableList("arsenal")  // 
        .setPosition(20, 140)
        .setSize(360, 100)
        .setBarHeight(20)
@@ -60,16 +57,15 @@ class Arsenal {
        .addItems(arsenalList)
        .setLabel("Arsenal Dropdown Menu")
        .plugTo(this, "setArsenalValue")
-       //.setValue(0)
        .setType(ControlP5.DROPDOWN)  
        .setOpen(false)
        .setColorActive(whiteSolid)
-       .setColorLabel(color(0, 255, 0))
+       .setColorLabel(greenSolid)
        .setColorValue(greenSolid)
        .setColorForeground(redSolid)
-       .setColorBackground(color(0))
-       .setVisible(false)
-       ;
+       .setColorBackground(blackSolid)
+       .setVisible(false)                     // Initially hide slider for intro screen and link
+       ;                                      // ....to main page view visibility
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -89,15 +85,14 @@ class Arsenal {
     rect(0, 0, dataStreamSizeX, 20);
     rect(0, 100, dataStreamSizeX, dataStreamSizeY);
     dataStream();
-    dataStreamText.setText(text.toUpperCase());
+    dataStreamText.setText(guideText.toUpperCase());
     popMatrix();
   }
   
   // *******************************************************
   // 
   void viewport(){
-     arsenalSelect.setVisible(true); 
-    
+     arsenalSelect.setVisible(true);     // Activate visibility when this method is called in draw()
      pushMatrix();
      translate(20, 800);
      fill(0);
@@ -117,6 +112,8 @@ class Arsenal {
     iteration = value;
   }
   
+  // *******************************************************
+  // 
   void setArsenalValue(int i){
     arsenalClassCP.get(ScrollableList.class, "arsenal").getItem(i);
     dataSelection = i;
@@ -126,7 +123,7 @@ class Arsenal {
   // 
   void dataStream(){
       JSONObject drone = arsenal.getJSONObject(dataSelection);
-      String id = drone.getString("id");
+      //String id = drone.getString("id");
       String codeName = drone.getString("codename");
       String name = drone.getString("name");
       JSONObject genChar = drone.getJSONObject("General Characteristics");
@@ -162,7 +159,7 @@ class Arsenal {
       String av2 = avionics.getString("2");
       String av3 = avionics.getString("3");
           
-      text = codeName  + " " + name + "\n"  
+      guideText = codeName  + " " + name + "\n"      // 
         + "***************************************" + "\n"
         + "General Characteristics" + "\n"
         + "***************************************" + "\n"
