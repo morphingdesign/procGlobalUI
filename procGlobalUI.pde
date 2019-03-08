@@ -48,8 +48,8 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 // Processing Libraries
-import ComputationalGeometry.*;    // Library for use with 3D meshes
-import controlP5.*;                // Library for use with UI elements
+import ComputationalGeometry.*;     // Library for use with 3D meshes
+import controlP5.*;                 // Library for use with UI elements
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -136,10 +136,12 @@ Table routes;
 Table cities;
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Data for armory sourced from: 
+// Data for arsenal sourced from: 
 // https://en.wikipedia.org/wiki/General_Atomics_MQ-9_Reaper
 // https://www.af.mil/About-Us/Fact-Sheets/Display/Article/104470/mq-9-reaper/
 // https://www.globalsecurity.org/military/systems/aircraft/mq-9-specs.htm
+// JSONArray used because it stores a collection of separate JSON objects, each with their own
+// pair of name and value.
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 JSONArray arsenal;
 
@@ -195,23 +197,23 @@ void draw() {
     // Main program content
     bkgdGrid.rectGrid(width/2, whiteAlpha20, 20);       // Small square grid
     bkgdGrid.rectGrid(width/2, whiteAlpha50, 140);      // Large square grid
-    backText.renderStream(40);             // Background text stream
-    arsenalModule.dataStreamBox();         // Text box with data
-    arsenalModule.viewport();              // Scrollable 3D view
-    radarModule.viewport();                // UI for managing radar system
-    radarModule.renderRadar();             // Radar system
-    earthModule.viewport();                // UI for managing earth data
-    earthModule.renderGlobe();             // Earth data points and 3D view
-    hudScreen.renderRunGraphics();         // HUD graphics when running
+    backText.renderStream(40);              // Background text stream
+    arsenalModule.dataTextBox();            // Text box with data
+    arsenalModule.viewport();               // Scrollable 3D view
+    radarModule.viewport();                 // UI for managing radar system
+    radarModule.renderRadar();              // Radar system
+    earthModule.viewport();                 // UI for managing earth data
+    earthModule.renderGlobe();              // Earth data points and 3D view
+    hudScreen.renderRunGraphics();          // HUD graphics when running
   }
   else{
     // ******************************************************* 
     // Content before main program starts
     bkgdGrid.rectGrid(0, whiteAlpha10, 20);  // Small square grid
     bkgdGrid.rectGrid(0, whiteAlpha20, 140); // Large square grid
-    hudScreen.renderPreGraphics();          // HUD screen graphics when program is off
-    abstractGeo.geoHelicoid();              // Rotating and interactive geo shape
-    abstractGeo.geoTrefoil();               // Rotating geo shape 
+    hudScreen.renderPreGraphics();           // HUD screen graphics when program is off
+    abstractGeo.geoHelicoid();               // Rotating and interactive geo shape
+    abstractGeo.geoTrefoil();                // Rotating geo shape 
   }
   
 }
