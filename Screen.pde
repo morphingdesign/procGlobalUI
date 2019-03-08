@@ -134,9 +134,6 @@ class Screen {
   // *******************************************************
   //
   void renderPreGraphics(){
-    //    
-    
-    
     pushMatrix();
     translate(width/2, height/2, -100);
     // Stroke color, alpha, and weight are in the radialGrid() method

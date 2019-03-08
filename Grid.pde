@@ -1,82 +1,58 @@
 // Class for grid construction
 class Grid {  
   
-  // Class Variables
-  int bkgdGridXOrigin = width/2;
-  int bkgdGridYOrigin = 0;
-  int spacing;
-  //color gridColor;
+  // Class Variables 
+  // No local class variables defined
   
-  color bkgdGridColor = (50);
-  int bkgdGridSpace = 20;
-
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
-  // 
- 
+  // Used to construct either a rectangular or radial grid
   Grid(){  
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Methods
   
-  
-  
   // *******************************************************
-  // Create rectangular grid
+  // Create rectangular grid system of horizontal and vertical lines
   void rectGrid(int x, int bkgdGridColor, int gridSpace){
     pushMatrix();
     strokeWeight(1);
     stroke(bkgdGridColor);
-    translate(x, bkgdGridYOrigin, -1);
-    
-    /**
-    // Horizontal Lines
+    translate(x, 0, -1);           // X-value used to vary start position
     for(int i=0; i < height; i+=gridSpace){
-       line(0, i, width, i);
-    }
-    // Vertical Lines
+       line(0, i, width, i);       // Horizontal Lines
+    }                              // Line spacing varies by passed through parameter
     for(int i=0; i < width; i+=gridSpace){
-       line(i, 0, i, height);
+       line(i, 0, i, height);       // Vertical Lines
     }
-    **/
-    
-    // Horizontal Lines
-    for(int i=0; i < height; i+=gridSpace){
-       line(0, i, width, i);
-    }
-    // Vertical Lines
-    for(int i=0; i < width; i+=gridSpace){
-       line(i, 0, i, height);
-    }
-    
     popMatrix();
   }
   
   // *******************************************************
-  // 
-  void radialGrid(int diameter, int projection, int interval, int ringWeight, int tickWeight, color gridColor, int colorAlpha, boolean ticks){
-    int lineLength;
-    color radarColor = color(gridColor, colorAlpha);
+  // Create a single radial ring instance with or without tick marks
+  void radialGrid(int diameter, int projection, int interval, int ringWeight, 
+              int tickWeight, color gridColor, int colorAlpha, boolean ticks){
+    int tickLineLength;
     pushMatrix();
     noFill();
     strokeWeight(ringWeight);
-    stroke(radarColor);
+    stroke(gridColor, colorAlpha);   // Color & alpha separated to allow varying alphas
     ellipseMode(RADIUS);
     ellipse(0, 0, diameter/2, diameter/2);
-    if(ticks){
-       lineLength = diameter/2 - projection;
+    if(ticks){                       // Conditionatal to check if ticks are used or not
+       tickLineLength = diameter/2 - projection;
+    }                                // Projection variable defines length of tick from
+    else{                            // ....ring towards its center point
+       tickLineLength = 0;           // When ticks are not active, they are not shown
     }
-    else{
-       lineLength = 0;
-    }
-    for(int i = 0; i < 360; i+=interval){
-      stroke(radarColor);
+    for(int i = 0; i < 360; i+=interval){  // Interval defines spacing of tick lines
       strokeWeight(tickWeight);
-      rotate(radians(i));
-      line(lineLength, 0, diameter/2, 0);
-      rotate(radians(-i));
-    }
+      stroke(gridColor, colorAlpha); // Color & alpha separated to allow varying alphas
+      rotate(radians(i));            // Coordinate system rotated for each tick
+      line(tickLineLength, 0, diameter/2, 0);
+      rotate(radians(-i));           // Coordinate system rotation reset before next
+    }                                // ....iteration
     popMatrix();
   }  
 }  
