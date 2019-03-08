@@ -76,12 +76,16 @@ class TextStream {
     curveVertex(xList[xList.length-1], yList[yList.length-1]);  // Last control point
     endShape();                         // Finish curve creation
         
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+    // Unicode decimal values for glyphs sources from the following link:
+    // https://en.wikipedia.org/wiki/List_of_Unicode_characters
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++     
     char[] glyph = new char[95];      // Create array of glpyhs using Unicode decimal
     for(int i = 0; i < 95; i++){      // ....values to render a variety of characters
       glyph[i] = (char)(33 + i);      // ....including the alphabet
     }
     
-    for(int i=0; i < arrayLength; i++){
+    for(int i=0; i < arrayLength; i++){    // Placement of each glyph along sine curve
        if(yList[i] > yList[0]){       // For each y value in vertex array, place a 
          textSize(10);                // ....random glyph from char array
          textAlign(CENTER, CENTER);   // Center glyph at each point position
