@@ -47,7 +47,7 @@ class Arsenal {
        .setScrollForeground(whiteSolid)       // Set color of scroll handle to white when inactive
        .setColorBackground(color(blackSolid,100))    // Transparency added to allow text stream
        .setColorForeground(color(whiteSolid,100))    // ....in background to show through       
-       .setVisible(false)                     // Hide slider for intro screen and link it to the 
+       .setVisible(false)                     // Hide text for intro screen and link it to the 
        ;                                      // ....visibility of the main page screen    
      arsenalSelect = arsenalClassCP.addScrollableList("arsenal")  // Construct arsenal dropdown menu
        .setPosition(20, 140)                  // Position menu above text box
@@ -64,7 +64,7 @@ class Arsenal {
        .setColorValue(greenSolid)
        .setColorForeground(redSolid)
        .setColorBackground(blackSolid)
-       .setVisible(false)                     // Hide slider for intro screen and link it to the
+       .setVisible(false)                     // Hide dropdown menu for intro screen and link it to the
        ;                                      // ....visibility of the main page screen
   }
  

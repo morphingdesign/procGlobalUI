@@ -4,20 +4,21 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 /** PROJECT DESCRIPTION
-    This interactive sketch is composed of an initial splash screen followed by a 
-    main workspace screen.  It is intended to provide a framework for a futuristic 
-    HUD as part of an global aerial security system game interface.  The splash 
-    screen is a dynamic and interactive display of math formulas used to create 
-    point geometry.  It also includes a button for activating the main workspace
-    screen.  The main workspace is a dashboard/HUD for managing global aerial 
-    security, namely airports and flight paths, which can be monitored in the 
-    center of the screen.  Its visual display controls are at the top right of the 
-    screen.  The security network integrates the use of an arsenal of reconnaissance 
-    drones, listed in the dropdown menu on the left of the screen. At the moment, 
-    only 3 are listed and 1 has data and a visual display, located at the bottom 
-    left corner of the screen. The visual display of the drone has a slider to view
-    the drone from different angles.  The radar system at the bottom right can be 
-    linked to a drone once it has been deployed for use.
+    This interactive sketch is composed of an intro screen followed by a 
+    main program screen.  It is intended to provide an abstract framework for a 
+    futuristic HUD as part of a hypothetical global aerial security system game 
+    interface.  The intro screen is a dynamic and interactive display of math 
+    formulas used to create point geometry.  It also includes a button for 
+    activating the main program screen.  The main program is a dashboard/HUD for 
+    managing global aerial security, namely airports and flight paths, which can 
+    be monitored in the center of the screen.  Its visual display controls are at 
+    the top right of the screen.  The security network integrates the use of an 
+    arsenal of reconnaissance drones, listed in the dropdown menu on the left of 
+    the screen. At the moment, only 3 are listed and 1 has data and a visual 
+    display, located at the bottom left corner of the screen. The visual display 
+    of the drone has a slider to view the drone from different angles.  The radar 
+    system at the bottom right can be linked to a drone once it has been deployed 
+    for use.
     
     --------------------------------------------------------------------------------
     REFERENCED CODE

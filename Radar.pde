@@ -36,13 +36,13 @@ class Radar {
         .setPosition(1560, 420)             // Position title at top of control panel
         .setText(title)                     // Set text to string variable "title"
         .setColorValue(greenSolid)          // Set color of text
-        .setVisible(false)                  // Hide slider for intro screen and link it to the
+        .setVisible(false)                  // Hide text for intro screen and link it to the
     ;                                       // ....visibility of the main page screen
     radarClassTextDesc = radarClassCP.addTextlabel("descText")    // Construct radar description text
         .setPosition(1560, 432)             // Position description below title text
         .setText(description)               // Set text to string variable "description"
         .setColorValue(greenSolid)          // Set color of text
-        .setVisible(false)                  // Hide slider for intro screen and link it to the
+        .setVisible(false)                  // Hide text for intro screen and link it to the
     ;                                       // ....visibility of the main page screen
     radarClassTangoScaleKnob = radarClassCP.addKnob("tangoScale") // Knob for tango point scale control
         .setPosition(1560, knobRowYPos)     // Position knob below CtrlP5 color picker
@@ -58,7 +58,7 @@ class Radar {
         .setColorLabel(greenSolid)
         .setDragDirection(Knob.HORIZONTAL)  // Knob operation set to dragging mouse horizontally
         .setLabel("Tango Scale")            // Set the visible label below the knob
-        .setVisible(false)                  // Hide slider for intro screen and link it to the
+        .setVisible(false)                  // Hide knob for intro screen and link it to the
     ;                                       // ....visibility of the main page screen
     radarClassTangoDensityKnob = radarClassCP.addKnob("tangoDensity")  // Knob for number of tango points
        .setPosition(1640, knobRowYPos)      // Position knob below CtrlP5 color picker
@@ -67,14 +67,14 @@ class Radar {
        .setRadius(30)                       // Set size of knob arc geometry
        .setNumberOfTickMarks(5)             // Set number of tick marks visible around knob arc
        .setTickMarkLength(2)                // Set tick mark length projected from knob arc
-       .snapToTickMarks(false)              // Force knob movement to snap to defined tick marks
+       .snapToTickMarks(false)              // Do not force knob movement to snap to defined tick marks
        .setColorForeground(whiteSolid)      // Set colors for different elements used by knob
        .setColorBackground(blackSolid)
        .setColorActive(redSolid)
        .setColorLabel(greenSolid)
        .setDragDirection(Knob.HORIZONTAL)   // Knob operation set to dragging mouse horizontally
        .setLabel("Tango Density")           // Set the visible label below the knob
-       .setVisible(false)                   // Hide slider for intro screen and link it to the
+       .setVisible(false)                   // Hide knob for intro screen and link it to the
     ;                                       // ....visibility of the main page screen
     // Color picker for tango points in radar
     radarClassTangoColorPicker = radarClassCP.addColorPicker("tangoPicker")  // Color picker for tangos
@@ -87,7 +87,7 @@ class Radar {
         .enableCollapse()                   // Allow for the color picker to be collapsed into a 
         .close()                            // dropdown menu and have it closed initially
         .setLabel("Tango Point Color Selector")  // Set the visible text label within dropdown bar
-        .setVisible(false)                  // Hide slider for intro screen and link it to the
+        .setVisible(false)                  // Hide color picker for intro screen and link it to the
     ;                                       // ....visibility of the main page screen
     
     for(int i=0; i < ptPos.length; i++){    // Initiate the x- & y-values for a set of points within the

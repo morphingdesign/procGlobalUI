@@ -91,6 +91,7 @@ class Screen {
   // Render only graphics used in main program screen
   void renderRunGraphics(){   
     stroke(greenSolid);
+    strokeWeight(1);
     rect(20, 20, 290, 60);             // Frame for title box positioned at top left corner of canvas
     noStroke();
     fill(greenSolid);
