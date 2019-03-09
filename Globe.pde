@@ -1,86 +1,79 @@
-// Class for globe and global data construction and animation
+// Class for globe, global data, and globe control panel construction and animation
 class Globe {  
   
   // Class Variables
-  IsoWrap earthShell;
-  
-  ControlP5 globeClassCP;
-  Textlabel globeClassTextTitle;            // Title text
-  Textlabel globeClassTextDesc;             // Description text
-  ColorPicker globeClassCityColorPicker;    // UI for global cities color
-  ColorPicker globeClassAptColorPicker;     // UI for global airports color
-  ColorPicker globeClassPathColorPicker;    // UI for global path color
-  CheckBox globeClassDataCheckBox;          // UI for global data visibility
-  Knob globeClassScaleKnob;                 // UI for global scale
-  Knob globeClassDataOffsetKnob;            // UI for global data offset distance
-  Knob globeClassPathOffsetKnob;            // UI for global path offset distance
-  Knob globeClassPathDetailKnob;            // UI for global path density
-  
-  Grid globeRing;
-  
-  PVector[] pts = new PVector[1000];
-  
-  float xOrigin = 0;
-  float yOrigin = 0;
-  float zOrigin = 0;
-  float xPoint, yPoint, zPoint;
-  float radius = 400;
-  float offset = 0;
-  float projection = 30;
-  float dataPtScale = 1;
-  float radiusSmall = 200;
-  float phi;
-  float theta;
-  
-  float knobYPos = 290;
-  
-  String title = ("GLOBAL VIEW CONTROL PANEL");
-  String description = ("Visualize global network of airports and flight paths using \n the following control panel and settings.");
-  
+  Grid globeRing;                          // Used to create ring border geometry around globe
+  IsoWrap earthShell;                      // Used to pass through IsoWrap into this class
+  ControlP5 globeClassCP;                  // Used to pass through Control P5 into this class
+  Textlabel globeClassTextTitle;           // Title text for UI control panel
+  Textlabel globeClassTextDesc;            // Description text for UI control panel
+  ColorPicker globeClassCityColorPicker;   // UI control for global cities color
+  ColorPicker globeClassAptColorPicker;    // UI control for global airports color
+  ColorPicker globeClassPathColorPicker;   // UI control for global path color
+  CheckBox globeClassDataCheckBox;         // UI control for global data visibility
+  Knob globeClassScaleKnob;                // UI control for global scale
+  Knob globeClassDataOffsetKnob;           // UI control for global data offset distance
+  Knob globeClassPathOffsetKnob;           // UI control for global path offset distance
+  Knob globeClassPathDetailKnob;           // UI control for global path density
+  PVector[] pts = new PVector[1000];       // Declare vector array for use with globe mesh
+  float radius = 400;                      // Radius of globe
+  float offset = 0;                        // Perpendicular distance from globe surface for airports
+  float projection = 30;                   // Perpendicular distance from globe surface for flight paths
+  float dataPtScale = 1;                   // Sets the stroke weight for data points around globe
+  float knobYPos = 290;                    // Y-position for consistent placement of all CtrlP5 knobs
+  String title = ("GLOBAL VIEW CONTROL PANEL");                            // Title text
+  String description = ("Visualize global network of airports and flight paths using"
+                       + "\n the following control panel and settings.");  // Description text
+    
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
-  // 
- 
+  // Create sphere mesh, global data points, boundary rings, and globe control panel
   Globe(IsoWrap isoWrap, ControlP5 ctrlP5){
-    earthShell = isoWrap;
-    globeClassCP = ctrlP5;
-    globeRing = new Grid();
+    earthShell = isoWrap;                  // Pass through IsoWrap into this class
+    globeClassCP = ctrlP5;                 // Pass through ControlP5 into this class
+    globeRing = new Grid();                // Construct new Grid() for creating ring geometry
     
-    //PVector[] pts = new PVector[1000];
+    // Loop to iteratively define coordinates for each vector used for creating sphere mesh
     for (int i=0; i<pts.length; i++) {
-      phi = random(PI * -1, PI);
-      theta = random(TWO_PI * -1, TWO_PI);
-         xPoint = xOrigin + (radius * sin(phi) * cos(theta));
-         yPoint = yOrigin + (radius * sin(phi) * sin(theta));
-         zPoint = zOrigin + (radius * cos(phi));
-         //println(xPoint + " , " + yPoint + " , " + zPoint);
-         pts[i] = new PVector(xPoint, yPoint, zPoint);
+      float xOrigin = 0;                       // Sets centerpoint x-value of globe to 0  
+      float yOrigin = 0;                       // Sets centerpoint y-value of globe to 0
+      float zOrigin = 0;                       // Sets centerpoint z-value of globe to 0
+      float xPoint, yPoint, zPoint;            // Declare x-, y-, z-values for use in conversion formula
+      
+      // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      // Formula for converting spherical to Cartesian coordinates source citation below:
+      // https://en.wikipedia.org/wiki/Spherical_coordinate_system
+      // Formula is used to create the x, y, z points using radius, theta, and phi
+      float theta = random(PI * -1, PI);       // Random theta values derived from between range
+      float phi = random(TWO_PI * -1, TWO_PI); // Random phi values derived from between range
+      xPoint = xOrigin + (radius * sin(theta) * cos(phi));
+      yPoint = yOrigin + (radius * sin(theta) * sin(phi));
+      zPoint = zOrigin + (radius * cos(theta));
+      // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      
+      pts[i] = new PVector(xPoint, yPoint, zPoint);  // Add vectors to array using created x, y, z values
     }  
-    for (int i=0; i<pts.length; i++) {
-      for (int j=i+1; j<pts.length; j++) {
-        if (pts[i].dist( pts[j] ) < 50) {
-          earthShell.addPt(pts[i]);
+    for (int i=0; i<pts.length; i++) {          
+      for (int j=i+1; j<pts.length; j++) {     
+        if (pts[i].dist( pts[j] ) < 50) {      // Loop & nested loop to add vectors from array to the
+          earthShell.addPt(pts[i]);            // ....addPt method used to prepare sphere mesh
         }
       }
     }    
     
-    // Main Earth control panel
-    
+    // Globe control panel using ControlP5 elements
     globeClassTextTitle = globeClassCP.addTextlabel("titleText")
         .setPosition(1560, 40)
         .setText(title)
         .setColorValue(greenSolid)
         .setVisible(false)
     ;
-    
     globeClassTextDesc = globeClassCP.addTextlabel("descText")
         .setPosition(1560, 52)
         .setText(description)
         .setColorValue(greenSolid)
         .setVisible(false)
     ;
-
-    // 
     globeClassDataCheckBox = globeClassCP.addCheckBox("checkBox")
         .setPosition(1560, 80)
         .setColorBackground(whiteSolid)
@@ -95,11 +88,7 @@ class Globe {
         .addItem("Flight Paths", 1)
         .activate(1)
         .setVisible(false)
-    ;      
-    
-
-    
-    //
+    ;          
     globeClassScaleKnob = globeClassCP.addKnob("dataScale")
         .setPosition(1560, knobYPos)
         .setRange(0,5)
@@ -116,7 +105,6 @@ class Globe {
         .setLabel("City Scale")
         .setVisible(false)
     ; 
-    
     globeClassDataOffsetKnob = globeClassCP.addKnob("dataOffset")
         .setPosition(1640, knobYPos)
         .setRange(0,20)
@@ -133,7 +121,6 @@ class Globe {
         .setLabel("Data Offset")
         .setVisible(false)
     ;  
-    
     globeClassPathOffsetKnob = globeClassCP.addKnob("pathOffset")
         .setPosition(1720, knobYPos)
         .setRange(10,40)
@@ -150,7 +137,6 @@ class Globe {
         .setLabel("Path Projection")
         .setVisible(false)
     ; 
-    
     // Controls the amount of paths visible in the Earth module
     // The data set "routes" includes a very large number of paths,
     // so this allows user to show only a few or a lot in the UI
@@ -170,7 +156,6 @@ class Globe {
        .setLabel("Path Detail")
        .setVisible(false)
     ;  
-
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassPathColorPicker = globeClassCP.addColorPicker("pathPicker")
         .setPosition(1560, 230)
@@ -184,7 +169,6 @@ class Globe {
         .setLabel("Flight Path Color Selector")
         .setVisible(false)
     ;    
-
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassAptColorPicker = globeClassCP.addColorPicker("aptPicker")
         .setPosition(1560, 175)
@@ -198,7 +182,6 @@ class Globe {
         .setLabel("Airport Location Color Selector")
         .setVisible(false)
     ;      
-    
     // Color picker for paths on Earth, part of main Earth control panel
     globeClassCityColorPicker = globeClassCP.addColorPicker("cityPicker")
         .setPosition(1560, 120)
@@ -220,8 +203,6 @@ class Globe {
   // *******************************************************
   // Render globe with all data sets
   void renderGlobe(){
-
-    
     pushMatrix();
     earthModule.drawSphereMask();
     translate(width/2, height/2);
@@ -328,10 +309,7 @@ class Globe {
   // *******************************************************
   // 
   void globePaths(){
-    float lift = 1;
     PVector rise = new PVector(0, 0, 0);
-    //for(int i=0; i < routes.getRowCount(); i++){
-    //for(int i=0; i < 3000; i++){
     for(int i=0; i < routes.getRowCount(); i+=pathDensity){  
        String source = routes.getString(i, 0);
        String destination = routes.getString(i, 1);
@@ -365,22 +343,23 @@ class Globe {
                  curveVertex(aptDestination.x, aptDestination.y, aptDestination.z);
                  curveVertex(aptDestinationAnchor.x, aptDestinationAnchor.y, aptDestinationAnchor.z);
                endShape();
-               float dist = PVector.dist(aptSource, aptDestination);
            }        
        }
     }
   }
 
   // *******************************************************
-  // 
+  // Returns vector from latitute/longitude conversion to Cartesian coordinate system
   PVector sphereToCart(float lat, float lon){
-    // Algorithms for mapping spherical coordinates to three-dimensional Cartesian
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // Algorithms for mapping latitude/longitude coordinates to three-dimensional Cartesian
     // coordinates derived from the following resource link:
     // https://www.mathworks.com/help/matlab/ref/sph2cart.html
-    // Formulas from this reference were then converted to align elevation to latitude
-    // and azimuth to longitude
+    // Formulas from this reference were then converted to align elevation to latitude and
+    // azimuth to longitude
     PVector vNew = new PVector(-cos(lat) * cos(lon), -sin(lat), cos(lat) * sin(lon));
-    return vNew;
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    return vNew;    // Returns vector as output for this method
   }
   
   // *******************************************************

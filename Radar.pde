@@ -12,7 +12,7 @@ class Radar {
   String title = ("RADAR SYSTEM CONTROL PANEL");                           // Title text
   String description = ("Visualize global network of airports and flight paths using \n"
                         + "the following control panel and settings.");    // Description text
-  float knobRowYPos = 530;                  // Y-position for consisten placement of all CtrlP5 knobs
+  float knobRowYPos = 530;                  // Y-position for consistent placement of all CtrlP5 knobs
   int rotateAngle = 1;                      // Starting rotate angle for radar scan rotation
   int radarRadius = 200;                    // Radar radius for consistency across methods
   int radarDiameter = radarRadius * 2;      // Radar diameter for consistency across methods
