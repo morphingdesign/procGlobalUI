@@ -222,126 +222,129 @@ class Globe {
      rect(0, 0, 340, 360);                  // Create background and border for control panel
      popMatrix();
   }
-    
+  
   // *******************************************************
-  // Render globe with all data sets
+  // Render all elements to display globe with all global data
   void renderGlobe(){
     pushMatrix();
-    earthModule.drawSphereMask();
-    translate(width/2, height/2);
-    
-    hotSpotStartX = width/2 - ctrTopPos;
+    translate(width/2, height/2);          // Position globe at center of canvas
+    earthModule.drawSphereMask();          // Create mask to hide background and boundary around globe
+    hotSpotStartX = width/2 - ctrTopPos;   // X- and y-values to define start of hotspot around globe
     hotSpotStartY = height/2 - ctrSidePos;
-    hotSpotEndX = width/2 + ctrTopPos;
+    hotSpotEndX = width/2 + ctrTopPos;     // X- and y-values to define end of hotspot around globe
     hotSpotEndY = height/2 + ctrSidePos;
-    
     if(mouseX > hotSpotStartX &&  mouseX < hotSpotEndX && mouseY > hotSpotStartY && mouseY < hotSpotEndY){  
        rotateY(frameCount * 0.003 + mouseX * 0.003);
-       rotateX(mouseY * 0.003);
-       inGlobalHotSpot = true;
-    }
-    else{
-      rotateY(frameCount * 0.003);
+       rotateX(mouseY * 0.003);            // Conditional statement that evaluates mouse postiion relative
+       inGlobalHotSpot = true;             // ....to defined hotspot area limits. If within the hotspot
+    }                                      // ....area, the globe rotates horizontally and vertically
+    else{                                  // ....based on mouse position.  When mouse is not in hotspot,
+      rotateY(frameCount * 0.003);         // ....globe rotates slowly horizontally to the right.
       inGlobalHotSpot = false;
     }
-    
-    dataPtScale = globeClassScaleKnob.getValue();
-    offset = globeClassDataOffsetKnob.getValue();
-    projection = globeClassPathOffsetKnob.getValue();
-    pathColor = globeClassPathColorPicker.getColorValue();  // Assign color picker color to pathColor 
-                                                            // ....variable. Updates the path color in
-                                                            // ....globe control panel. Needs to be included
-                                                            // ....in draw() to update accordingly.
-    cityColor = globeClassCityColorPicker.getColorValue();
-    aptColor = globeClassAptColorPicker.getColorValue();
-    
-    earthModule.globeShell();
-    earthModule.globeGeo();
-    
-    if(globeClassDataCheckBox.getArrayValue(0) == 1){
-       earthModule.globeData();  
+    earthModule.globeShell();              // Render sphere mesh for globe shape
+    earthModule.cityData();                // Render globe city points
+    // The following variables get the values from the ControlP5 UI elements created by the constructor
+    // ....and connects them to the actual geometry and data sets in the globe module.  These need to be
+    // ....included in draw(), and not in the constructor/setup(), so that the values can be dynamically
+    // ....updated and change the globe geometry.
+    dataPtScale = globeClassScaleKnob.getValue();           // Links knob value to point stroke weight
+    offset = globeClassDataOffsetKnob.getValue();           // Links knob value to point offset distance
+    projection = globeClassPathOffsetKnob.getValue();       // Links knob value to path offset distance
+    pathColor = globeClassPathColorPicker.getColorValue();  // Links color picker to path color 
+    cityColor = globeClassCityColorPicker.getColorValue();  // Links color picker to city point color
+    aptColor = globeClassAptColorPicker.getColorValue();    // Links color picker to airport point color
+    if(globeClassDataCheckBox.getArrayValue(0) == 1){       // Evaluate if 1st checkbox is activated
+       earthModule.airportData();                           // Render globe airport points if activated
     }
-    
-    if(globeClassDataCheckBox.getArrayValue(1) == 1){
-       earthModule.globePaths();
+    if(globeClassDataCheckBox.getArrayValue(1) == 1){       // Evaluate if 2nd checkbox is activated
+       earthModule.globePaths();                            // Render globe paths if activated
     }
-    
     popMatrix();
   }
   
   // *******************************************************
-  // 
+  // Create sphere mesh using IsoWrap and array vectors initiated in constructor
   void globeShell(){
-    noFill();
-    noStroke();
-    fill(0, 0, 0, 255);
-    eShell.plot();
+    noStroke();            // Do not display strokes of mesh edges
+    fill(blackSolid);      // Fill meshes with black to mask data points on back side of globe
+    earthShell.plot();     // Create sphere mesh using the vectors in array initiated in constructor
   }
   
   // *******************************************************
-  // 
-  void globeGeo(){
-    for(int i=0; i < cities.getRowCount(); i++){
-       float latitude = cities.getFloat(i, "lat");
-       float longitude = cities.getFloat(i, "lng");
-       PVector aPt = sphereToCart(radians(latitude), radians(longitude));
-       aPt.mult(radius);
-       stroke(cityColor);
-       strokeWeight(dataPtScale);
-       point(aPt.x, aPt.y, aPt.z);
+  // Create points to denote cities around globe using data source
+  void cityData(){
+    for(int i=0; i < cities.getRowCount(); i++){    // Iterate through each row within data source
+       float latitude = cities.getFloat(i, "lat");  // Extract latitude for each item in data source
+       float longitude = cities.getFloat(i, "lng"); // Extract longitude for each item in data source
+       PVector aPt = sphereToCart(radians(latitude), radians(longitude));  // Convert lat/lon to Cartesian
+                                                    // ....coordinates and create vectors for each line item
+       aPt.mult(radius);                            // Multiply each vector by globe radius
+       stroke(cityColor);                           // Set point stroke color; linked to color picker value
+       strokeWeight(dataPtScale);                   // Set point stroke weight; linked to knob value
+       point(aPt.x, aPt.y, aPt.z);                  // Create each point through iterations
     }  
   }
 
   // *******************************************************
-  // 
-  void globeData(){
-    for(int i=0; i < airports.getRowCount(); i++){
-       float latitude = airports.getFloat(i, 6);
-       float longitude = airports.getFloat(i, 7);
-       PVector aPt = sphereToCart(radians(latitude), radians(longitude));
-       aPt.mult(radius + offset);
-       stroke(aptColor);
-       strokeWeight(1);
-       point(aPt.x, aPt.y, aPt.z);
+  // Create points to denote airports around globe using data source
+  void airportData(){
+    for(int i=0; i < airports.getRowCount(); i++){  // Iterate through each row within data source
+       float latitude = airports.getFloat(i, 6);    // Extract latitude for each item in data source
+       float longitude = airports.getFloat(i, 7);   // Extract longitude for each item in data source
+       PVector aPt = sphereToCart(radians(latitude), radians(longitude));  // Convert lat/lon to Cartesian
+                                                    // ....coordinates and create vectors for each line item       
+       aPt.mult(radius + offset);                   // Multiply each airport vector by globe radius and link
+                                                    // ....to offset that is set by knob value
+       stroke(aptColor);                            // Set point stroke color; linked to color picker value
+       strokeWeight(1);                             // Set point stroke weight
+       point(aPt.x, aPt.y, aPt.z);                  // Create each point through iterations
     }   
   }
     
   // *******************************************************
-  // 
+  // Create lines to denote flight paths connecting airport locations around globe using data source
   void globePaths(){
-    PVector rise = new PVector(0, 0, 0);
-    for(int i=0; i < routes.getRowCount(); i+=pathDensity){  
-       String source = routes.getString(i, 0);
-       String destination = routes.getString(i, 1);
-       TableRow srcIteration = airports.findRow(source, 4);
-       TableRow destIteration = airports.findRow(destination, 4);
-       if(srcIteration != null && destIteration != null){          // Check to verify data line item
-           String aptCodeSrc = srcIteration.getString(4);          // ....is valid
-           String aptCodeDest = destIteration.getString(4);
-           if(source.equals(aptCodeSrc) && destination.equals(aptCodeDest)){
+    
+    for(int i=0; i < routes.getRowCount(); i+=pathDensity){          // Iterate through each data item in data; interval set by control knob to moderate density
+       String source = routes.getString(i, 0);                       // Extract flight path source airport for each data item/row in route data
+       String destination = routes.getString(i, 1);                  // Extract flight path destination airport for each data item/row in route data
+       TableRow srcIteration = airports.findRow(source, 4);          // Search for airport name in airport data & extract row number if match with source variable
+       TableRow destIteration = airports.findRow(destination, 4);    // Search for airport name in airport data & extract row number match with destination variable
+       if(srcIteration != null && destIteration != null){            // Check to verify data item is valid; skips data items with missing information
+           String aptCodeSrc = srcIteration.getString(4);            // Extract source airport name from airport data based on which row the loop is processing
+           String aptCodeDest = destIteration.getString(4);          // Extract destination airport name from airport data based on which row the loop is processing
+           if(source.equals(aptCodeSrc) && destination.equals(aptCodeDest)){    // Check to see if source airport name from route data equals airport name from 
+                                                                     // ....airport data and if destination airport name from route data equals airport name from
+                                                                     // ....route data.  Proceed with nested code if equal.
+               PVector rise = new PVector(0, 0, 0);                  // Initialize vector used to set start/end control point of path perpendicular to sphere
+               float srcLatitude = srcIteration.getFloat(6);         // Extract latitude for selected source airport in data source
+               float srcLongitude = srcIteration.getFloat(7);        // Extract longitude for selected source airport in data source
+               aptSource = sphereToCart(radians(srcLatitude), radians(srcLongitude));  // Convert lat/lon to Cartesian coordinates & create vector for each
+               aptSource = aptSource.mult(radius + offset);          // Multiply each airport vector by globe radius and link to offset that is set by knob value
+               PVector aptSourceAnchor = aptSource.cross(rise);      // Use cross product of airport source vector with rise to set first control path point
+                                                                     // ....perpendicular to sphere.
+               float destLatitude = destIteration.getFloat(6);       // Extract latitude for selected destination airport in data source
+               float destLongitude = destIteration.getFloat(7);      // Extract longitude for selected destination airport in data source
+               aptDestination = sphereToCart(radians(destLatitude), radians(destLongitude)); // Convert lat/lon to Cartesian coordinates & create vector for each
+               aptDestination = aptDestination.mult(410);            // Multiply each airport vector by globe radius and link to offset that is set by knob value
+               PVector aptDestinationAnchor = aptDestination.cross(rise);    // Use cross product of airport source vector with rise to set first control path
+                                                                     // ....point perpendicular to sphere.
+               float midLatitude = srcLatitude + ((destLatitude - srcLatitude) / 2);      // Compute latitude for path midpoint by halving distance between source
+                                                                     // ....and destination latitude values. 
+               float midLongitude = srcLongitude + ((destLongitude - srcLongitude) / 2);  // Compute longitude for path midpoint by halving distance between source
+                                                                     // ....and destination latitude values. 
+               PVector aptMidpoint = sphereToCart(radians(midLatitude), radians(midLongitude)); // Convert lat/lon to Cartesian coordinates & create vector for each
+               aptMidpoint = aptMidpoint.mult(radius + offset + projection);    // Midpoint vector of path multiplied by projection value set by control knob
                noFill();
-               float srcLatitude = srcIteration.getFloat(6);
-               float srcLongitude = srcIteration.getFloat(7);
-               aptSource = sphereToCart(radians(srcLatitude), radians(srcLongitude));
-               aptSource = aptSource.mult(radius + offset);
-               PVector aptSourceAnchor = aptSource.cross(rise);
-               float destLatitude = destIteration.getFloat(6);
-               float destLongitude = destIteration.getFloat(7);
-               aptDestination = sphereToCart(radians(destLatitude), radians(destLongitude));
-               aptDestination = aptDestination.mult(410);
-               PVector aptDestinationAnchor = aptDestination.cross(rise);
-               float midLatitude = srcLatitude + ((destLatitude - srcLatitude) / 2);
-               float midLongitude = srcLongitude + ((destLongitude - srcLongitude) / 2);
-               PVector aptMidpoint = sphereToCart(radians(midLatitude), radians(midLongitude));
-               aptMidpoint = aptMidpoint.mult(radius + offset + projection);
-               stroke(pathColor);
+               stroke(pathColor);                                    // Set path stroke color based on linked color picker
                strokeWeight(1);
-               beginShape();
-                 curveVertex(aptSourceAnchor.x, aptSourceAnchor.y, aptSourceAnchor.z);
-                 curveVertex(aptSource.x, aptSource.y, aptSource.z);
-                 curveVertex(aptMidpoint.x, aptMidpoint.y, aptMidpoint.z);
-                 curveVertex(aptDestination.x, aptDestination.y, aptDestination.z);
-                 curveVertex(aptDestinationAnchor.x, aptDestinationAnchor.y, aptDestinationAnchor.z);
+               beginShape();                                         // Create path using curve and curve vertices
+                 curveVertex(aptSourceAnchor.x, aptSourceAnchor.y, aptSourceAnchor.z);                // Control point for first path point; makes it perpendicular
+                 curveVertex(aptSource.x, aptSource.y, aptSource.z);                                  // First path point; aligns with source airport point
+                 curveVertex(aptMidpoint.x, aptMidpoint.y, aptMidpoint.z);                            // Middle path point; interpolated between source & destination
+                 curveVertex(aptDestination.x, aptDestination.y, aptDestination.z);                   // Last path point; aligns with destination airport point
+                 curveVertex(aptDestinationAnchor.x, aptDestinationAnchor.y, aptDestinationAnchor.z); // Control point for last path point; makes it perpendicular
                endShape();
            }        
        }
@@ -363,22 +366,17 @@ class Globe {
   }
   
   // *******************************************************
-  // 
+  // Create ring boundary around globe and mask to hide square grid in background
   void drawSphereMask(){
     pushMatrix();
-    translate(width/2, height/2, 0);
-    fill(0);
+    fill(blackSolid);                     // Solid fill to serve as mask for background
     strokeWeight(1);
-    stroke(255, 100);
-    ellipseMode(RADIUS);
-    ellipse(0, 0, height/2, height/2);
-    globeRing.radialGrid(height-10, -5, 10, 1, 1, whiteSolid, 100, true);
-    globeRing.radialGrid(height-20, -5, 5, 1, 1, whiteSolid, 100, true);
-    globeRing.radialGrid(height-20, 5, 1, 1, 1, whiteSolid, 100, true);
+    stroke(whiteSolid, 100);
+    ellipseMode(RADIUS);          
+    ellipse(0, 0, height/2, height/2);    // Shape mask to fit within ring boundary
+    globeRing.radialGrid(height-10, -5, 10, 1, 1, whiteSolid, 100, true);  // Series of rings with tick
+    globeRing.radialGrid(height-20, -5, 5, 1, 1, whiteSolid, 100, true);   // ....marks to serve as 
+    globeRing.radialGrid(height-20, 5, 1, 1, 1, whiteSolid, 100, true);    // ....boundary for globe
     popMatrix();
   }
-  
-  // *******************************************************
-  // 
-    
 }  
