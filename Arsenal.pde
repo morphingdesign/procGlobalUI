@@ -17,7 +17,7 @@ class Arsenal {
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Class Constructor
   // Used to construct the assets within the arsenal module 
-  Arsenal(ControlP5 ctrlP5){                  // Construct the Arsenal controller object 
+  Arsenal(ControlP5 ctrlP5){                   
      arsenalClassCP = ctrlP5;                 // Pass through ControlP5 into this class
      viewSlider = arsenalClassCP.addSlider("slider")  // Add slider UI element
        .setPosition(20, 1040)                 // Position slider below image portal
@@ -47,8 +47,8 @@ class Arsenal {
        .setScrollForeground(whiteSolid)       // Set color of scroll handle to white when inactive
        .setColorBackground(color(blackSolid,100))    // Transparency added to allow text stream
        .setColorForeground(color(whiteSolid,100))    // ....in background to show through       
-       .setVisible(false)                     // Initially hide slider for intro screen and link 
-       ;                                      // ....to main page view visibility  
+       .setVisible(false)                     // Hide slider for intro screen and link it to the 
+       ;                                      // ....visibility of the main page screen    
      arsenalSelect = arsenalClassCP.addScrollableList("arsenal")  // Construct arsenal dropdown menu
        .setPosition(20, 140)                  // Position menu above text box
        .setSize(360, 100)                     // Align width of dropdown with text box boundary
@@ -64,8 +64,8 @@ class Arsenal {
        .setColorValue(greenSolid)
        .setColorForeground(redSolid)
        .setColorBackground(blackSolid)
-       .setVisible(false)                     // Initially hide slider for intro screen and link
-       ;                                      // ....to main page view visibility
+       .setVisible(false)                     // Hide slider for intro screen and link it to the
+       ;                                      // ....visibility of the main page screen
   }
  
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -92,7 +92,7 @@ class Arsenal {
                                                          // .... be static and unchangeable in draw().
   
   // *******************************************************
-  // 
+  // Render arsenal image viewport and its UI slider element
   void viewport(){
      viewSlider.setVisible(true);              // Activate visibility of text box and dropdown menu 
      pushMatrix();                             // ....when this method is called in draw()
