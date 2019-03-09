@@ -192,7 +192,7 @@ void draw() {
   // Static HUD screen graphics
   hudScreen.renderStaticGraphics();  
   
-  if(programOn){
+  if(programOn){                            // Boolean set with ControlP5 power toggle on intro screen
     // *******************************************************
     // Main program content
     bkgdGrid.rectGrid(width/2, whiteAlpha20, 20);       // Small square grid
